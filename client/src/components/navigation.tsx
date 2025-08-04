@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Music, ChartLine, Bot, Table, Eye, Bell, User } from "lucide-react";
+import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Navigation() {
@@ -10,6 +10,7 @@ export default function Navigation() {
     { path: "/agents", label: "Agents", icon: Bot },
     { path: "/workflow", label: "Workflow", icon: Table },
     { path: "/conductor", label: "Conductor", icon: Eye },
+    { path: "/pricing", label: "Pricing", icon: DollarSign },
   ];
 
   return (
