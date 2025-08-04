@@ -1,4 +1,5 @@
 import { SupabaseAuth } from './supabase-auth';
+import orchestraLogo from '@assets/Lo_1754349496969.png';
 
 export function AuthPage() {
   return (
@@ -6,7 +7,7 @@ export function AuthPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img 
-            src="/attached_assets/Lo_1754348262426.png" 
+            src={orchestraLogo}
             alt="Orchestra by PulseSpark.ai" 
             className="mx-auto mb-4 h-16 w-auto"
           />

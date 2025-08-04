@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TokenUsageIndicator } from "@/components/ui/token-usage-indicator";
+import orchestraLogo from '@assets/Lo_1754349496969.png';
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -21,7 +22,7 @@ export default function Navigation() {
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-3">
               <img 
-                src="/attached_assets/Lo_1754348262426.png" 
+                src={orchestraLogo}
                 alt="Orchestra by PulseSpark.ai" 
                 className="h-8 w-auto"
               />
