@@ -5,12 +5,11 @@ export function AuthPage() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            Orchestra
-          </h1>
-          <p className="text-muted-foreground">
-            by PulseSpark.ai
-          </p>
+          <img 
+            src="/attached_assets/Lo_1754348262426.png" 
+            alt="Orchestra by PulseSpark.ai" 
+            className="mx-auto mb-4 h-16 w-auto"
+          />
         </div>
 
         <SupabaseAuth />
