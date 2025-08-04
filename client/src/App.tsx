@@ -7,6 +7,7 @@ import Navigation from "@/components/navigation";
 import Dashboard from "@/pages/dashboard";
 import Agents from "@/pages/agents";
 import Workflow from "@/pages/workflow";
+import Conductor from "@/pages/conductor";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/agents" component={Agents} />
       <Route path="/workflow" component={Workflow} />
+      <Route path="/conductor" component={Conductor} />
       <Route component={NotFound} />
     </Switch>
   );

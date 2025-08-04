@@ -21,6 +21,22 @@ Preferred communication style: Simple, everyday language.
 - Added "Preview Agent" button alongside "Save Agent" button
 - Updated agent form with improved styling and purple theme
 
+### Workflow Designer Implementation
+- Built comprehensive workflow designer using React Flow
+- Added draggable agent cards in left sidebar with role badges and status indicators
+- Created custom agent nodes with role-specific icons and connection handles
+- Implemented visual connection lines with arrows for data flow
+- Added toolbar with Run Workflow, Save, and Clear Canvas functionality
+- Built right panel for selected node details and configuration
+
+### Conductor Dashboard
+- Created real-time monitoring dashboard with AI conductor avatar
+- Added system health metrics: total agents, active workflows, success rate
+- Implemented live activity log stream with timestamp and agent tracking
+- Built active workflows panel with progress bars and status indicators
+- Added intervention controls: Pause, Resume, and Retry Failed Agent buttons
+- Integrated real-time updates every 3 seconds for dynamic monitoring
+
 ### Schema Updates
 - Added `role` field to agents table with default "Custom"
 - Renamed `conductorOversight` to `conductorMonitoring` for clarity
