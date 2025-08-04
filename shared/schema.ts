@@ -93,6 +93,18 @@ export const tokenUsage = pgTable("token_usage", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const executionLimits = pgTable("execution_limits", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  period: text("period").notNull(), // Format: "YYYY-MM-DD" for day or "YYYY-MM-DD-HH" for hour
+  periodType: text("period_type", { enum: ["hour", "day"] }).notNull(),
+  workflowRuns: integer("workflow_runs").notNull().default(0),
+  agentExecutions: integer("agent_executions").notNull().default(0),
+  lastExecution: timestamp("last_execution"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow()
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertAgent = z.infer<typeof insertAgentSchema>;
@@ -100,3 +112,4 @@ export type Agent = typeof agents.$inferSelect;
 export type WorkflowExecution = typeof workflowExecutions.$inferSelect;
 export type WorkflowExecutionLog = typeof workflowExecutionLogs.$inferSelect;
 export type TokenUsage = typeof tokenUsage.$inferSelect;
+export type ExecutionLimits = typeof executionLimits.$inferSelect;

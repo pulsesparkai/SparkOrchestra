@@ -175,7 +175,7 @@ export function registerWorkflowRoutes(app: Express) {
   app.get("/api/user/tokens", async (req, res) => {
     try {
       const userId = 'demo-user'; // TODO: Get from auth context
-      const stats = await tokenTracker.getTokenUsageStats(userId);
+      const stats = await tokenTracker.getTokenUsage(userId);
       
       res.json({
         success: true,

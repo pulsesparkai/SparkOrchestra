@@ -246,10 +246,21 @@ export class TokenTracker {
   }
 
   /**
+   * Get current token usage statistics for user (alias for consistency)
+   */
+  async getTokenUsageStats(userId: string): Promise<TokenUsageStats> {
+    return this.getTokenUsage(userId);
+  }
+
+  /**
    * Get current token usage statistics for user
    */
   async getTokenUsage(userId: string): Promise<TokenUsageStats> {
     try {
+      // Get user's plan for accurate token limit
+      const user = await this.getUserPlan(userId);
+      const tokenLimit = this.PLAN_LIMITS[user.userPlan];
+      
       const month = this.getCurrentMonth();
       const record = await this.getOrCreateUsageRecord(userId, month);
 
@@ -257,10 +268,10 @@ export class TokenTracker {
         userId,
         month,
         tokensUsed: record.tokensUsed,
-        tokenLimit: this.TOKEN_LIMIT_PER_MONTH,
-        remainingTokens: this.TOKEN_LIMIT_PER_MONTH - record.tokensUsed,
-        percentageUsed: (record.tokensUsed / this.TOKEN_LIMIT_PER_MONTH) * 100,
-        isLimitExceeded: record.tokensUsed >= this.TOKEN_LIMIT_PER_MONTH
+        tokenLimit,
+        remainingTokens: tokenLimit - record.tokensUsed,
+        percentageUsed: (record.tokensUsed / tokenLimit) * 100,
+        isLimitExceeded: record.tokensUsed >= tokenLimit
       };
     } catch (error: any) {
       console.error('Error getting token usage:', error);
@@ -297,10 +308,10 @@ export class TokenTracker {
           userId,
           month,
           tokensUsed,
-          tokenLimit: this.TOKEN_LIMIT_PER_MONTH,
-          remainingTokens: this.TOKEN_LIMIT_PER_MONTH - tokensUsed,
-          percentageUsed: (tokensUsed / this.TOKEN_LIMIT_PER_MONTH) * 100,
-          isLimitExceeded: tokensUsed >= this.TOKEN_LIMIT_PER_MONTH
+          tokenLimit: this.PLAN_LIMITS.free, // Default for history
+          remainingTokens: this.PLAN_LIMITS.free - tokensUsed,
+          percentageUsed: (tokensUsed / this.PLAN_LIMITS.free) * 100,
+          isLimitExceeded: tokensUsed >= this.PLAN_LIMITS.free
         };
       });
 

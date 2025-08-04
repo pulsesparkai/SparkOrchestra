@@ -1,14 +1,31 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { clerkMiddleware } from '@clerk/express';
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { supabaseAdmin } from "./lib/supabase";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Add Clerk middleware for authentication
-app.use(clerkMiddleware());
+// Add Supabase authentication middleware
+app.use(async (req: any, res, next) => {
+  const authHeader = req.headers.authorization;
+  
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.substring(7);
+    
+    try {
+      const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+      if (!error && user) {
+        req.user = user;
+      }
+    } catch (error) {
+      // Token validation failed, continue without user
+    }
+  }
+  
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

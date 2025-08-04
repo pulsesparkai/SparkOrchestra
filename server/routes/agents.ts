@@ -1,29 +1,35 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { EncryptionService } from '../services/encryption';
-import { requireAuth } from '@clerk/express';
+import { supabaseAdmin } from '../lib/supabase';
 import Anthropic from '@anthropic-ai/sdk';
 import { storage } from '../storage';
 import { insertAgentSchema, type Agent } from '../../shared/schema';
 import { tokenTracker } from '../services/tokenTracker';
 
-// Extend Request interface for Clerk auth
+// Extend Request interface for Supabase auth
 interface AuthenticatedRequest extends Request {
-  auth: {
-    userId: string;
-    sessionId?: string;
+  user: {
+    id: string;
+    email?: string;
+    user_metadata?: any;
   };
 }
 
 const router = express.Router();
 
 // Middleware to ensure user is authenticated
-router.use(requireAuth());
+router.use(async (req: any, res: Response, next) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
+  next();
+});
 
 // POST /api/agents - Create new agent
 router.post('/', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.auth.userId;
+    const userId = req.user.id;
     
     // Check agent limits based on user's plan
     const currentAgents = await storage.getAgentsByUserId(userId);
@@ -81,7 +87,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
 // GET /api/agents - Get user's agents
 router.get('/', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.auth.userId;
+    const userId = req.user.id;
     
     const agents = await storage.getAgentsByUserId(userId);
     
@@ -105,7 +111,7 @@ router.get('/', async (req: AuthenticatedRequest, res: Response) => {
 // PUT /api/agents/:id - Update agent
 router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.auth.userId;
+    const userId = req.user.id;
     const agentId = req.params.id;
     
     // Check if agent belongs to user
