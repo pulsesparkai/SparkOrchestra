@@ -9,6 +9,7 @@ export interface IStorage {
   // Agent methods
   getAgent(id: string): Promise<Agent | undefined>;
   getAllAgents(): Promise<Agent[]>;
+  getAgentsByUserId(userId: string): Promise<Agent[]>;
   createAgent(agent: InsertAgent): Promise<Agent>;
   updateAgent(id: string, updates: Partial<Agent>): Promise<Agent | undefined>;
   deleteAgent(id: string): Promise<boolean>;
@@ -45,9 +46,17 @@ export class MemStorage implements IStorage {
   }
 
   async getAllAgents(): Promise<Agent[]> {
-    return Array.from(this.agents.values()).sort((a, b) => 
+    return Array.from(this.agents.values()).filter(agent => !agent.deletedAt).sort((a, b) => 
       new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
     );
+  }
+
+  async getAgentsByUserId(userId: string): Promise<Agent[]> {
+    return Array.from(this.agents.values())
+      .filter(agent => agent.userId === userId && !agent.deletedAt)
+      .sort((a, b) => 
+        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+      );
   }
 
   async createAgent(insertAgent: InsertAgent): Promise<Agent> {
@@ -55,13 +64,15 @@ export class MemStorage implements IStorage {
     const now = new Date();
     const agent: Agent = { 
       id,
+      userId: insertAgent.userId,
       name: insertAgent.name,
       role: insertAgent.role,
       prompt: insertAgent.prompt,
       model: insertAgent.model,
-      apiKey: insertAgent.apiKey || null,
+      encryptedApiKey: null, // Will be set separately after encryption
       conductorMonitoring: insertAgent.conductorMonitoring || null,
       status: "active",
+      deletedAt: null,
       createdAt: now,
       updatedAt: now
     };

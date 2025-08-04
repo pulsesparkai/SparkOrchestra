@@ -232,9 +232,9 @@ function WorkflowCanvas() {
       websocketClient.subscribeToWorkflow(workflowId);
 
       // Start the workflow
-      await apiRequest("POST", "/api/workflows/run", {
-        workflowId,
-        agentIds
+      await apiRequest("POST", `/api/workflows/${workflowId}/start`, {
+        agentIds,
+        userId: 'demo-user' // TODO: Get from auth context
       });
 
       toast({

@@ -11,13 +11,15 @@ export const users = pgTable("users", {
 
 export const agents = pgTable("agents", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(), // Clerk user ID for ownership
   name: text("name").notNull(),
   role: text("role").notNull().default("Custom"),
   prompt: text("prompt").notNull(),
-  model: text("model").notNull(),
-  apiKey: text("api_key").default(""),
+  model: text("model").notNull().default("claude-sonnet-4-20250514"),
+  encryptedApiKey: text("encrypted_api_key"), // Encrypted API key with bcryptjs
   conductorMonitoring: boolean("conductor_monitoring").default(false),
   status: text("status").default("active"), // active, idle, error
+  deletedAt: timestamp("deleted_at"), // For soft delete
   createdAt: timestamp("created_at").default(sql`now()`),
   updatedAt: timestamp("updated_at").default(sql`now()`),
 });
@@ -28,18 +30,18 @@ export const insertUserSchema = createInsertSchema(users).pick({
 });
 
 export const insertAgentSchema = createInsertSchema(agents).pick({
+  userId: true,
   name: true,
   role: true,
   prompt: true,
   model: true,
-  apiKey: true,
   conductorMonitoring: true,
 }).extend({
   name: z.string().min(1, "Agent name is required"),
   role: z.string().min(1, "Role selection is required"),
   prompt: z.string().min(10, "Prompt must be at least 10 characters"),
   model: z.string().min(1, "Model selection is required"),
-  apiKey: z.string().optional(),
+  apiKey: z.string().optional(), // This will be encrypted before storage
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

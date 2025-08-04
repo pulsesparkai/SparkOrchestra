@@ -4,46 +4,85 @@ import { storage } from "./storage";
 import { insertAgentSchema } from "@shared/schema";
 import { testAnthropicConnection } from "./services/anthropic";
 import { initializeWebSocket, getWebSocketManager } from "./websocket";
+import agentRoutes from "./routes/agents";
+import { conductor } from "./conductor";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Create agent endpoint
-  app.post("/api/agents", async (req, res) => {
-    try {
-      const validatedData = insertAgentSchema.parse(req.body);
-      const agent = await storage.createAgent(validatedData);
-      res.status(201).json(agent);
-    } catch (error: any) {
-      res.status(400).json({ 
-        message: "Failed to create agent", 
-        error: error.message 
-      });
-    }
-  });
+  // Use the new agent routes with Clerk authentication and bcryptjs encryption
+  app.use('/api/agents', agentRoutes);
 
-  // Get all agents
-  app.get("/api/agents", async (req, res) => {
+  // Conductor API endpoints
+  app.post("/api/workflows/:id/start", async (req, res) => {
     try {
-      const agents = await storage.getAllAgents();
-      res.json(agents);
-    } catch (error: any) {
-      res.status(500).json({ 
-        message: "Failed to fetch agents", 
-        error: error.message 
-      });
-    }
-  });
-
-  // Get single agent
-  app.get("/api/agents/:id", async (req, res) => {
-    try {
-      const agent = await storage.getAgent(req.params.id);
-      if (!agent) {
-        return res.status(404).json({ message: "Agent not found" });
+      const workflowId = req.params.id;
+      const { agentIds, userId } = req.body;
+      
+      if (!agentIds || !Array.isArray(agentIds) || agentIds.length === 0) {
+        return res.status(400).json({ message: "Agent IDs are required" });
       }
-      res.json(agent);
+      
+      const context = await conductor.orchestrateWorkflow(workflowId, agentIds, userId);
+      res.json(context);
     } catch (error: any) {
       res.status(500).json({ 
-        message: "Failed to fetch agent", 
+        message: "Failed to start workflow", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.get("/api/workflows/:id/status", (req, res) => {
+    try {
+      const workflowId = req.params.id;
+      const status = conductor.getWorkflowStatus(workflowId);
+      
+      if (!status) {
+        return res.status(404).json({ message: "Workflow not found" });
+      }
+      
+      res.json(status);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to get workflow status", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.post("/api/workflows/:id/intervene", async (req, res) => {
+    try {
+      const workflowId = req.params.id;
+      const { agentId, action } = req.body;
+      
+      if (!agentId || !action) {
+        return res.status(400).json({ message: "Agent ID and action are required" });
+      }
+      
+      await conductor.intervene(workflowId, agentId, action);
+      res.json({ success: true, message: `${action} intervention applied` });
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to apply intervention", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.get("/api/conductor/metrics", (req, res) => {
+    try {
+      const activeWorkflows = conductor.getActiveWorkflows();
+      const metrics = {
+        totalWorkflows: activeWorkflows.length,
+        activeWorkflows: activeWorkflows.filter(w => w.status === 'running').length,
+        pausedWorkflows: activeWorkflows.filter(w => w.status === 'paused').length,
+        successRate: 0.92, // Mock success rate
+        timestamp: new Date().toISOString()
+      };
+      
+      res.json(metrics);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to get conductor metrics", 
         error: error.message 
       });
     }
