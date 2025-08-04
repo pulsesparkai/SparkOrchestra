@@ -10,7 +10,20 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
-### BYOAPI Functionality Implementation (Latest)
+### Complete Migration to Supabase Stack (Latest - August 2025)
+- Successfully migrated from Clerk authentication to Supabase Auth with magic link login
+- Replaced Neon PostgreSQL with Supabase database and Row Level Security policies
+- Implemented comprehensive rate limiting system: 10 workflow runs/hour, 100 agent executions/day
+- Added 5-second minimum delay between agent handoffs for proper orchestration
+- Built RateLimitDisplay component showing real-time usage like "7/10 runs this hour"
+- Created AutomatedWorkflowWarning component requiring BYOAPI for scheduled/recurring workflows
+- Enhanced Supabase client with realtime subscriptions replacing Socket.io for live updates
+- Added ExecutionLimits table with proper RLS policies for user data isolation
+- Implemented SupabaseAuth component with tabbed interface: Magic Link (primary) and Password options
+- Built auth callback handling for seamless magic link authentication flow
+- Updated all server routes to use Supabase user authentication instead of Clerk sessions
+
+### BYOAPI Functionality Implementation
 - Added optional "API Key" field in agent creation form with validation and encryption
 - Implemented ApiKeyValidator component with real-time validation, format checking, and secure display
 - Built EncryptionService for secure API key storage using AES-256-GCM encryption
@@ -119,9 +132,10 @@ Preferred communication style: Simple, everyday language.
 - **Data Models**: Users and Agents tables with UUID primary keys and timestamp tracking
 
 ### Authentication and Authorization
-- **Session Management**: Connect-pg-simple for PostgreSQL-backed sessions
-- **Storage Interface**: Abstracted storage layer with in-memory fallback for development
-- **User Model**: Username/password based authentication system
+- **Authentication Provider**: Supabase Auth with magic link and password options
+- **Session Management**: Supabase built-in session handling with JWT tokens
+- **Row Level Security**: RLS policies ensuring users can only access their own data
+- **User Management**: Supabase's built-in user system with auth.uid() for data isolation
 
 ### External Service Integrations
 - **AI Services**: Anthropic Claude integration for agent testing and communication

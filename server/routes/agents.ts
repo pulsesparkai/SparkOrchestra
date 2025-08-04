@@ -158,7 +158,7 @@ router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
 // DELETE /api/agents/:id - Soft delete agent
 router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.auth.userId;
+    const userId = req.user.id;
     const agentId = req.params.id;
     
     // Check if agent belongs to user
@@ -193,7 +193,7 @@ router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
 // POST /api/agents/:id/test - Test agent with Anthropic
 router.post('/:id/test', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.auth.userId;
+    const userId = req.user.id;
     const agentId = req.params.id;
     
     // Get agent and verify ownership

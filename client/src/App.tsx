@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/components/auth/auth-provider";
 import { AuthPage } from "@/components/auth/auth-page";
+import { AuthCallback } from "@/components/auth/auth-callback";
 import Navigation from "@/components/navigation";
 import Dashboard from "@/pages/dashboard";
 import Agents from "@/pages/agents";
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/workflow" component={Workflow} />
       <Route path="/conductor" component={Conductor} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/auth/callback" component={AuthCallback} />
       <Route component={NotFound} />
     </Switch>
   );

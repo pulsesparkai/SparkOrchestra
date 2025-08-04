@@ -1,20 +1,17 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Play, AlertTriangle, Calendar } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Clock, Zap, AlertTriangle, CheckCircle } from "lucide-react";
+
+interface RateLimitStats {
+  current: number;
+  limit: number;
+  resetTime: Date;
+}
 
 interface RateLimitDisplayProps {
-  workflowRuns: {
-    current: number;
-    limit: number;
-    resetTime: Date;
-  };
-  agentExecutions: {
-    current: number;
-    limit: number;
-    resetTime: Date;
-  };
+  workflowRuns: RateLimitStats;
+  agentExecutions: RateLimitStats;
   isBlocked: boolean;
   nextExecutionAllowed?: Date;
   className?: string;
@@ -27,136 +24,157 @@ export function RateLimitDisplay({
   nextExecutionAllowed,
   className
 }: RateLimitDisplayProps) {
-  const workflowUsagePercentage = (workflowRuns.current / workflowRuns.limit) * 100;
-  const agentUsagePercentage = (agentExecutions.current / agentExecutions.limit) * 100;
-  
-  const isWorkflowNearLimit = workflowUsagePercentage >= 80;
-  const isAgentNearLimit = agentUsagePercentage >= 80;
-
   const formatTimeUntilReset = (resetTime: Date) => {
     const now = new Date();
     const diff = resetTime.getTime() - now.getTime();
+    
+    if (diff <= 0) return "Resetting now";
+    
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     
     if (hours > 0) {
-      return `${hours}h ${minutes}m`;
+      return `Resets in ${hours}h ${minutes}m`;
     }
-    return `${minutes}m`;
+    return `Resets in ${minutes}m`;
   };
 
-  const formatNextExecutionTime = () => {
-    if (!nextExecutionAllowed) return null;
-    
-    const now = new Date();
-    const diff = nextExecutionAllowed.getTime() - now.getTime();
-    const seconds = Math.ceil(diff / 1000);
-    
-    if (seconds <= 0) return null;
-    return `${seconds}s`;
+  const getProgressColor = (current: number, limit: number) => {
+    const percentage = (current / limit) * 100;
+    if (percentage >= 90) return "bg-red-500";
+    if (percentage >= 70) return "bg-yellow-500";
+    return "bg-green-500";
+  };
+
+  const getStatusIcon = (current: number, limit: number) => {
+    if (current >= limit) {
+      return <AlertTriangle className="w-4 h-4 text-red-400" />;
+    }
+    if (current >= limit * 0.8) {
+      return <Clock className="w-4 h-4 text-yellow-400" />;
+    }
+    return <CheckCircle className="w-4 h-4 text-green-400" />;
   };
 
   return (
-    <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
-      <CardContent className="p-4 space-y-4">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+    <Card className={`bg-gray-900/50 border-gray-700 ${className}`}>
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Clock className="w-4 h-4 text-purple-400" />
-            <span className="text-sm font-medium text-gray-300">Rate Limits</span>
+            <Zap className="w-5 h-5 text-purple-400" />
+            <span className="text-gray-300">Rate Limits</span>
           </div>
-          {isBlocked && (
-            <Badge variant="destructive" className="text-xs">
-              <AlertTriangle className="w-3 h-3 mr-1" />
+          
+          {isBlocked ? (
+            <Badge variant="destructive" className="bg-red-900/50 text-red-300 border-red-500/20">
               Blocked
             </Badge>
+          ) : (
+            <Badge variant="secondary" className="bg-green-900/50 text-green-300 border-green-500/20">
+              Active
+            </Badge>
           )}
-        </div>
-
+        </CardTitle>
+      </CardHeader>
+      
+      <CardContent className="space-y-6">
         {/* Workflow Runs */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Play className="w-3 h-3 text-blue-400" />
-              <span className="text-sm text-gray-300">Workflow Runs</span>
+              {getStatusIcon(workflowRuns.current, workflowRuns.limit)}
+              <span className="text-sm font-medium text-gray-300">
+                Workflow Runs (Hourly)
+              </span>
             </div>
-            <span className={cn(
-              "text-sm font-medium",
-              workflowRuns.current >= workflowRuns.limit ? "text-red-400" :
-              isWorkflowNearLimit ? "text-yellow-400" : "text-green-400"
-            )}>
-              {workflowRuns.current}/{workflowRuns.limit}
-            </span>
+            <div className="text-right">
+              <div className="text-lg font-bold text-white">
+                {workflowRuns.current}/{workflowRuns.limit}
+              </div>
+              <div className="text-xs text-gray-400">
+                {formatTimeUntilReset(workflowRuns.resetTime)}
+              </div>
+            </div>
           </div>
           
-          <Progress 
-            value={workflowUsagePercentage} 
-            className="h-1.5"
-            style={{
-              "--progress-background": workflowRuns.current >= workflowRuns.limit
-                ? "rgb(239 68 68)" // red-500
-                : isWorkflowNearLimit 
-                  ? "rgb(234 179 8)" // yellow-500  
-                  : "rgb(59 130 246)" // blue-500
-            } as React.CSSProperties}
-          />
-          
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>Per Hour</span>
-            <span>Resets in {formatTimeUntilReset(workflowRuns.resetTime)}</span>
+          <div className="space-y-1">
+            <Progress 
+              value={(workflowRuns.current / workflowRuns.limit) * 100} 
+              className="h-2"
+            />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>0</span>
+              <span>{workflowRuns.limit} max</span>
+            </div>
           </div>
         </div>
 
         {/* Agent Executions */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 rounded bg-green-400" />
-              <span className="text-sm text-gray-300">Agent Executions</span>
+              {getStatusIcon(agentExecutions.current, agentExecutions.limit)}
+              <span className="text-sm font-medium text-gray-300">
+                Agent Executions (Daily)
+              </span>
             </div>
-            <span className={cn(
-              "text-sm font-medium",
-              agentExecutions.current >= agentExecutions.limit ? "text-red-400" :
-              isAgentNearLimit ? "text-yellow-400" : "text-green-400"
-            )}>
-              {agentExecutions.current}/{agentExecutions.limit}
-            </span>
+            <div className="text-right">
+              <div className="text-lg font-bold text-white">
+                {agentExecutions.current}/{agentExecutions.limit}
+              </div>
+              <div className="text-xs text-gray-400">
+                {formatTimeUntilReset(agentExecutions.resetTime)}
+              </div>
+            </div>
           </div>
           
-          <Progress 
-            value={agentUsagePercentage} 
-            className="h-1.5"
-            style={{
-              "--progress-background": agentExecutions.current >= agentExecutions.limit
-                ? "rgb(239 68 68)" // red-500
-                : isAgentNearLimit 
-                  ? "rgb(234 179 8)" // yellow-500  
-                  : "rgb(34 197 94)" // green-500
-            } as React.CSSProperties}
-          />
-          
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>Per Day</span>
-            <span>Resets in {formatTimeUntilReset(agentExecutions.resetTime)}</span>
+          <div className="space-y-1">
+            <Progress 
+              value={(agentExecutions.current / agentExecutions.limit) * 100} 
+              className="h-2"
+            />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>0</span>
+              <span>{agentExecutions.limit} max</span>
+            </div>
           </div>
         </div>
 
         {/* Next Execution Timer */}
-        {nextExecutionAllowed && (
-          <div className="p-2 bg-yellow-900/20 border border-yellow-500/20 rounded text-center">
-            <div className="flex items-center justify-center space-x-2 text-yellow-300">
-              <Calendar className="w-3 h-3" />
-              <span className="text-xs">
-                Next execution in {formatNextExecutionTime()}
+        {nextExecutionAllowed && nextExecutionAllowed > new Date() && (
+          <div className="p-3 bg-yellow-900/20 border border-yellow-500/20 rounded-lg">
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4 text-yellow-400" />
+              <span className="text-sm text-yellow-300">
+                Next execution in {Math.ceil((nextExecutionAllowed.getTime() - Date.now()) / 1000)}s
               </span>
+            </div>
+            <div className="text-xs text-yellow-400 mt-1">
+              5-second delay enforced between workflow executions
             </div>
           </div>
         )}
 
         {/* Status Messages */}
-        {(isWorkflowNearLimit || isAgentNearLimit) && !isBlocked && (
-          <div className="text-xs text-yellow-400 text-center">
-            Approaching rate limits - executions may be delayed
+        {workflowRuns.current >= workflowRuns.limit && (
+          <div className="p-3 bg-red-900/20 border border-red-500/20 rounded-lg">
+            <div className="text-sm font-medium text-red-300">
+              Hourly workflow limit reached
+            </div>
+            <div className="text-xs text-red-400 mt-1">
+              {formatTimeUntilReset(workflowRuns.resetTime)}
+            </div>
+          </div>
+        )}
+
+        {agentExecutions.current >= agentExecutions.limit && (
+          <div className="p-3 bg-red-900/20 border border-red-500/20 rounded-lg">
+            <div className="text-sm font-medium text-red-300">
+              Daily agent execution limit reached
+            </div>
+            <div className="text-xs text-red-400 mt-1">
+              {formatTimeUntilReset(agentExecutions.resetTime)}
+            </div>
           </div>
         )}
       </CardContent>
