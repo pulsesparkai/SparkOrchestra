@@ -17,9 +17,10 @@ import { Eye, EyeOff, Save, Play } from "lucide-react";
 
 interface AgentFormProps {
   onPreview: (agent: Partial<Agent> | null) => void;
+  onSuccess?: () => void;
 }
 
-export default function AgentForm({ onPreview }: AgentFormProps) {
+export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   const [showApiKey, setShowApiKey] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -49,6 +50,7 @@ export default function AgentForm({ onPreview }: AgentFormProps) {
       });
       form.reset();
       onPreview(null);
+      onSuccess?.();
     },
     onError: (error: any) => {
       toast({
