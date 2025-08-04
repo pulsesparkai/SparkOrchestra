@@ -12,6 +12,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TokenLimitModal } from "@/components/ui/token-limit-modal";
+import { ApiKeyIndicator } from "@/components/ui/api-key-indicator";
 import type { Agent } from "@shared/schema";
 
 export default function Agents() {
@@ -260,9 +261,12 @@ export default function Agents() {
                     <span>Created {formatDate(agent.createdAt || new Date())}</span>
                   </div>
 
-                  <div className="flex items-center text-sm text-gray-300">
-                    <Bot className="w-4 h-4 mr-2 text-gray-400" />
-                    <span>1,234 tokens used this month</span>
+                  <div className="flex items-center justify-between text-sm text-gray-300">
+                    <div className="flex items-center">
+                      <Bot className="w-4 h-4 mr-2 text-gray-400" />
+                      <span>1,234 tokens used this month</span>
+                    </div>
+                    <ApiKeyIndicator hasApiKey={!!(agent as any).hasApiKey} />
                   </div>
                 </div>
 

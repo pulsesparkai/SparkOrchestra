@@ -10,17 +10,17 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
-### Upgrade Prompts & Conversion Tracking (Latest)
-- Created TokenLimitModal component with "You've used your free tokens. Upgrade for 10x more!" messaging
-- Built UpgradeBanner component for dashboard with "Unlock unlimited agents - Upgrade now" messaging
-- Added comprehensive analytics tracking system in useAnalytics hook for conversion events
-- Implemented soft limits with clear upgrade CTAs throughout the application
-- Enhanced dashboard with real-time token usage indicators and upgrade prompts
-- Added upgrade prompts to agents page with limit checking before agent creation
-- Built conversion tracking for upgrade_clicked, modal_dismissed, banner_dismissed events
-- Integrated analytics into dashboard views, agent creation, and workflow interactions
-- Created dynamic upgrade messaging based on user's current usage and plan limits
-- Added localStorage-based event tracking for analytics processing and conversion funnel analysis
+### BYOAPI Functionality Implementation (Latest)
+- Added optional "API Key" field in agent creation form with validation and encryption
+- Implemented ApiKeyValidator component with real-time validation, format checking, and secure display
+- Built EncryptionService for secure API key storage using AES-256-GCM encryption
+- Created API key validation endpoint with format checking and basic Anthropic compatibility
+- Added ApiKeyIndicator component showing "Using your key" vs "Using Orchestra credits" status
+- Enhanced agent cards to display API key status with green/purple badge indicators
+- Implemented encrypted API key storage in database with proper decryption for usage
+- Built BYOAPI logic: user keys bypass token limits, platform keys count toward plan limits
+- Added secure API key handling throughout agent creation, validation, and execution workflows
+- Created clear visual differentiation between unlimited BYOAPI usage and limited platform usage
 
 ## Previous Changes
 

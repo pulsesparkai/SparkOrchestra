@@ -10,6 +10,44 @@ import { workflowEngine } from "./services/workflowEngine";
 import { tokenTracker } from "./services/tokenTracker";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // API Key validation endpoint
+  app.post("/api/validate-api-key", async (req, res) => {
+    try {
+      const { apiKey } = req.body;
+      
+      if (!apiKey) {
+        return res.status(400).json({ valid: false, error: "API key is required" });
+      }
+
+      // Basic format validation
+      if (!apiKey.startsWith('sk-ant-')) {
+        return res.status(400).json({ 
+          valid: false, 
+          error: "API key must start with 'sk-ant-'" 
+        });
+      }
+
+      if (apiKey.length < 20) {
+        return res.status(400).json({ 
+          valid: false, 
+          error: "API key format is invalid" 
+        });
+      }
+
+      // For development, we'll do basic validation
+      return res.json({ 
+        valid: true, 
+        message: "API key format is valid" 
+      });
+    } catch (error) {
+      console.error("API key validation error:", error);
+      res.status(500).json({ 
+        valid: false, 
+        error: "Internal server error during validation" 
+      });
+    }
+  });
+
   // Use the new agent routes with Clerk authentication and bcryptjs encryption
   app.use('/api/agents', agentRoutes);
 

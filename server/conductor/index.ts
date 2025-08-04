@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { storage } from '../storage';
 import { getWebSocketManager } from '../websocket';
 import { tokenTracker } from '../services/tokenTracker';
+import { EncryptionService } from '../services/encryption';
 import type { Agent } from '../../shared/schema';
 
 export interface WorkflowContext {
@@ -146,13 +147,28 @@ export class Conductor {
       throw new Error(`Agent ${agentId} not found in workflow context`);
     }
 
-    // Check token limit before execution
-    const estimatedTokens = tokenTracker.estimateTokens(agent.prompt);
-    const userId = 'demo-user'; // TODO: Get from auth context
-    const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
+    // Determine API key to use (BYOAPI vs platform)
+    let anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    let usingUserKey = false;
     
-    if (!tokenCheck.allowed) {
-      throw new Error(`Token limit exceeded: ${tokenCheck.message}`);
+    if (agent.encryptedApiKey) {
+      try {
+        anthropicApiKey = EncryptionService.decrypt(agent.encryptedApiKey);
+        usingUserKey = true;
+      } catch (error) {
+        console.error('Failed to decrypt user API key, falling back to platform key:', error);
+      }
+    }
+    
+    // Only check token limits if using platform API key
+    if (!usingUserKey) {
+      const estimatedTokens = tokenTracker.estimateTokens(agent.prompt);
+      const userId = 'demo-user'; // TODO: Get from auth context
+      const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
+      
+      if (!tokenCheck.allowed) {
+        throw new Error(`Token limit exceeded: ${tokenCheck.message}`);
+      }
     }
 
     // Initialize agent execution tracking
@@ -186,8 +202,8 @@ export class Conductor {
         throw new Error('No Anthropic API key available');
       }
 
-      // Initialize Anthropic client
-      const anthropic = new Anthropic({ apiKey });
+      // Initialize Anthropic client with appropriate API key
+      const anthropic = new Anthropic({ apiKey: anthropicApiKey });
 
       // Prepare system prompt with workflow context
       const systemPrompt = `You are the Orchestra Conductor. Coordinate agents, monitor progress, handle errors. 
@@ -217,8 +233,10 @@ ${agent.prompt}`;
       const responseText = (response.content[0] as any)?.text || 'No response received';
       const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
-      // Record token usage in tracking system
-      await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
+      // Only record token usage if using platform API key (not user's BYOAPI key)
+      if (!usingUserKey) {
+        await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
+      }
 
       // Update execution tracking
       execution.status = 'complete';
@@ -247,7 +265,7 @@ ${agent.prompt}`;
         agentId,
         status: 'complete',
         progress: 1,
-        message: `${agent.name} completed (${tokensUsed} tokens)`
+        message: `${agent.name} completed (${tokensUsed} tokens)${usingUserKey ? ' - using user API key' : ' - using platform credits'}`
       });
 
       // Emit token usage

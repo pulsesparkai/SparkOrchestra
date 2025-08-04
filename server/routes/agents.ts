@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import { EncryptionService } from '../services/encryption';
 import { requireAuth } from '@clerk/express';
 import Anthropic from '@anthropic-ai/sdk';
 import { storage } from '../storage';
@@ -48,8 +49,7 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
     
     // Encrypt and update API key if provided
     if (validatedData.apiKey) {
-      const saltRounds = 12;
-      const encryptedApiKey = await bcrypt.hash(validatedData.apiKey, saltRounds);
+      const encryptedApiKey = EncryptionService.encrypt(validatedData.apiKey);
       await storage.updateAgent(agent.id, { encryptedApiKey });
     }
     

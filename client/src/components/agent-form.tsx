@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ApiKeyValidator } from "@/components/ui/api-key-validator";
 import { Eye, EyeOff, Save, Play } from "lucide-react";
 
 interface AgentFormProps {
@@ -22,6 +23,7 @@ interface AgentFormProps {
 
 export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   const [showApiKey, setShowApiKey] = useState(false);
+  const [isApiKeyValid, setIsApiKeyValid] = useState(true);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -193,30 +195,14 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               name="apiKey"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-300">API Key (Optional)</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Input
-                        type={showApiKey ? "text" : "password"}
-                        placeholder="sk-ant-api03-..."
-                        className="border-gray-600 bg-gray-800 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600 pr-10"
-                        {...field}
-                        value={field.value || ""}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white"
-                        onClick={() => setShowApiKey(!showApiKey)}
-                      >
-                        {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </Button>
-                    </div>
+                    <ApiKeyValidator
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      onValidationChange={setIsApiKeyValid}
+                      disabled={createAgentMutation.isPending}
+                    />
                   </FormControl>
-                  <FormDescription className="text-xs text-gray-500">
-                    Leave blank to use environment variable
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -258,7 +244,7 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               <Button
                 type="submit"
                 className="flex-1 bg-purple-600 text-white hover:bg-purple-700"
-                disabled={createAgentMutation.isPending}
+                disabled={createAgentMutation.isPending || !isApiKeyValid}
               >
                 <Save className="w-4 h-4 mr-2" />
                 {createAgentMutation.isPending ? "Saving..." : "Save Agent"}
