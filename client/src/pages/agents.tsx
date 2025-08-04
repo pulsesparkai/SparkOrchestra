@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, Plus, Search, Bot, Edit, Trash2, Calendar, Zap } from "lucide-react";
 import AgentForm from "@/components/agent-form";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
+import { TokenCounter } from "@/components/ui/token-counter";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -94,6 +95,18 @@ export default function Agents() {
     }
   };
 
+  const handleUpgrade = () => {
+    trackEvent("upgrade_initiated", {
+      source: "agents_page",
+      user_plan: userPlan,
+      agent_count: agentCount,
+      tokens_used: tokensUsed
+    });
+    
+    // TODO: Redirect to upgrade flow/Stripe
+    console.log("Redirecting to upgrade...");
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
@@ -132,6 +145,17 @@ export default function Agents() {
               </DialogContent>
             </Dialog>
           </div>
+        </div>
+
+        {/* Token Counter */}
+        <div className="mb-6">
+          <TokenCounter
+            tokensUsed={tokensUsed}
+            tokensLimit={tokensLimit}
+            userPlan={userPlan}
+            showUpgradePrompt={true}
+            onUpgrade={handleUpgrade}
+          />
         </div>
 
         {/* Search and Filter Bar */}

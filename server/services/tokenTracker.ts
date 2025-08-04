@@ -131,18 +131,28 @@ export class TokenTracker {
         month,
         tokensUsed: record.tokensUsed,
         tokenLimit,
-        remainingTokens: this.TOKEN_LIMIT_PER_MONTH - record.tokensUsed,
-        percentageUsed: (record.tokensUsed / this.TOKEN_LIMIT_PER_MONTH) * 100,
-        isLimitExceeded: record.tokensUsed >= this.TOKEN_LIMIT_PER_MONTH
+        remainingTokens: tokenLimit - record.tokensUsed,
+        percentageUsed: (record.tokensUsed / tokenLimit) * 100,
+        isLimitExceeded: record.tokensUsed >= tokenLimit
       };
 
       const wouldExceedLimit = (record.tokensUsed + estimatedTokens) > tokenLimit;
 
       if (wouldExceedLimit) {
+        // Calculate next reset date (first day of next month)
+        const nextMonth = new Date();
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        nextMonth.setDate(1);
+        const nextResetDate = nextMonth.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric',
+          year: 'numeric'
+        });
+
         return {
           allowed: false,
           stats,
-          message: `Execution would exceed monthly token limit. Current usage: ${record.tokensUsed}/${tokenLimit} tokens. Estimated tokens needed: ${estimatedTokens}.`
+          message: `Monthly token limit reached. Add your API key or wait until ${nextResetDate}`
         };
       }
 
@@ -180,14 +190,18 @@ export class TokenTracker {
         })
         .where(eq(tokenUsage.id, record.id));
 
+      // Get user's plan for accurate token limit
+      const user = await this.getUserPlan(userId);
+      const tokenLimit = this.PLAN_LIMITS[user.userPlan];
+
       const stats: TokenUsageStats = {
         userId,
         month,
         tokensUsed: newTokensUsed,
-        tokenLimit: this.TOKEN_LIMIT_PER_MONTH,
-        remainingTokens: this.TOKEN_LIMIT_PER_MONTH - newTokensUsed,
-        percentageUsed: (newTokensUsed / this.TOKEN_LIMIT_PER_MONTH) * 100,
-        isLimitExceeded: newTokensUsed >= this.TOKEN_LIMIT_PER_MONTH
+        tokenLimit,
+        remainingTokens: tokenLimit - newTokensUsed,
+        percentageUsed: (newTokensUsed / tokenLimit) * 100,
+        isLimitExceeded: newTokensUsed >= tokenLimit
       };
 
       // Emit real-time token usage update
@@ -198,14 +212,14 @@ export class TokenTracker {
         timestamp: new Date()
       });
 
-      // Emit warning if approaching limit
+      // Emit warning at 80% usage
       if (stats.percentageUsed >= 80 && stats.percentageUsed < 100) {
         this.wsManager?.emitLog({
           id: `token-warning-${Date.now()}`,
           timestamp: new Date(),
           agentName: 'Token Tracker',
           agentId: 'system',
-          message: `Warning: ${stats.percentageUsed.toFixed(1)}% of monthly token limit used (${stats.tokensUsed}/${stats.tokenLimit})`,
+          message: `Warning: ${stats.tokensUsed}/${stats.tokenLimit} tokens used (${stats.percentageUsed.toFixed(0)}%). Consider adding your API key for unlimited usage.`,
           level: 'warning',
           workflowId
         });

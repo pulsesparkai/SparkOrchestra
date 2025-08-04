@@ -51,25 +51,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Use the new agent routes with Clerk authentication and bcryptjs encryption
   app.use('/api/agents', agentRoutes);
 
-  // Conductor API endpoints
-  app.post("/api/workflows/:id/start", async (req, res) => {
-    try {
-      const workflowId = req.params.id;
-      const { agentIds, userId } = req.body;
-      
-      if (!agentIds || !Array.isArray(agentIds) || agentIds.length === 0) {
-        return res.status(400).json({ message: "Agent IDs are required" });
-      }
-      
-      const context = await conductor.orchestrateWorkflow(workflowId, agentIds, userId);
-      res.json(context);
-    } catch (error: any) {
-      res.status(500).json({ 
-        message: "Failed to start workflow", 
-        error: error.message 
-      });
-    }
-  });
+  // Import enhanced workflow routes with token enforcement
+  const { registerWorkflowRoutes } = await import('./routes/workflows');
+  registerWorkflowRoutes(app);
 
   app.get("/api/workflows/:id/status", (req, res) => {
     try {

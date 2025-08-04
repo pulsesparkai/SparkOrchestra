@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UpgradeBanner } from "@/components/ui/upgrade-banner";
 import { TokenLimitModal } from "@/components/ui/token-limit-modal";
+import { TokenCounter } from "@/components/ui/token-counter";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { Bot, Zap, Clock, TrendingUp, Plus } from "lucide-react";
 import { Link } from "wouter";
@@ -64,6 +65,17 @@ export default function Dashboard() {
         onUpgrade={handleUpgrade}
         onTrackEvent={trackEvent}
       />
+
+      {/* Token Counter */}
+      <div className="mb-6">
+        <TokenCounter
+          tokensUsed={tokensUsed}
+          tokensLimit={tokensLimit}
+          userPlan={userPlan}
+          showUpgradePrompt={true}
+          onUpgrade={handleUpgrade}
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="bg-gray-900 border-gray-700">

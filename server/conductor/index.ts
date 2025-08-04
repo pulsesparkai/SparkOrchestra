@@ -160,14 +160,17 @@ export class Conductor {
       }
     }
     
-    // Only check token limits if using platform API key
+    // Only check token limits if using platform API key (not user's BYOAPI key)
     if (!usingUserKey) {
       const estimatedTokens = tokenTracker.estimateTokens(agent.prompt);
       const userId = 'demo-user'; // TODO: Get from auth context
       const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
       
       if (!tokenCheck.allowed) {
-        throw new Error(`Token limit exceeded: ${tokenCheck.message}`);
+        // Enhanced error with better messaging
+        const error = new Error(tokenCheck.message || "Token limit exceeded");
+        error.name = "TokenLimitError";
+        throw error;
       }
     }
 
