@@ -34,10 +34,10 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-gray-400 mt-4">Loading Orchestra...</p>
+          <p className="text-muted-foreground mt-4">Loading Orchestra...</p>
         </div>
       </div>
     );
@@ -48,7 +48,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
       <Navigation />
       <Router />
     </div>
