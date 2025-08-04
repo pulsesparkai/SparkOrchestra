@@ -106,7 +106,7 @@ const nodeTypes: NodeTypes = {
 
 function WorkflowCanvas() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [nodeStatuses, setNodeStatuses] = useState<Record<string, "idle" | "running" | "complete" | "error">>({});
   const [tokenLimitDialog, setTokenLimitDialog] = useState<{ open: boolean; usage?: any }>({ open: false });
@@ -232,7 +232,7 @@ function WorkflowCanvas() {
         estimatedTokens: nodes.length * 250 // Rough estimation per agent
       });
 
-      if (!tokenCheck.allowed) {
+      if (!(tokenCheck as any).allowed) {
         const usage = await apiRequest("GET", "/api/tokens/usage");
         setTokenLimitDialog({ open: true, usage });
         return;
