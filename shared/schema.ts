@@ -7,6 +7,11 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  email: text("email"),
+  userPlan: text("user_plan", { enum: ["free", "early_adopter"] }).default("free").notNull(),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  createdAt: timestamp("created_at").default(sql`now()`),
 });
 
 export const agents = pgTable("agents", {
@@ -27,6 +32,8 @@ export const agents = pgTable("agents", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+  email: true,
+  userPlan: true,
 });
 
 export const insertAgentSchema = createInsertSchema(agents).pick({

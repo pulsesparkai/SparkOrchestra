@@ -10,17 +10,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
-### Token Usage Tracking System (Latest)
-- Created tokens_usage table with user_id, month, tokens_used, and last_updated fields
-- Built comprehensive TokenTracker service in server/services/tokenTracker.ts with 1000/month limit
-- Integrated token limit checking before agent execution in conductor and workflow engine
-- Added real-time token usage recording after each Anthropic API call with database persistence
-- Created TokenUsageIndicator component with live usage display (823/1000 tokens used) in navigation header
-- Built TokenLimitExceededDialog with upgrade prompts when monthly limit exceeded
-- Added token usage API endpoints: /api/tokens/usage, /api/tokens/usage/history, /api/tokens/check-limit
-- Integrated token tracking into workflow execution with pre-flight limit checking
-- Enhanced WebSocket events with real-time token usage updates and limit warnings
-- Added comprehensive token estimation based on prompt length and response size
+### Freemium Model Implementation (Latest)
+- Added user_plan field to users table with 'free' and 'early_adopter' options, defaulting to 'free'
+- Updated TokenTracker service with plan-based limits: Free (100 tokens/month, 2 agents max), Early Adopter (1000 tokens/month, unlimited agents)
+- Implemented agent limit checking in POST /api/agents endpoint with 403 responses when limits exceeded
+- Created comprehensive UpgradePrompt component with side-by-side plan comparison and upgrade buttons
+- Added agent limit validation before creation with user-friendly error messages
+- Enhanced token tracking to support different monthly limits based on user's subscription plan
+- Built upgrade prompts for both token limits and agent limits across the application
+- Integrated freemium restrictions into workflow execution and conductor monitoring features
+- Added plan-based feature restrictions: free users get basic monitoring, Early Adopters get full conductor features
 
 ## Previous Changes
 

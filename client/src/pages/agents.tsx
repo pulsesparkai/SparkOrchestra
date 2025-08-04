@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Download, Plus, Search, Bot, Edit, Trash2, Calendar, Zap } from "lucide-react";
 import AgentForm from "@/components/agent-form";
+import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -15,6 +16,7 @@ export default function Agents() {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [upgradePrompt, setUpgradePrompt] = useState<{ open: boolean; reason: "agents" | "tokens" | "features" }>({ open: false, reason: "agents" });
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -31,12 +33,16 @@ export default function Agents() {
         description: "The agent has been successfully deleted.",
       });
     },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to delete agent. Please try again.",
-        variant: "destructive",
-      });
+    onError: (error: any) => {
+      if (error?.status === 403) {
+        setUpgradePrompt({ open: true, reason: "agents" });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to delete agent. Please try again.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
@@ -271,6 +277,14 @@ export default function Agents() {
           ))}
         </div>
       )}
+
+      {/* Upgrade Prompt Dialog */}
+      <UpgradePrompt
+        open={upgradePrompt.open}
+        onOpenChange={(open) => setUpgradePrompt({ ...upgradePrompt, open })}
+        reason={upgradePrompt.reason}
+        currentUsage={{ used: 2, limit: 2 }} // This would come from API
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { requireAuth } from '@clerk/express';
 import Anthropic from '@anthropic-ai/sdk';
 import { storage } from '../storage';
 import { insertAgentSchema, type Agent } from '../../shared/schema';
+import { tokenTracker } from '../services/tokenTracker';
 
 // Extend Request interface for Clerk auth
 interface AuthenticatedRequest extends Request {
@@ -22,6 +23,19 @@ router.use(requireAuth());
 router.post('/', async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.auth.userId;
+    
+    // Check agent limits based on user's plan
+    const currentAgents = await storage.getAgentsByUserId(userId);
+    const agentLimitCheck = await tokenTracker.checkAgentLimit(userId, currentAgents.length);
+    
+    if (!agentLimitCheck.allowed) {
+      return res.status(403).json({
+        message: agentLimitCheck.message,
+        plan: 'free',
+        limit: agentLimitCheck.limit,
+        current: currentAgents.length
+      });
+    }
     
     // Validate request body
     const validatedData = insertAgentSchema.parse({

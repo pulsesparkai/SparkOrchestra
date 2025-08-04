@@ -1,7 +1,8 @@
 import { db } from '../db';
-import { tokenUsage } from '../../shared/schema';
+import { tokenUsage, users } from '../../shared/schema';
 import { eq, and } from 'drizzle-orm';
 import { getWebSocketManager } from '../websocket';
+import type { User } from '../../shared/schema';
 
 export interface TokenUsageStats {
   userId: string;
@@ -14,8 +15,61 @@ export interface TokenUsageStats {
 }
 
 export class TokenTracker {
-  private readonly TOKEN_LIMIT_PER_MONTH = 1000;
+  private readonly PLAN_LIMITS = {
+    free: 100,
+    early_adopter: 1000
+  };
+
+  private readonly PLAN_AGENT_LIMITS = {
+    free: 2,
+    early_adopter: -1 // unlimited
+  };
   private wsManager = getWebSocketManager();
+
+  /**
+   * Get user's plan information
+   */
+  private async getUserPlan(userId: string): Promise<User> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId));
+    
+    if (!user) {
+      throw new Error(`User ${userId} not found`);
+    }
+    
+    return user;
+  }
+
+  /**
+   * Check if user can create more agents based on their plan
+   */
+  async checkAgentLimit(userId: string, currentAgentCount: number): Promise<{
+    allowed: boolean;
+    limit: number;
+    message?: string;
+  }> {
+    try {
+      const user = await this.getUserPlan(userId);
+      const agentLimit = this.PLAN_AGENT_LIMITS[user.userPlan];
+      
+      // -1 means unlimited
+      if (agentLimit === -1) {
+        return { allowed: true, limit: -1 };
+      }
+      
+      const allowed = currentAgentCount < agentLimit;
+      return {
+        allowed,
+        limit: agentLimit,
+        message: allowed ? undefined : `${user.userPlan === 'free' ? 'Free' : 'Early Adopter'} plan limited to ${agentLimit} agents. Upgrade to create more.`
+      };
+    } catch (error) {
+      console.error('Error checking agent limit:', error);
+      return { allowed: false, limit: 0, message: 'Error checking agent limit' };
+    }
+  }
 
   /**
    * Get current month string in format "YYYY-MM"
@@ -65,6 +119,10 @@ export class TokenTracker {
     message?: string;
   }> {
     try {
+      // Get user's plan
+      const user = await this.getUserPlan(userId);
+      const tokenLimit = this.PLAN_LIMITS[user.userPlan];
+
       const month = this.getCurrentMonth();
       const record = await this.getOrCreateUsageRecord(userId, month);
 
@@ -72,19 +130,19 @@ export class TokenTracker {
         userId,
         month,
         tokensUsed: record.tokensUsed,
-        tokenLimit: this.TOKEN_LIMIT_PER_MONTH,
+        tokenLimit,
         remainingTokens: this.TOKEN_LIMIT_PER_MONTH - record.tokensUsed,
         percentageUsed: (record.tokensUsed / this.TOKEN_LIMIT_PER_MONTH) * 100,
         isLimitExceeded: record.tokensUsed >= this.TOKEN_LIMIT_PER_MONTH
       };
 
-      const wouldExceedLimit = (record.tokensUsed + estimatedTokens) > this.TOKEN_LIMIT_PER_MONTH;
+      const wouldExceedLimit = (record.tokensUsed + estimatedTokens) > tokenLimit;
 
       if (wouldExceedLimit) {
         return {
           allowed: false,
           stats,
-          message: `Execution would exceed monthly token limit. Current usage: ${record.tokensUsed}/${this.TOKEN_LIMIT_PER_MONTH} tokens. Estimated tokens needed: ${estimatedTokens}.`
+          message: `Execution would exceed monthly token limit. Current usage: ${record.tokensUsed}/${tokenLimit} tokens. Estimated tokens needed: ${estimatedTokens}.`
         };
       }
 
