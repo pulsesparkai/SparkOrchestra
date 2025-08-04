@@ -6,6 +6,7 @@ import { testAnthropicConnection } from "./services/anthropic";
 import { initializeWebSocket, getWebSocketManager } from "./websocket";
 import agentRoutes from "./routes/agents";
 import { conductor } from "./conductor";
+import { workflowEngine } from "./services/workflowEngine";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Use the new agent routes with Clerk authentication and bcryptjs encryption
@@ -63,6 +64,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       res.status(500).json({ 
         message: "Failed to apply intervention", 
+        error: error.message 
+      });
+    }
+  });
+
+  // NEW: Workflow execution engine endpoint
+  app.post("/api/workflows/:id/run", async (req, res) => {
+    try {
+      const workflowId = req.params.id;
+      const { userId, graph } = req.body;
+      
+      if (!graph || !graph.nodes || !graph.edges) {
+        return res.status(400).json({ message: "Invalid workflow graph structure" });
+      }
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      
+      const execution = await workflowEngine.executeWorkflow(workflowId, userId, graph);
+      res.json({
+        success: true,
+        executionId: execution.id,
+        workflowId: execution.workflowId,
+        executionOrder: execution.executionOrder,
+        totalSteps: execution.totalSteps,
+        status: execution.status
+      });
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to execute workflow", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.get("/api/workflows/:id/executions", (req, res) => {
+    try {
+      const workflowId = req.params.id;
+      const executions = workflowEngine.getWorkflowExecutions(workflowId);
+      
+      // Return sanitized execution data
+      const sanitizedExecutions = executions.map(exec => ({
+        id: exec.id,
+        workflowId: exec.workflowId,
+        status: exec.status,
+        startTime: exec.startTime,
+        endTime: exec.endTime,
+        currentStep: exec.currentStep,
+        totalSteps: exec.totalSteps,
+        progress: exec.currentStep / exec.totalSteps,
+        logsCount: exec.logs.length
+      }));
+      
+      res.json(sanitizedExecutions);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to get workflow executions", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.get("/api/executions/:id", (req, res) => {
+    try {
+      const executionId = req.params.id;
+      const execution = workflowEngine.getExecution(executionId);
+      
+      if (!execution) {
+        return res.status(404).json({ message: "Execution not found" });
+      }
+      
+      res.json(execution);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to get execution details", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.post("/api/executions/:id/control", async (req, res) => {
+    try {
+      const executionId = req.params.id;
+      const { action } = req.body;
+      
+      if (!action || !['pause', 'resume', 'abort'].includes(action)) {
+        return res.status(400).json({ message: "Invalid action. Use 'pause', 'resume', or 'abort'" });
+      }
+      
+      let success = false;
+      
+      switch (action) {
+        case 'pause':
+          success = await workflowEngine.pauseExecution(executionId);
+          break;
+        case 'resume':
+          success = await workflowEngine.resumeExecution(executionId);
+          break;
+        case 'abort':
+          success = await workflowEngine.abortExecution(executionId);
+          break;
+      }
+      
+      if (success) {
+        res.json({ success: true, message: `Execution ${action}ed successfully` });
+      } else {
+        res.status(400).json({ success: false, message: `Failed to ${action} execution` });
+      }
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: `Failed to ${req.body.action} execution`, 
         error: error.message 
       });
     }

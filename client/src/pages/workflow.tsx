@@ -226,25 +226,42 @@ function WorkflowCanvas() {
 
     try {
       const workflowId = `workflow-${Date.now()}`;
-      const agentIds = nodes.map(node => node.data.id);
+      
+      // Prepare workflow graph with proper agent IDs
+      const workflowGraph = {
+        nodes: nodes.map(node => ({
+          id: node.id,
+          agentId: node.data.id,
+          position: node.position,
+          data: node.data
+        })),
+        edges: edges.map(edge => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          type: edge.type || 'default'
+        }))
+      };
 
       // Subscribe to this workflow's events
       websocketClient.subscribeToWorkflow(workflowId);
 
-      // Start the workflow
-      await apiRequest("POST", `/api/workflows/${workflowId}/start`, {
-        agentIds,
-        userId: 'demo-user' // TODO: Get from auth context
+      // Execute workflow using the new engine
+      const response = await apiRequest("POST", `/api/workflows/${workflowId}/run`, {
+        userId: 'demo-user', // TODO: Get from auth context
+        graph: workflowGraph
       });
 
       toast({
-        title: "Workflow Started",
-        description: `Running workflow with ${nodes.length} agent(s)...`,
+        title: "Workflow Execution Started",
+        description: `Executing ${workflowGraph.nodes.length} agents in determined order...`,
       });
+
+      console.log('Workflow execution started:', response);
     } catch (error: any) {
       toast({
-        title: "Failed to Start Workflow",
-        description: error.message || "Unable to start workflow",
+        title: "Failed to Execute Workflow",
+        description: error.message || "Unable to execute workflow",
         variant: "destructive",
       });
     }

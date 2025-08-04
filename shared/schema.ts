@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, boolean, timestamp, jsonb, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -44,7 +44,42 @@ export const insertAgentSchema = createInsertSchema(agents).pick({
   apiKey: z.string().optional(), // This will be encrypted before storage
 });
 
+export const workflowExecutions = pgTable("workflow_executions", {
+  id: text("id").primaryKey(),
+  workflowId: text("workflow_id").notNull(),
+  userId: text("user_id").notNull(),
+  graph: jsonb("graph").notNull(),
+  executionOrder: jsonb("execution_order").notNull(),
+  status: text("status").notNull().default("pending"),
+  startTime: timestamp("start_time").notNull(),
+  endTime: timestamp("end_time"),
+  currentStep: integer("current_step").notNull().default(0),
+  totalSteps: integer("total_steps").notNull().default(0),
+  context: jsonb("context").notNull().default("{}"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull()
+});
+
+export const workflowExecutionLogs = pgTable("workflow_execution_logs", {
+  id: text("id").primaryKey(),
+  workflowExecutionId: text("workflow_execution_id").notNull().references(() => workflowExecutions.id, { onDelete: "cascade" }),
+  stepNumber: integer("step_number").notNull(),
+  agentId: text("agent_id").notNull(),
+  agentName: text("agent_name").notNull(),
+  action: text("action").notNull(),
+  input: jsonb("input"),
+  output: jsonb("output"),
+  status: text("status").notNull(),
+  timestamp: timestamp("timestamp").notNull(),
+  duration: integer("duration"), 
+  tokensUsed: integer("tokens_used"),
+  error: text("error"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertAgent = z.infer<typeof insertAgentSchema>;
 export type Agent = typeof agents.$inferSelect;
+export type WorkflowExecution = typeof workflowExecutions.$inferSelect;
+export type WorkflowExecutionLog = typeof workflowExecutionLogs.$inferSelect;

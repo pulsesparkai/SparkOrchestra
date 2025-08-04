@@ -10,13 +10,16 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
-### Orchestra Conductor Implementation (Latest)
-- Built server/conductor/index.ts with complete workflow orchestration system
-- Integrated Anthropic API execution with encrypted API key support and user validation
-- Added real-time Socket.io events for workflow progress, agent status, and intervention controls
-- Created conductor API endpoints for starting workflows, checking status, and applying interventions
-- Enhanced workflow designer with conductor integration for live agent execution
-- Implemented comprehensive execution logging and error handling with WebSocket streaming
+### Workflow Execution Engine (Latest)
+- Built comprehensive workflow execution engine in server/services/workflowEngine.ts
+- Created POST /api/workflows/:id/run endpoint that triggers the Conductor system
+- Implemented graph parsing with topological sort to determine optimal execution order
+- Added context passing between agents based on workflow connections and execution flow
+- Built database storage in server/services/workflowDatabase.ts with PostgreSQL integration
+- Created workflowExecutions and workflowExecutionLogs tables for persistent logging
+- Enhanced real-time Socket.io updates for each execution step and agent progress
+- Implemented workflow control endpoints for pause, resume, and abort operations
+- Added comprehensive error handling and execution state management
 
 ## Previous Changes
 
