@@ -232,7 +232,7 @@ export default function Agents() {
 
                   <div className="flex items-center text-sm text-gray-300">
                     <Calendar className="w-4 h-4 mr-2 text-gray-400" />
-                    <span>Created {formatDate(agent.createdAt)}</span>
+                    <span>Created {formatDate(agent.createdAt || new Date())}</span>
                   </div>
 
                   <div className="flex items-center text-sm text-gray-300">
