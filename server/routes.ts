@@ -7,6 +7,7 @@ import { initializeWebSocket, getWebSocketManager } from "./websocket";
 import agentRoutes from "./routes/agents";
 import { conductor } from "./conductor";
 import { workflowEngine } from "./services/workflowEngine";
+import { tokenTracker } from "./services/tokenTracker";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Use the new agent routes with Clerk authentication and bcryptjs encryption
@@ -176,6 +177,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       res.status(500).json({ 
         message: `Failed to ${req.body.action} execution`, 
+        error: error.message 
+      });
+    }
+  });
+
+  // Token usage endpoints
+  app.get("/api/tokens/usage", async (req, res) => {
+    try {
+      const userId = 'demo-user'; // TODO: Get from auth context
+      const usage = await tokenTracker.getTokenUsage(userId);
+      res.json(usage);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to get token usage", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.get("/api/tokens/usage/history", async (req, res) => {
+    try {
+      const userId = 'demo-user'; // TODO: Get from auth context
+      const history = await tokenTracker.getTokenUsageHistory(userId);
+      res.json(history);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to get token usage history", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.post("/api/tokens/check-limit", async (req, res) => {
+    try {
+      const userId = 'demo-user'; // TODO: Get from auth context
+      const { estimatedTokens } = req.body;
+      const result = await tokenTracker.checkTokenLimit(userId, estimatedTokens || 100);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to check token limit", 
+        error: error.message 
+      });
+    }
+  });
+
+  app.post("/api/tokens/reset", async (req, res) => {
+    try {
+      const userId = 'demo-user'; // TODO: Get from auth context
+      const { month } = req.body;
+      await tokenTracker.resetTokenUsage(userId, month);
+      res.json({ success: true, message: "Token usage reset successfully" });
+    } catch (error: any) {
+      res.status(500).json({ 
+        message: "Failed to reset token usage", 
         error: error.message 
       });
     }

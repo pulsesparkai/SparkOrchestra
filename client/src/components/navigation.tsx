@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TokenUsageIndicator } from "@/components/ui/token-usage-indicator";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -54,6 +55,7 @@ export default function Navigation() {
           </div>
           
           <div className="flex items-center space-x-4">
+            <TokenUsageIndicator />
             <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
               <Bell className="w-4 h-4" />
             </Button>

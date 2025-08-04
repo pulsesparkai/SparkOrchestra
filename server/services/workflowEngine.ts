@@ -2,6 +2,7 @@ import { conductor } from '../conductor';
 import { storage } from '../storage';
 import { getWebSocketManager } from '../websocket';
 import { workflowDatabase } from './workflowDatabase';
+import { tokenTracker } from './tokenTracker';
 import type { Agent } from '../../shared/schema';
 
 export interface WorkflowNode {
@@ -128,6 +129,16 @@ export class WorkflowExecutionEngine {
     graph: WorkflowGraph
   ): Promise<WorkflowExecution> {
     try {
+      // Check token limits before starting workflow
+      const totalEstimatedTokens = graph.nodes.reduce((total, node) => {
+        return total + tokenTracker.estimateTokens(node.data.prompt);
+      }, 0);
+
+      const tokenCheck = await tokenTracker.checkTokenLimit(userId, totalEstimatedTokens);
+      if (!tokenCheck.allowed) {
+        throw new Error(`Token limit exceeded: ${tokenCheck.message}`);
+      }
+
       // Parse execution order
       const executionOrder = this.parseExecutionOrder(graph);
       

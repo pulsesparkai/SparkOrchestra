@@ -10,16 +10,17 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
-### Workflow Execution Engine (Latest)
-- Built comprehensive workflow execution engine in server/services/workflowEngine.ts
-- Created POST /api/workflows/:id/run endpoint that triggers the Conductor system
-- Implemented graph parsing with topological sort to determine optimal execution order
-- Added context passing between agents based on workflow connections and execution flow
-- Built database storage in server/services/workflowDatabase.ts with PostgreSQL integration
-- Created workflowExecutions and workflowExecutionLogs tables for persistent logging
-- Enhanced real-time Socket.io updates for each execution step and agent progress
-- Implemented workflow control endpoints for pause, resume, and abort operations
-- Added comprehensive error handling and execution state management
+### Token Usage Tracking System (Latest)
+- Created tokens_usage table with user_id, month, tokens_used, and last_updated fields
+- Built comprehensive TokenTracker service in server/services/tokenTracker.ts with 1000/month limit
+- Integrated token limit checking before agent execution in conductor and workflow engine
+- Added real-time token usage recording after each Anthropic API call with database persistence
+- Created TokenUsageIndicator component with live usage display (823/1000 tokens used) in navigation header
+- Built TokenLimitExceededDialog with upgrade prompts when monthly limit exceeded
+- Added token usage API endpoints: /api/tokens/usage, /api/tokens/usage/history, /api/tokens/check-limit
+- Integrated token tracking into workflow execution with pre-flight limit checking
+- Enhanced WebSocket events with real-time token usage updates and limit warnings
+- Added comprehensive token estimation based on prompt length and response size
 
 ## Previous Changes
 

@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import bcrypt from 'bcryptjs';
 import { storage } from '../storage';
 import { getWebSocketManager } from '../websocket';
+import { tokenTracker } from '../services/tokenTracker';
 import type { Agent } from '../../shared/schema';
 
 export interface WorkflowContext {
@@ -145,6 +146,15 @@ export class Conductor {
       throw new Error(`Agent ${agentId} not found in workflow context`);
     }
 
+    // Check token limit before execution
+    const estimatedTokens = tokenTracker.estimateTokens(agent.prompt);
+    const userId = 'demo-user'; // TODO: Get from auth context
+    const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
+    
+    if (!tokenCheck.allowed) {
+      throw new Error(`Token limit exceeded: ${tokenCheck.message}`);
+    }
+
     // Initialize agent execution tracking
     const execution: AgentExecution = {
       agentId,
@@ -206,6 +216,9 @@ ${agent.prompt}`;
 
       const responseText = (response.content[0] as any)?.text || 'No response received';
       const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+
+      // Record token usage in tracking system
+      await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
 
       // Update execution tracking
       execution.status = 'complete';

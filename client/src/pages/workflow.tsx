@@ -5,6 +5,7 @@ import { Play, Save, Trash2, Settings, Bot, Search, FileText, BarChart3, PenTool
 import { useState, useCallback, useRef, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { TokenLimitExceededDialog } from "@/components/ui/token-usage-indicator";
 import type { Agent } from "@shared/schema";
 import { websocketClient, type WorkflowProgressEvent } from "@/lib/websocket";
 import { apiRequest } from "@/lib/queryClient";
@@ -105,9 +106,10 @@ const nodeTypes: NodeTypes = {
 
 function WorkflowCanvas() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [nodeStatuses, setNodeStatuses] = useState<Record<string, "idle" | "running" | "complete" | "error">>({});
+  const [tokenLimitDialog, setTokenLimitDialog] = useState<{ open: boolean; usage?: any }>({ open: false });
   const { toast } = useToast();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
@@ -225,6 +227,17 @@ function WorkflowCanvas() {
     }
 
     try {
+      // Check token limits before running
+      const tokenCheck = await apiRequest("POST", "/api/tokens/check-limit", {
+        estimatedTokens: nodes.length * 250 // Rough estimation per agent
+      });
+
+      if (!tokenCheck.allowed) {
+        const usage = await apiRequest("GET", "/api/tokens/usage");
+        setTokenLimitDialog({ open: true, usage });
+        return;
+      }
+
       const workflowId = `workflow-${Date.now()}`;
       
       // Prepare workflow graph with proper agent IDs
@@ -500,6 +513,13 @@ function WorkflowCanvas() {
           </div>
         </div>
       </div>
+
+      {/* Token Limit Exceeded Dialog */}
+      <TokenLimitExceededDialog
+        open={tokenLimitDialog.open}
+        onOpenChange={(open) => setTokenLimitDialog({ open, usage: tokenLimitDialog.usage })}
+        usage={tokenLimitDialog.usage}
+      />
     </div>
   );
 }

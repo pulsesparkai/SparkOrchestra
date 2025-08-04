@@ -77,9 +77,19 @@ export const workflowExecutionLogs = pgTable("workflow_execution_logs", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const tokenUsage = pgTable("token_usage", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  month: text("month").notNull(), // Format: "2025-08"
+  tokensUsed: integer("tokens_used").notNull().default(0),
+  lastUpdated: timestamp("last_updated").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertAgent = z.infer<typeof insertAgentSchema>;
 export type Agent = typeof agents.$inferSelect;
 export type WorkflowExecution = typeof workflowExecutions.$inferSelect;
 export type WorkflowExecutionLog = typeof workflowExecutionLogs.$inferSelect;
+export type TokenUsage = typeof tokenUsage.$inferSelect;
