@@ -85,23 +85,23 @@ export function SupabaseAuth() {
 
   if (magicLinkSent) {
     return (
-      <Card className="w-full max-w-md bg-gray-900 border-gray-700">
+      <Card style={{backgroundColor: 'var(--auth-card)'}} className="w-full max-w-md border-border">
         <CardHeader className="text-center">
           <div className="mx-auto w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
             <CheckCircle className="w-8 h-8 text-green-400" />
           </div>
-          <CardTitle className="text-2xl font-bold text-white">Check Your Email</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardTitle className="text-2xl font-bold" style={{color: 'var(--auth-card-foreground)'}}>Check Your Email</CardTitle>
+          <CardDescription style={{color: 'var(--auth-card-foreground)', opacity: 0.7}}>
             We sent a magic link to <strong>{email}</strong>
           </CardDescription>
         </CardHeader>
         <CardContent className="text-center space-y-4">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm" style={{color: 'var(--auth-card-foreground)', opacity: 0.7}}>
             Click the link in your email to sign in instantly. No password required!
           </p>
           
-          <div className="p-4 bg-blue-900/20 border border-blue-500/20 rounded-lg">
-            <p className="text-sm text-blue-300">
+          <div className="p-4 border rounded-lg" style={{backgroundColor: 'rgba(255, 107, 53, 0.1)', borderColor: 'rgba(255, 107, 53, 0.2)'}}>
+            <p className="text-sm" style={{color: '#ff6b35'}}>
               💡 Tip: Magic links are more secure than passwords and work on any device
             </p>
           </div>
@@ -112,7 +112,8 @@ export function SupabaseAuth() {
               setMagicLinkSent(false);
               setEmail('');
             }}
-            className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+            className="w-full border-border hover:bg-secondary"
+            style={{color: 'var(--auth-card-foreground)'}}
           >
             Try Different Email
           </Button>
@@ -122,22 +123,22 @@ export function SupabaseAuth() {
   }
 
   return (
-    <Card className="w-full max-w-md bg-gray-900 border-gray-700">
+    <Card style={{backgroundColor: 'var(--auth-card)'}} className="w-full max-w-md border-border">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-white">Welcome to Orchestra</CardTitle>
-        <CardDescription className="text-gray-400">
+        <CardTitle className="text-2xl font-bold" style={{color: 'var(--auth-card-foreground)'}}>Welcome to Orchestra</CardTitle>
+        <CardDescription style={{color: 'var(--auth-card-foreground)', opacity: 0.7}}>
           Sign in to manage your AI agents
         </CardDescription>
       </CardHeader>
       
       <CardContent>
         <Tabs defaultValue="magic" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800">
-            <TabsTrigger value="magic" className="data-[state=active]:bg-purple-600">
+          <TabsList className="grid w-full grid-cols-2 bg-secondary">
+            <TabsTrigger value="magic" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Zap className="w-4 h-4 mr-2" />
               Magic Link
             </TabsTrigger>
-            <TabsTrigger value="password" className="data-[state=active]:bg-purple-600">
+            <TabsTrigger value="password" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Lock className="w-4 h-4 mr-2" />
               Password
             </TabsTrigger>
@@ -152,16 +153,16 @@ export function SupabaseAuth() {
             )}
 
             {success && (
-              <Alert className="border-green-500 bg-green-900/20">
-                <AlertDescription className="text-green-300">{success}</AlertDescription>
+              <Alert className="border-accent bg-accent/20">
+                <AlertDescription style={{color: '#ff6b35'}}>{success}</AlertDescription>
               </Alert>
             )}
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="magic-email" className="text-gray-300">Email Address</Label>
+                <Label htmlFor="magic-email" style={{color: 'var(--auth-card-foreground)'}}>Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4" style={{color: 'var(--auth-card-foreground)', opacity: 0.7}} />
                   <Input
                     id="magic-email"
                     type="email"
@@ -169,7 +170,8 @@ export function SupabaseAuth() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="pl-10 bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+                    className="pl-10 bg-secondary border-border focus:ring-primary focus:border-primary"
+                    style={{color: 'var(--auth-card-foreground)'}}
                   />
                 </div>
               </div>
@@ -177,11 +179,14 @@ export function SupabaseAuth() {
               <Button
                 onClick={handleMagicLink}
                 disabled={isLoading || !email}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-primary hover:opacity-80 text-primary-foreground"
+                style={{backgroundColor: '#3d1700', color: '#e4e4e4'}}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#5a2200'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#3d1700'}
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                     <span>Sending magic link...</span>
                   </div>
                 ) : (
@@ -193,7 +198,7 @@ export function SupabaseAuth() {
               </Button>
 
               <div className="text-center">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs" style={{color: 'var(--auth-card-foreground)', opacity: 0.5}}>
                   ✨ No password needed • More secure • Works on any device
                 </p>
               </div>

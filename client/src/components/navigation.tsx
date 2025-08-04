@@ -16,7 +16,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-card border-b border-border">
+    <nav className="bg-secondary border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
@@ -42,7 +42,7 @@ export default function Navigation() {
                         px-3 py-2 text-sm transition-colors
                         ${isActive 
                           ? "bg-primary/20 text-primary" 
-                          : "text-muted-foreground hover:text-foreground"
+                          : "text-secondary-foreground hover:text-secondary-foreground/80"
                         }
                       `}
                     >
@@ -57,7 +57,7 @@ export default function Navigation() {
           
           <div className="flex items-center space-x-4">
             <TokenUsageIndicator />
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" className="text-secondary-foreground hover:text-secondary-foreground/80">
               <Bell className="w-4 h-4" />
             </Button>
             <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
