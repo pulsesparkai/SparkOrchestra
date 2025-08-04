@@ -10,16 +10,17 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
-### Freemium Model Implementation (Latest)
-- Added user_plan field to users table with 'free' and 'early_adopter' options, defaulting to 'free'
-- Updated TokenTracker service with plan-based limits: Free (100 tokens/month, 2 agents max), Early Adopter (1000 tokens/month, unlimited agents)
-- Implemented agent limit checking in POST /api/agents endpoint with 403 responses when limits exceeded
-- Created comprehensive UpgradePrompt component with side-by-side plan comparison and upgrade buttons
-- Added agent limit validation before creation with user-friendly error messages
-- Enhanced token tracking to support different monthly limits based on user's subscription plan
-- Built upgrade prompts for both token limits and agent limits across the application
-- Integrated freemium restrictions into workflow execution and conductor monitoring features
-- Added plan-based feature restrictions: free users get basic monitoring, Early Adopters get full conductor features
+### Upgrade Prompts & Conversion Tracking (Latest)
+- Created TokenLimitModal component with "You've used your free tokens. Upgrade for 10x more!" messaging
+- Built UpgradeBanner component for dashboard with "Unlock unlimited agents - Upgrade now" messaging
+- Added comprehensive analytics tracking system in useAnalytics hook for conversion events
+- Implemented soft limits with clear upgrade CTAs throughout the application
+- Enhanced dashboard with real-time token usage indicators and upgrade prompts
+- Added upgrade prompts to agents page with limit checking before agent creation
+- Built conversion tracking for upgrade_clicked, modal_dismissed, banner_dismissed events
+- Integrated analytics into dashboard views, agent creation, and workflow interactions
+- Created dynamic upgrade messaging based on user's current usage and plan limits
+- Added localStorage-based event tracking for analytics processing and conversion funnel analysis
 
 ## Previous Changes
 

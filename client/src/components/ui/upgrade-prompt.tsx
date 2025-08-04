@@ -7,6 +7,7 @@ import { Check, Zap, Crown, Sparkles } from "lucide-react";
 interface UpgradePromptProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onUpgrade?: () => void;
   reason: "tokens" | "agents" | "features";
   currentUsage?: {
     used: number;
@@ -14,7 +15,7 @@ interface UpgradePromptProps {
   };
 }
 
-export function UpgradePrompt({ open, onOpenChange, reason, currentUsage }: UpgradePromptProps) {
+export function UpgradePrompt({ open, onOpenChange, reason, currentUsage, onUpgrade }: UpgradePromptProps) {
   const getTitle = () => {
     switch (reason) {
       case "tokens":

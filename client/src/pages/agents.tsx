@@ -6,10 +6,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, Plus, Search, Bot, Edit, Trash2, Calendar, Zap } from "lucide-react";
 import AgentForm from "@/components/agent-form";
 import { UpgradePrompt } from "@/components/ui/upgrade-prompt";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAnalytics } from "@/hooks/use-analytics";
+import { TokenLimitModal } from "@/components/ui/token-limit-modal";
 import type { Agent } from "@shared/schema";
 
 export default function Agents() {
@@ -17,8 +19,26 @@ export default function Agents() {
   const [roleFilter, setRoleFilter] = useState("all");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [upgradePrompt, setUpgradePrompt] = useState<{ open: boolean; reason: "agents" | "tokens" | "features" }>({ open: false, reason: "agents" });
+  const [tokenLimitModalOpen, setTokenLimitModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { trackEvent } = useAnalytics();
+
+  // Mock user data - would come from API/context in real app
+  const userPlan = "free" as const;
+  const agentCount = agents?.length || 0;
+  const maxAgents = 2;
+  const tokensUsed = 95; // Near limit to show prompts
+  const tokensLimit = 100;
+
+  useEffect(() => {
+    // Track page view
+    trackEvent("agents_page_viewed", {
+      user_plan: userPlan,
+      agent_count: agentCount,
+      tokens_used: tokensUsed
+    });
+  }, [agentCount]);
 
   const { data: agents, isLoading } = useQuery<Agent[]>({
     queryKey: ["/api/agents"],
@@ -35,6 +55,11 @@ export default function Agents() {
     },
     onError: (error: any) => {
       if (error?.status === 403) {
+        trackEvent("agent_limit_hit", {
+          source: "delete_attempt",
+          agent_count: agentCount,
+          max_agents: maxAgents
+        });
         setUpgradePrompt({ open: true, reason: "agents" });
       } else {
         toast({
@@ -283,7 +308,34 @@ export default function Agents() {
         open={upgradePrompt.open}
         onOpenChange={(open) => setUpgradePrompt({ ...upgradePrompt, open })}
         reason={upgradePrompt.reason}
-        currentUsage={{ used: 2, limit: 2 }} // This would come from API
+        currentUsage={{ used: agentCount, limit: maxAgents }}
+        onUpgrade={() => {
+          trackEvent("upgrade_clicked", {
+            source: "upgrade_prompt",
+            reason: upgradePrompt.reason,
+            agent_count: agentCount,
+            tokens_used: tokensUsed
+          });
+          // TODO: Redirect to upgrade flow
+        }}
+      />
+
+      {/* Token Limit Modal */}
+      <TokenLimitModal
+        open={tokenLimitModalOpen}
+        onOpenChange={setTokenLimitModalOpen}
+        tokensUsed={tokensUsed}
+        tokensLimit={tokensLimit}
+        userPlan={userPlan}
+        onUpgrade={() => {
+          trackEvent("upgrade_clicked", {
+            source: "token_limit_modal",
+            tokens_used: tokensUsed,
+            tokens_limit: tokensLimit
+          });
+          // TODO: Redirect to upgrade flow
+        }}
+        onTrackEvent={trackEvent}
       />
     </div>
   );
