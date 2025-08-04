@@ -28,7 +28,8 @@ export default function Pricing() {
   ];
 
   const earlyAdopterFeatures = [
-    "1,000 tokens per month",
+    "1,000 Orchestra credits per month",
+    "Bring your own API key for unlimited usage",
     "Unlimited agents",
     "Full conductor orchestration",
     "Real-time monitoring",
@@ -37,7 +38,8 @@ export default function Pricing() {
   ];
 
   const comparisonFeatures = [
-    { name: "Monthly Tokens", free: "100", earlyAdopter: "1,000" },
+    { name: "Orchestra Credits", free: "100", earlyAdopter: "1,000" },
+    { name: "Bring Your Own API", free: false, earlyAdopter: true },
     { name: "Agents", free: "2", earlyAdopter: "Unlimited" },
     { name: "Monitoring", free: "Basic", earlyAdopter: "Real-time" },
     { name: "Conductor", free: false, earlyAdopter: true },
@@ -147,7 +149,7 @@ export default function Pricing() {
                 <span className="text-gray-400 text-lg">/month</span>
               </div>
               <p className="text-gray-300">
-                Everything you need for professional AI workflows
+                Use our credits or connect your Anthropic API for unlimited power
               </p>
             </CardHeader>
 
@@ -274,43 +276,77 @@ export default function Pricing() {
           </div>
         </div>
 
+        {/* BYOAPI Highlight Section */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <Card className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-purple-500/30 backdrop-blur-sm">
+            <CardContent className="p-8 text-center">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center">
+                  <Key className="w-8 h-8 text-purple-400" />
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Unlimited Power with Your Own API</h3>
+              <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+                Early Adopter members can connect their own Anthropic API key for unlimited usage. 
+                Use our 1,000 monthly credits for convenience, or plug in your API key for unlimited power.
+              </p>
+              <div className="flex items-center justify-center space-x-8 text-sm text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <Zap className="w-4 h-4 text-purple-400" />
+                  <span>1,000 Orchestra credits included</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Key className="w-4 h-4 text-green-400" />
+                  <span>+ Unlimited with your API key</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* FAQ Section */}
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Frequently Asked Questions</h3>
-          <div className="space-y-6">
-            <Card className="bg-gray-900/50 border-gray-700">
-              <CardContent className="p-6">
-                <h4 className="font-semibold text-white mb-2">Can I start with the Free Plan?</h4>
-                <p className="text-gray-400 text-sm">
-                  Absolutely! The Free Plan includes 100 tokens per month and 2 agents to help you explore Orchestra's capabilities.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-700">
-              <CardContent className="p-6">  
-                <h4 className="font-semibold text-white mb-2">What happens when I hit my token limit?</h4>
-                <p className="text-gray-400 text-sm">
-                  You'll receive notifications as you approach your limit. Free users can upgrade anytime, and Early Adopters get priority support for additional tokens.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-700">
-              <CardContent className="p-6">
-                <h4 className="font-semibold text-white mb-2">Can I upgrade or downgrade my plan?</h4>
-                <p className="text-gray-400 text-sm">
-                  Yes, you can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the next billing cycle.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 border-gray-700">
-              <CardContent className="p-6">
-                <h4 className="font-semibold text-white mb-2">What's included in conductor orchestration?</h4>
-                <p className="text-gray-400 text-sm">
-                  Early Adopter subscribers get full access to our AI conductor system for advanced workflow management, real-time monitoring, and intelligent agent coordination.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="bg-gray-900/80 border-gray-600 backdrop-blur-sm">
+            <CardContent className="p-8">
+              <div className="space-y-6">
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-2">What are Orchestra credits?</h4>
+                  <p className="text-gray-300">
+                    Orchestra credits are units of AI computation that power your agents. Each interaction consumes credits based on input and output length. Early Adopter members get 1,000 credits per month.
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-2">How does "Bring Your Own API" work?</h4>
+                  <p className="text-gray-300">
+                    Connect your own Anthropic API key during agent creation for unlimited usage. Your API calls are billed directly to your Anthropic account, bypassing Orchestra credit limits entirely.
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Can I use both Orchestra credits and my own API key?</h4>
+                  <p className="text-gray-300">
+                    Absolutely! You can set API keys on specific agents for unlimited usage while using Orchestra credits for others. Perfect for mixing high-volume and occasional-use agents.
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-2">Can I upgrade or downgrade anytime?</h4>
+                  <p className="text-gray-300">
+                    Yes! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the next billing cycle.
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-2">What happens if I exceed my credit limit?</h4>
+                  <p className="text-gray-300">
+                    Agents using Orchestra credits will pause until the next billing cycle or until you upgrade. Agents with your own API keys continue running unlimited.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
