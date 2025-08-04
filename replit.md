@@ -45,6 +45,16 @@ Preferred communication style: Simple, everyday language.
 - Added FAQ section and additional platform benefits showcase
 - Included security badges and guarantee information for user confidence
 
+### Real-time WebSocket Integration
+- Implemented Socket.io for live updates across workflow and conductor interfaces
+- Added workflow progress events with agent status updates (idle, running, complete, error)
+- Built real-time log streaming to conductor dashboard with timestamp and agent tracking
+- Created conductor intervention notifications for pause, resume, and retry operations
+- Integrated live token usage counter updates for monitoring resource consumption
+- Added WebSocket client with auto-reconnection and subscription management
+- Enhanced workflow canvas nodes with animated status indicators and real-time updates
+- Enabled live workflow execution with progress tracking and completion notifications
+
 ### Schema Updates
 - Added `role` field to agents table with default "Custom"
 - Renamed `conductorOversight` to `conductorMonitoring` for clarity

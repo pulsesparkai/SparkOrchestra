@@ -23,6 +23,8 @@ import {
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { Agent } from "@shared/schema";
+import { websocketClient, type LogEvent, type ConductorEvent, type TokenUsageEvent } from "@/lib/websocket";
+import { apiRequest } from "@/lib/queryClient";
 
 interface LogEntry {
   id: string;
@@ -71,34 +73,47 @@ export default function Conductor() {
     queryKey: ["/api/agents"],
   });
 
-  // Simulate real-time log updates
+  // WebSocket setup for real-time updates
   useEffect(() => {
-    const interval = setInterval(() => {
-      const mockMessages = [
-        "Processing data batch completed successfully",
-        "Analyzing sentiment from 150 documents",
-        "Generated content review completed",
-        "Research query executed with 98% accuracy",
-        "Workflow checkpoint reached",
-        "Agent synchronization complete"
-      ];
+    websocketClient.subscribeToConductor();
 
-      const agentNames = agents?.map(a => a.name) || ["Research Agent", "Content Agent", "Analysis Agent"];
-      const levels: Array<"info" | "warning" | "error" | "success"> = ["info", "success", "warning"];
-      
-      const newLog: LogEntry = {
-        id: Date.now().toString(),
-        timestamp: new Date(),
-        agentName: agentNames[Math.floor(Math.random() * agentNames.length)],
-        message: mockMessages[Math.floor(Math.random() * mockMessages.length)],
-        level: levels[Math.floor(Math.random() * levels.length)]
+    const handleNewLog = (event: LogEvent) => {
+      const logEntry: LogEntry = {
+        id: event.id,
+        timestamp: new Date(event.timestamp),
+        agentName: event.agentName,
+        message: event.message,
+        level: event.level
       };
+      setLogs(prev => [logEntry, ...prev.slice(0, 49)]); // Keep last 50 logs
+    };
 
-      setLogs(prev => [newLog, ...prev.slice(0, 49)]); // Keep last 50 logs
-    }, 3000);
+    const handleConductorEvent = (event: ConductorEvent) => {
+      const logEntry: LogEntry = {
+        id: `conductor-${Date.now()}`,
+        timestamp: new Date(event.timestamp),
+        agentName: "Conductor",
+        message: event.message,
+        level: "info"
+      };
+      setLogs(prev => [logEntry, ...prev.slice(0, 49)]);
+    };
 
-    return () => clearInterval(interval);
-  }, [agents]);
+    const handleTokenUsage = (event: TokenUsageEvent) => {
+      // Update token usage for agents (could be expanded to show in UI)
+      console.log(`Token usage update: Agent ${event.agentId} used ${event.tokensUsed} tokens`);
+    };
+
+    websocketClient.onNewLog(handleNewLog);
+    websocketClient.onConductorEvent(handleConductorEvent);
+    websocketClient.onTokenUsage(handleTokenUsage);
+
+    return () => {
+      websocketClient.offNewLog(handleNewLog);
+      websocketClient.offConductorEvent(handleConductorEvent);
+      websocketClient.offTokenUsage(handleTokenUsage);
+    };
+  }, []);
 
   // Update conductor status
   useEffect(() => {
@@ -137,19 +152,39 @@ export default function Conductor() {
     }
   };
 
-  const handlePauseWorkflow = (workflowId: string) => {
-    setActiveWorkflows(prev => 
-      prev.map(w => w.id === workflowId ? { ...w, status: "paused" } : w)
-    );
+  const handlePauseWorkflow = async (workflowId: string) => {
+    try {
+      await apiRequest("POST", `/api/workflows/${workflowId}/pause`);
+      setActiveWorkflows(prev => 
+        prev.map(w => w.id === workflowId ? { ...w, status: "paused" } : w)
+      );
+    } catch (error: any) {
+      console.error("Failed to pause workflow:", error);
+    }
   };
 
-  const handleResumeWorkflow = (workflowId: string) => {
-    setActiveWorkflows(prev => 
-      prev.map(w => w.id === workflowId ? { ...w, status: "running" } : w)
-    );
+  const handleResumeWorkflow = async (workflowId: string) => {
+    try {
+      await apiRequest("POST", `/api/workflows/${workflowId}/resume`);
+      setActiveWorkflows(prev => 
+        prev.map(w => w.id === workflowId ? { ...w, status: "running" } : w)
+      );
+    } catch (error: any) {
+      console.error("Failed to resume workflow:", error);
+    }
   };
 
-  const handleRetryFailed = () => {
+  const handleRetryFailed = async () => {
+    const failedWorkflows = activeWorkflows.filter(w => w.status === "failed");
+    
+    for (const workflow of failedWorkflows) {
+      try {
+        await apiRequest("POST", `/api/workflows/${workflow.id}/resume`);
+      } catch (error: any) {
+        console.error(`Failed to retry workflow ${workflow.id}:`, error);
+      }
+    }
+    
     setActiveWorkflows(prev => 
       prev.map(w => w.status === "failed" ? { ...w, status: "running", progress: 0 } : w)
     );

@@ -2,10 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Play, Save, Trash2, Settings, Bot, Search, FileText, BarChart3, PenTool, Circle, Zap } from "lucide-react";
-import { useState, useCallback, useRef, useMemo } from "react";
+import { useState, useCallback, useRef, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import type { Agent } from "@shared/schema";
+import { websocketClient, type WorkflowProgressEvent } from "@/lib/websocket";
+import { apiRequest } from "@/lib/queryClient";
 import ReactFlow, {
   Node,
   Edge,
@@ -40,14 +42,31 @@ const AgentNode = ({ data, selected }: { data: any; selected: boolean }) => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
+      case "running":
+        return "bg-blue-500 animate-pulse";
+      case "complete":
         return "bg-green-500";
-      case "inactive":
-        return "bg-gray-500";
       case "error":
         return "bg-red-500";
+      case "idle":
+        return "bg-gray-500";
       default:
         return "bg-yellow-500";
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "running":
+        return "Running";
+      case "complete":
+        return "Complete";
+      case "error":
+        return "Error";
+      case "idle":
+        return "Idle";
+      default:
+        return "Ready";
     }
   };
 
@@ -66,9 +85,12 @@ const AgentNode = ({ data, selected }: { data: any; selected: boolean }) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <h3 className="font-medium text-white text-sm truncate">{data.name}</h3>
-            <div className={`w-2 h-2 rounded-full ${getStatusColor(data.status)}`} />
+            <div className={`w-2 h-2 rounded-full ${getStatusColor(data.status || 'idle')}`} />
           </div>
-          <p className="text-xs text-gray-400">{data.role}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-400">{data.role}</p>
+            <p className="text-xs text-gray-300">{getStatusLabel(data.status || 'idle')}</p>
+          </div>
         </div>
       </div>
 
@@ -85,6 +107,7 @@ function WorkflowCanvas() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [nodeStatuses, setNodeStatuses] = useState<Record<string, "idle" | "running" | "complete" | "error">>({});
   const { toast } = useToast();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
@@ -92,6 +115,51 @@ function WorkflowCanvas() {
   const { data: agents, isLoading } = useQuery<Agent[]>({
     queryKey: ["/api/agents"],
   });
+
+  // WebSocket setup for real-time updates
+  useEffect(() => {
+    const handleWorkflowProgress = (event: WorkflowProgressEvent) => {
+      setNodeStatuses(prev => ({
+        ...prev,
+        [event.agentId]: event.status
+      }));
+
+      // Update node data with new status
+      setNodes(nodes => nodes.map(node => {
+        if (node.data.id === event.agentId) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              status: event.status,
+              progress: event.progress
+            }
+          };
+        }
+        return node;
+      }));
+
+      // Show toast for status changes
+      if (event.status === "complete") {
+        toast({
+          title: "Agent Completed",
+          description: `${event.message || 'Agent finished processing'}`,
+        });
+      } else if (event.status === "error") {
+        toast({
+          title: "Agent Error",
+          description: `${event.message || 'Agent encountered an error'}`,
+          variant: "destructive",
+        });
+      }
+    };
+
+    websocketClient.onWorkflowProgress(handleWorkflowProgress);
+
+    return () => {
+      websocketClient.offWorkflowProgress(handleWorkflowProgress);
+    };
+  }, [setNodes, toast]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -146,7 +214,7 @@ function WorkflowCanvas() {
     });
   };
 
-  const runWorkflow = () => {
+  const runWorkflow = async () => {
     if (nodes.length === 0) {
       toast({
         title: "No Workflow",
@@ -156,10 +224,30 @@ function WorkflowCanvas() {
       return;
     }
 
-    toast({
-      title: "Workflow Started",
-      description: `Running workflow with ${nodes.length} agent(s)...`,
-    });
+    try {
+      const workflowId = `workflow-${Date.now()}`;
+      const agentIds = nodes.map(node => node.data.id);
+
+      // Subscribe to this workflow's events
+      websocketClient.subscribeToWorkflow(workflowId);
+
+      // Start the workflow
+      await apiRequest("POST", "/api/workflows/run", {
+        workflowId,
+        agentIds
+      });
+
+      toast({
+        title: "Workflow Started",
+        description: `Running workflow with ${nodes.length} agent(s)...`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Failed to Start Workflow",
+        description: error.message || "Unable to start workflow",
+        variant: "destructive",
+      });
+    }
   };
 
   const saveWorkflow = () => {
