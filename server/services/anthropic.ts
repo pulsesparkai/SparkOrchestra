@@ -1,7 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { Agent } from '@shared/schema';
 import { EncryptionService } from './encryption';
-import { EncryptionService } from './encryption';
 
 /*
 <important_code_snippet_instructions>
