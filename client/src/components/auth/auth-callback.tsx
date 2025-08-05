@@ -8,8 +8,35 @@ export function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        const { data, error } = await supabase.auth.getSession();
+        // Handle magic link callback from URL hash
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
         
+        if (accessToken && refreshToken) {
+          // Set the session from the magic link tokens
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          });
+          
+          if (error) {
+            console.error('Auth callback error:', error);
+            setLocation('/');
+            return;
+          }
+          
+          if (data.session) {
+            // Clear the hash from URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Successfully authenticated, redirect to dashboard
+            setLocation('/dashboard');
+            return;
+          }
+        }
+        
+        // Fallback: check for existing session
+        const { data, error } = await supabase.auth.getSession();
         if (error) {
           console.error('Auth callback error:', error);
           setLocation('/');
