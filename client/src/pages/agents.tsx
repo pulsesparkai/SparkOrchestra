@@ -352,6 +352,7 @@ export default function Agents() {
       />
 
      </div>
+    </div>
 
       {/* Token Limit Modal */}
       <TokenLimitModal
