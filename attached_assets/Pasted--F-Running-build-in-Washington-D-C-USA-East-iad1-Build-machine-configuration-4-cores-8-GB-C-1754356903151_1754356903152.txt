@@ -1,0 +1,28 @@
+⌘F
+Running build in Washington, D.C., USA (East) – iad1
+Build machine configuration: 4 cores, 8 GB
+Cloning github.com/pulsesparkai/SparkOrchestra (Branch: main, Commit: 7ed05fb)
+Skipping build cache, deployment was triggered without cache.
+Cloning completed: 468.000ms
+Running "vercel build"
+Vercel CLI 44.6.4
+WARN! Due to `builds` existing in your configuration file, the Build and Development Settings defined in your Project Settings will not apply. Learn More: https://vercel.link/unused-build-settings
+Installing dependencies...
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+added 581 packages in 10s
+66 packages are looking for funding
+  run `npm fund` for details
+Using TypeScript 5.6.3 (local user-provided)
+server/storage.ts(39,11): error TS2739: Type '{ id: `${string}-${string}-${string}-${string}-${string}`; username: string; password: string; email?: string | null | undefined; userPlan?: "free" | "early_adopter" | undefined; }' is missing the following properties from type '{ id: string; createdAt: Date | null; username: string; password: string; email: string | null; userPlan: "free" | "early_adopter"; stripeCustomerId: string | null; stripeSubscriptionId: string | null; }': createdAt, stripeCustomerId, stripeSubscriptionId
+server/routes/agents.ts(30,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<express.Response<any, Record<string, any>> | undefined>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+      Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<Response<any, Record<string, any>> | undefined>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+server/routes/agents.ts(88,17): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<void>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+      Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<void>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+server/routes/agents.ts(112,20): error TS2769: No overload matches this call.
+  The last overload gave the following error.

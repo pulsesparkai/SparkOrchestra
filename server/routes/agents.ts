@@ -19,17 +19,20 @@ interface AuthenticatedRequest extends Request {
 const router = express.Router();
 
 // Middleware to ensure user is authenticated
-router.use(async (req: any, res: Response, next) => {
+const requireAuth = async (req: any, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Authentication required' });
   }
   next();
-});
+};
+
+router.use(requireAuth);
 
 // POST /api/agents - Create new agent
-router.post('/', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    const userId = req.user.id;
+    const userId = authReq.user.id;
     
     // Check agent limits based on user's plan
     const currentAgents = await storage.getAgentsByUserId(userId);
@@ -85,9 +88,10 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // GET /api/agents - Get user's agents
-router.get('/', async (req: AuthenticatedRequest, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    const userId = req.user.id;
+    const userId = authReq.user.id;
     
     const agents = await storage.getAgentsByUserId(userId);
     
@@ -109,9 +113,10 @@ router.get('/', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // PUT /api/agents/:id - Update agent
-router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    const userId = req.user.id;
+    const userId = authReq.user.id;
     const agentId = req.params.id;
     
     // Check if agent belongs to user
@@ -156,9 +161,10 @@ router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // DELETE /api/agents/:id - Soft delete agent
-router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    const userId = req.user.id;
+    const userId = authReq.user.id;
     const agentId = req.params.id;
     
     // Check if agent belongs to user
@@ -191,9 +197,10 @@ router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
 });
 
 // POST /api/agents/:id/test - Test agent with Anthropic
-router.post('/:id/test', async (req: AuthenticatedRequest, res: Response) => {
+router.post('/:id/test', async (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    const userId = req.user.id;
+    const userId = authReq.user.id;
     const agentId = req.params.id;
     
     // Get agent and verify ownership
