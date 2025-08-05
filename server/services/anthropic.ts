@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { Agent } from '@shared/schema';
 import { EncryptionService } from './encryption';
+import { EncryptionService } from './encryption';
 
 /*
 <important_code_snippet_instructions>
@@ -24,6 +25,7 @@ export async function testAnthropicConnection(agent: Agent): Promise<{
   error?: string;
 }> {
   try {
+    // Decrypt the API key if available
     let apiKey: string | undefined;
     if (agent.encryptedApiKey) {
       try {
@@ -75,6 +77,7 @@ export async function executeAgentTask(
   error?: string;
 }> {
   try {
+    // Decrypt the API key if available
     let apiKey: string | undefined;
     if (agent.encryptedApiKey) {
       try {

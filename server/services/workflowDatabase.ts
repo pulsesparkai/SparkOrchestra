@@ -100,7 +100,10 @@ export class WorkflowDatabase {
 
       return {
         ...execution,
-        logs: logs
+        logs: logs.map(log => ({
+          ...log,
+          status: log.status as "completed" | "failed" | "started" | "skipped"
+        }))
       } as WorkflowExecution;
     } catch (error: any) {
       console.error('Failed to get workflow execution:', error);
