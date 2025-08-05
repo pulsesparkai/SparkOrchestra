@@ -36,9 +36,9 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    if ('db' in this) {
-      // Database storage
-      const [user] = await (this as DatabaseStorage).db.insert(users).values({
+    // Check if this is database storage by checking for the db property
+    if ('db' in this && this.db) {
+      const [user] = await this.db.insert(users).values({
         ...insertUser,
         email: insertUser.email || null,
         createdAt: new Date(),
@@ -49,7 +49,6 @@ export class MemStorage implements IStorage {
       return user;
     } else {
       // Memory storage
-      const memStorage = this as MemStorage;
       const newUser: User = {
         ...insertUser,
         id: crypto.randomUUID(),
@@ -59,7 +58,7 @@ export class MemStorage implements IStorage {
         stripeSubscriptionId: null,
         userPlan: insertUser.userPlan || "free"
       };
-      memStorage.users.set(newUser.id, newUser);
+      this.users.set(newUser.id, newUser);
       return newUser;
     }
   }
