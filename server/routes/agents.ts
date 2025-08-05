@@ -88,7 +88,7 @@ router.post('/', (async (req: Request, res: Response) => {
 }) as express.RequestHandler);
 
 // GET /api/agents - Get user's agents
-router.get('/', (async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -110,7 +110,7 @@ router.get('/', (async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-}) as express.RequestHandler);
+});
 
 // PUT /api/agents/:id - Update agent
 router.put('/:id', (async (req: Request, res: Response) => {
