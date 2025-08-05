@@ -71,7 +71,7 @@ app.use((req, res, next) => {
 
   // For production (Vercel), serve static files from dist/public
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
-    const distPath = path.resolve(process.cwd(), "dist", "public");
+    const distPath = path.resolve(import.meta.dirname, "..", "dist", "public");
     app.use(express.static(distPath));
     
     // Serve React app for all non-API routes
@@ -99,6 +99,6 @@ app.use((req, res, next) => {
 
   // Export for Vercel
   if (process.env.VERCEL) {
-    module.exports = app;
+    export default app;
   }
 })();
