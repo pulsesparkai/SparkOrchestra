@@ -113,7 +113,7 @@ router.get('/', (async (req: Request, res: Response) => {
 }) as express.RequestHandler);
 
 // PUT /api/agents/:id - Update agent
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/:id', (async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -158,7 +158,7 @@ router.put('/:id', async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-});
+}) as express.RequestHandler);
 
 // DELETE /api/agents/:id - Soft delete agent
 router.delete('/:id', (async (req: Request, res: Response) => {
@@ -285,7 +285,5 @@ router.post('/:id/test', async (req: Request, res: Response) => {
       success: false
     });
   }
-}
-)
 
 export default router;
