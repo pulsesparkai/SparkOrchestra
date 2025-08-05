@@ -119,7 +119,6 @@ export default function Conductor() {
     setupWebSocket();
     
     return () => {
-      // Cleanup
       websocketClient.disconnect();
     };
   }, []);

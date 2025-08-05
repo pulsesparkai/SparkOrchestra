@@ -5,8 +5,6 @@ import { insertAgentSchema } from "@shared/schema";
 import { testAnthropicConnection } from "./services/anthropic";
 import agentRoutes from "./routes/agents";
 import { conductor } from "./conductor";
-import { workflowEngine } from "./services/workflowEngine";
-import { tokenTracker } from "./services/tokenTracker";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API Key validation endpoint

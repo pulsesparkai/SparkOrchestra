@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import bcrypt from 'bcryptjs';
 import { storage } from '../storage';
-import { getWebSocketManager } from '../websocket';
+import { getWebSocketManager } from '../websocket-mock';
 import { tokenTracker } from '../services/tokenTracker';
 import { EncryptionService } from '../services/encryption';
 import type { Agent } from '../../shared/schema';
