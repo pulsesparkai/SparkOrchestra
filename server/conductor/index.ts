@@ -233,17 +233,17 @@ ${agent.prompt}`;
       });
 
       const responseText = (response.content[0] as any)?.text || 'No response received';
-      const tokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+      const actualTokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
       // Only record token usage if using platform API key (not user's BYOAPI key)
       if (!usingUserKey) {
-        await tokenTracker.recordTokenUsage(agent.userId, tokensUsed, agentId, context.workflowId);
+        await tokenTracker.recordTokenUsage(agent.userId, actualTokensUsed, agentId, context.workflowId);
       }
 
       // Update execution tracking
       execution.status = 'complete';
       execution.endTime = new Date();
-      execution.tokensUsed = tokensUsed;
+      execution.tokensUsed = actualTokensUsed;
 
       // Update workflow context with agent output
       context.currentData[agent.id] = {
@@ -251,14 +251,14 @@ ${agent.prompt}`;
         role: agent.role,
         output: responseText,
         timestamp: new Date().toISOString(),
-        tokensUsed
+        tokensUsed: actualTokensUsed
       };
 
       // Log successful execution
       this.addExecutionLog(context, agentId, 'agent_executed', {
         input: userPrompt.substring(0, 100) + '...',
         output: responseText.substring(0, 200) + '...',
-        tokensUsed
+        tokensUsed: actualTokensUsed
       });
 
       // Emit agent completed event
@@ -267,14 +267,14 @@ ${agent.prompt}`;
         agentId,
         status: 'complete',
         progress: 1,
-        message: `${agent.name} completed (${tokensUsed} tokens)${usingUserKey ? ' - using user API key' : ' - using platform credits'}`
+        message: `${agent.name} completed (${actualTokensUsed} tokens)${usingUserKey ? ' - using user API key' : ' - using platform credits'}`
       });
 
       // Emit token usage
       this.wsManager?.emitTokenUsage({
         agentId,
-        tokensUsed,
-        totalTokens: tokensUsed,
+        tokensUsed: actualTokensUsed,
+        totalTokens: actualTokensUsed,
         timestamp: new Date()
       });
 
