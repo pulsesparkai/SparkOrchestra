@@ -130,7 +130,10 @@ export class WorkflowDatabase {
 
           return {
             ...execution,
-            logs: logs
+            logs: logs.map(log => ({
+              ...log,
+              status: log.status as "completed" | "failed" | "started" | "skipped"
+            }))
           } as WorkflowExecution;
         })
       );
@@ -147,11 +150,16 @@ export class WorkflowDatabase {
    */
   async getExecutionLogs(executionId: string): Promise<WorkflowExecutionLog[]> {
     try {
-      return await db
+      const logs = await db
         .select()
         .from(workflowExecutionLogs)
         .where(eq(workflowExecutionLogs.workflowExecutionId, executionId))
         .orderBy(workflowExecutionLogs.timestamp);
+      
+      return logs.map(log => ({
+        ...log,
+        status: log.status as "completed" | "failed" | "started" | "skipped"
+      })) as WorkflowExecutionLog[];
     } catch (error: any) {
       console.error('Failed to get execution logs:', error);
       throw new Error(`Database error: ${error.message}`);
