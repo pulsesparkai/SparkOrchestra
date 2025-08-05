@@ -46,6 +46,9 @@ export class MemStorage implements IStorage {
       createdAt: new Date(),
       stripeCustomerId: null,
       stripeSubscriptionId: null
+      createdAt: new Date(),
+      stripeCustomerId: null,
+      stripeSubscriptionId: null
     };
     this.users.set(id, user);
     return user;

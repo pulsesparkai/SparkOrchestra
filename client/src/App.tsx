@@ -20,33 +20,6 @@ import Conductor from "@/pages/conductor";
 import Pricing from "@/pages/pricing";
 import NotFound from "@/pages/not-found";
 
-// Redirect component for authenticated users
-function Redirect({ to }: { to: string }) {
-  const [, setLocation] = useLocation();
-  
-  React.useEffect(() => {
-    setLocation(to);
-  }, [to, setLocation]);
-  
-  return null;
-}
-
-function PublicRoutes() {
-  return (
-    <Switch>
-      <Route path="/" component={Landing} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/agents" component={Agents} />
-      <Route path="/workflow" component={Workflow} />
-      <Route path="/conductor" component={Conductor} />
-      <Route path="/pricing" component={Pricing} />
-      <Route path="/login" component={AuthPage} />
-      <Route path="/auth/callback" component={AuthCallback} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
 function AppContent() {
   const { user, loading } = useAuth();
   const [location] = useLocation();
@@ -69,12 +42,18 @@ function AppContent() {
         <div className="min-h-screen bg-gray-50">
           <Navigation />
           <Switch>
+            <Route path="/" component={() => {
+              const [, setLocation] = useLocation();
+              React.useEffect(() => {
+                setLocation("/dashboard");
+              }, [setLocation]);
+              return null;
+            }} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/agents" component={Agents} />
             <Route path="/workflow" component={Workflow} />
             <Route path="/conductor" component={Conductor} />
             <Route path="/pricing" component={Pricing} />
-            <Route path="/" component={() => <Redirect to="/dashboard" />} />
             <Route component={NotFound} />
           </Switch>
           <TourModal />
@@ -90,7 +69,7 @@ function AppContent() {
       <Route path="/" component={Landing} />
       <Route path="/login" component={AuthPage} />
       <Route path="/auth/callback" component={AuthCallback} />
-      <Route component={() => <Redirect to="/" />} />
+      <Route component={Landing} />
     </Switch>
   );
 }
