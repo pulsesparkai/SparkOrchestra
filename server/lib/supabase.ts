@@ -1,17 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+// Load environment variables with fallbacks
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://pahxigjphtkkzznwbjkv.supabase.co'
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'YOUR_SERVICE_ROLE_KEY_HERE'
 
-console.log('🔧 Supabase URL:', supabaseUrl ? 'Set' : 'Missing');
+console.log('🔧 Supabase URL:', supabaseUrl);
 console.log('🔧 Service Key:', supabaseServiceKey ? 'Set' : 'Missing');
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error(`Missing Supabase environment variables:
-    SUPABASE_URL: ${supabaseUrl ? 'Set' : 'Missing'}
-    SUPABASE_SERVICE_ROLE_KEY: ${supabaseServiceKey ? 'Missing' : 'Set'}
-    
-    Please check your .env file contains both variables.`);
+if (!supabaseUrl || supabaseServiceKey === 'YOUR_SERVICE_ROLE_KEY_HERE') {
+  console.warn('⚠️ Supabase not fully configured. Some features may not work.');
+  console.log('Please add your SUPABASE_SERVICE_ROLE_KEY to the .env file');
 }
 
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
