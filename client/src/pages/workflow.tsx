@@ -8,7 +8,22 @@ import { useToast } from "@/hooks/use-toast";
 import type { Agent } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 
-// Simplified workflow without React Flow for now
+// Import React Flow hooks properly
+import { useNodesState, useEdgesState } from 'reactflow';
+
+// Workflow Canvas Component with proper React Flow hooks
+function WorkflowCanvas() {
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]); // FIX: use onEdgesChange not onEdgesState
+  
+  // For now, return a simplified canvas
+  return (
+    <div className="h-96 bg-gray-100 border border-gray-300 rounded-lg flex items-center justify-center">
+      <p className="text-gray-600">Workflow Canvas - React Flow integration ready</p>
+    </div>
+  );
+}
+
 export default function Workflow() {
   const [selectedAgents, setSelectedAgents] = useState<Agent[]>([]);
   const [isRunning, setIsRunning] = useState(false);

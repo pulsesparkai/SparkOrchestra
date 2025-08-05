@@ -108,251 +108,268 @@ export default function Agents() {
   };
 
   return (
-    <>
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900 mb-2">Agent Management</h1>
-            <p className="text-gray-600">Create and configure AI agents for your Orchestra workflows</p>
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900 mb-2">Agent Management</h1>
+              <p className="text-gray-600">Create and configure AI agents for your Orchestra workflows</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export Agents
+              </Button>
+              <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    size="sm"
+                    data-tour="create-agent-button"
+                    className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Agent
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl bg-white border border-gray-200">
+                  <DialogHeader>
+                    <DialogTitle className="text-gray-900">Create New Agent</DialogTitle>
+                  </DialogHeader>
+                  <AgentForm 
+                    onPreview={() => {}} 
+                    onSuccess={() => setIsCreateModalOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Export Agents
-            </Button>
-            <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  size="sm"
-                  data-tour="create-agent-button"
-                  className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Agent
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-white border border-gray-200">
-                <DialogHeader>
-                  <DialogTitle className="text-gray-900">Create New Agent</DialogTitle>
-                </DialogHeader>
-                <AgentForm 
-                  onPreview={() => {}} 
-                  onSuccess={() => setIsCreateModalOpen(false)}
-                />
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
 
-        {/* Token Counter */}
-        <div className="mb-6">
-          <TokenCounter
-            tokensUsed={tokensUsed}
-            tokensLimit={tokensLimit}
-            userPlan={userPlan}
-            showUpgradePrompt={true}
-            onUpgrade={handleUpgrade}
-          />
-        </div>
-
-        {/* Search and Filter Bar */}
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search agents by name or role..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-orchestra-brown focus:border-orchestra-brown"
+          {/* Token Counter */}
+          <div className="mb-6">
+            <TokenCounter
+              tokensUsed={tokensUsed}
+              tokensLimit={tokensLimit}
+              userPlan={userPlan}
+              showUpgradePrompt={true}
+              onUpgrade={handleUpgrade}
             />
           </div>
-          <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-48 border-gray-300 bg-white text-gray-900 focus:ring-orchestra-brown focus:border-orchestra-brown">
-              <SelectValue placeholder="Filter by role" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Roles</SelectItem>
-              <SelectItem value="Researcher">Researcher</SelectItem>
-              <SelectItem value="Analyst">Analyst</SelectItem>
-              <SelectItem value="Writer">Writer</SelectItem>
-              <SelectItem value="Custom">Custom</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
 
-      {/* Agent Grid */}
-      {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="bg-white shadow-sm border border-gray-200 animate-pulse">
-              <CardContent className="p-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  </div>
-                </div>
-                <div className="mt-4 space-y-2">
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                </div>
-                <div className="flex justify-between items-center mt-4">
-                  <div className="h-6 bg-gray-200 rounded w-20"></div>
-                  <div className="flex space-x-2">
-                    <div className="h-8 w-16 bg-gray-200 rounded"></div>
-                    <div className="h-8 w-16 bg-gray-200 rounded"></div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : filteredAgents.length === 0 ? (
-        <div className="text-center py-20">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Bot className="w-10 h-10 text-gray-400" />
+          {/* Search and Filter Bar */}
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Search agents by name or role..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-orchestra-brown focus:border-orchestra-brown"
+              />
+            </div>
+            <Select value={roleFilter} onValueChange={setRoleFilter}>
+              <SelectTrigger className="w-48 border-gray-300 bg-white text-gray-900 focus:ring-orchestra-brown focus:border-orchestra-brown">
+                <SelectValue placeholder="Filter by role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="Researcher">Researcher</SelectItem>
+                <SelectItem value="Analyst">Analyst</SelectItem>
+                <SelectItem value="Writer">Writer</SelectItem>
+                <SelectItem value="Custom">Custom</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          <h3 className="text-xl font-medium text-gray-900 mb-2">
-            {agents?.length === 0 ? "No agents created yet" : "No agents match your search"}
-          </h3>
-          <p className="text-gray-600 mb-6">
-            {agents?.length === 0 
-              ? "Create your first agent to get started with Orchestra workflows"
-              : "Try adjusting your search terms or filters"
-            }
-          </p>
-          {agents?.length === 0 && (
-            <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Your First Agent
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-white border border-gray-200">
-                <DialogHeader>
-                  <DialogTitle className="text-gray-900">Create New Agent</DialogTitle>
-                </DialogHeader>
-                <AgentForm 
-                  onPreview={() => {}} 
-                  onSuccess={() => setIsCreateModalOpen(false)}
-                />
-              </DialogContent>
-            </Dialog>
-          )}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAgents.map((agent) => (
-            <Card key={agent.id} className="bg-white shadow-sm border border-gray-200 hover:border-orchestra-brown/50 transition-colors hover:shadow-md">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-12 h-12 bg-orchestra-brown rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-6 h-6 text-white" />
+
+        {/* Agent Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="bg-white shadow-sm border border-gray-200 animate-pulse">
+                <CardContent className="p-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 truncate mb-1">
-                        {agent.name}
-                      </h3>
-                      <div className="flex items-center space-x-2">
-                        <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                          {agent.role || "Custom"}
-                        </span>
-                        {agent.conductorMonitoring && (
-                          <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
-                            Monitored
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    <div className="h-3 bg-gray-200 rounded w-full"></div>
+                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                  </div>
+                  <div className="flex justify-between items-center mt-4">
+                    <div className="h-6 bg-gray-200 rounded w-20"></div>
+                    <div className="flex space-x-2">
+                      <div className="h-8 w-16 bg-gray-200 rounded"></div>
+                      <div className="h-8 w-16 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : filteredAgents.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Bot className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">
+              {agents?.length === 0 ? "No agents created yet" : "No agents match your search"}
+            </h3>
+            <p className="text-gray-600 mb-6">
+              {agents?.length === 0 
+                ? "Create your first agent to get started with Orchestra workflows"
+                : "Try adjusting your search terms or filters"
+              }
+            </p>
+            {agents?.length === 0 && (
+              <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Your First Agent
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl bg-white border border-gray-200">
+                  <DialogHeader>
+                    <DialogTitle className="text-gray-900">Create New Agent</DialogTitle>
+                  </DialogHeader>
+                  <AgentForm 
+                    onPreview={() => {}} 
+                    onSuccess={() => setIsCreateModalOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAgents.map((agent) => (
+              <Card key={agent.id} className="bg-white shadow-sm border border-gray-200 hover:border-orchestra-brown/50 transition-colors hover:shadow-md">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-12 h-12 bg-orchestra-brown rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Bot className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900 truncate mb-1">
+                          {agent.name}
+                        </h3>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                            {agent.role || "Custom"}
                           </span>
-                        )}
+                          {agent.conductorMonitoring && (
+                            <span className="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
+                              Monitored
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-center text-sm text-gray-900">
-                    <Zap className="w-4 h-4 mr-2 text-gray-600" />
-                    <span className="font-medium">{agent.model}</span>
-                  </div>
-
-                  <div className="flex items-center text-sm text-gray-900">
-                    <Calendar className="w-4 h-4 mr-2 text-gray-600" />
-                    <span>Created {formatDate(agent.createdAt || new Date())}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-sm text-gray-900">
-                    <div className="flex items-center">
-                      <Bot className="w-4 h-4 mr-2 text-gray-600" />
-                      <span>1,234 tokens used this month</span>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center text-sm text-gray-900">
+                      <Zap className="w-4 h-4 mr-2 text-gray-600" />
+                      <span className="font-medium">{agent.model}</span>
                     </div>
-                    <ApiKeyIndicator hasApiKey={!!(agent as any).hasApiKey} />
+
+                    <div className="flex items-center text-sm text-gray-900">
+                      <Calendar className="w-4 h-4 mr-2 text-gray-600" />
+                      <span>Created {formatDate(agent.createdAt || new Date())}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-gray-900">
+                      <div className="flex items-center">
+                        <Bot className="w-4 h-4 mr-2 text-gray-600" />
+                        <span>1,234 tokens used this month</span>
+                      </div>
+                      <ApiKeyIndicator hasApiKey={!!(agent as any).hasApiKey} />
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    agent.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${
-                      agent.status === 'active' ? 'bg-green-500' : 'bg-gray-500'
-                    }`}></div>
-                    {agent.status || "Unknown"}
-                  </span>
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      agent.status === 'active' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      <div className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${
+                        agent.status === 'active' ? 'bg-green-500' : 'bg-gray-500'
+                      }`}></div>
+                      {agent.status || "Unknown"}
+                    </span>
 
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
-                      onClick={() => handleDelete(agent.id, agent.name)}
-                      disabled={deleteAgentMutation.isPending}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+                        onClick={() => handleDelete(agent.id, agent.name)}
+                        disabled={deleteAgentMutation.isPending}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
-      {/* Upgrade Prompt Dialog */}
-      <UpgradePrompt
-        open={upgradePrompt.open}
-        onOpenChange={(open) => setUpgradePrompt({ ...upgradePrompt, open })}
-        reason={upgradePrompt.reason}
-        currentUsage={{ used: agentCount, limit: maxAgents }}
-        onUpgrade={() => {
-          trackEvent("upgrade_clicked", {
-            source: "upgrade_prompt",
-            reason: upgradePrompt.reason,
-            agent_count: agentCount,
-            tokens_used: tokensUsed
-          });
-          // TODO: Redirect to upgrade flow
-        }}
-      />
+        {/* Upgrade Prompt Dialog */}
+        <UpgradePrompt
+          open={upgradePrompt.open}
+          onOpenChange={(open) => setUpgradePrompt({ ...upgradePrompt, open })}
+          reason={upgradePrompt.reason}
+          currentUsage={{ used: agentCount, limit: maxAgents }}
+          onUpgrade={() => {
+            trackEvent("upgrade_clicked", {
+              source: "upgrade_prompt",
+              reason: upgradePrompt.reason,
+              agent_count: agentCount,
+              tokens_used: tokensUsed
+            });
+            // TODO: Redirect to upgrade flow
+          }}
+        />
 
-     </div>
+        {/* Token Limit Modal */}
+        <TokenLimitModal
+          open={tokenLimitModalOpen}
+          onOpenChange={setTokenLimitModalOpen}
+          tokensUsed={tokensUsed}
+          tokensLimit={tokensLimit}
+          userPlan={userPlan}
+          onUpgrade={() => {
+            trackEvent("upgrade_clicked", {
+              source: "token_limit_modal",
+              tokens_used: tokensUsed,
+              tokens_limit: tokensLimit
+            });
+            // TODO: Redirect to upgrade flow
+          }}
+        />
+      </div>
     </div>
+  );
+}
 
       {/* Token Limit Modal */}
       <TokenLimitModal
