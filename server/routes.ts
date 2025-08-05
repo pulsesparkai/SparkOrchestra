@@ -3,7 +3,6 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertAgentSchema } from "@shared/schema";
 import { testAnthropicConnection } from "./services/anthropic";
-import { initializeWebSocket, getWebSocketManager } from "./websocket";
 import agentRoutes from "./routes/agents";
 import { conductor } from "./conductor";
 import { workflowEngine } from "./services/workflowEngine";
@@ -322,19 +321,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const wsManager = getWebSocketManager();
-      if (wsManager) {
-        // Start workflow simulation
-        wsManager.simulateWorkflow(workflowId, agentIds);
-        
-        // Emit conductor event
-        wsManager.emitConductorEvent({
-          type: "intervention",
-          workflowId,
-          message: `Workflow ${workflowId} started with ${agentIds.length} agents`,
-          timestamp: new Date()
-        });
-      }
+      // TODO: Implement workflow execution with Supabase Realtime
+      console.log(`Starting workflow ${workflowId} with ${agentIds.length} agents`);
 
       res.json({ 
         message: "Workflow started successfully",
@@ -352,16 +340,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/workflows/:id/pause", async (req, res) => {
     try {
       const { id } = req.params;
-      const wsManager = getWebSocketManager();
       
-      if (wsManager) {
-        wsManager.emitConductorEvent({
-          type: "pause",
-          workflowId: id,
-          message: `Workflow ${id} paused by conductor`,
-          timestamp: new Date()
-        });
-      }
+      // TODO: Implement pause with Supabase Realtime
+      console.log(`Pausing workflow ${id}`);
 
       res.json({ message: "Workflow paused" });
     } catch (error: any) {
@@ -375,16 +356,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/workflows/:id/resume", async (req, res) => {
     try {
       const { id } = req.params;
-      const wsManager = getWebSocketManager();
       
-      if (wsManager) {
-        wsManager.emitConductorEvent({
-          type: "resume",
-          workflowId: id,
-          message: `Workflow ${id} resumed by conductor`,
-          timestamp: new Date()
-        });
-      }
+      // TODO: Implement resume with Supabase Realtime
+      console.log(`Resuming workflow ${id}`);
 
       res.json({ message: "Workflow resumed" });
     } catch (error: any) {
@@ -415,8 +389,5 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
   
-  // Initialize WebSocket server
-  initializeWebSocket(httpServer);
-
   return httpServer;
 }

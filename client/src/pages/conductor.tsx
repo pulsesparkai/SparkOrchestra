@@ -75,43 +75,52 @@ export default function Conductor() {
 
   // WebSocket setup for real-time updates
   useEffect(() => {
-    websocketClient.subscribeToConductor();
+    const setupWebSocket = async () => {
+      try {
+        await websocketClient.connect();
+        websocketClient.subscribeToConductor();
 
-    const handleNewLog = (event: LogEvent) => {
-      const logEntry: LogEntry = {
-        id: event.id,
-        timestamp: new Date(event.timestamp),
-        agentName: event.agentName,
-        message: event.message,
-        level: event.level
-      };
-      setLogs(prev => [logEntry, ...prev.slice(0, 49)]); // Keep last 50 logs
+        const handleNewLog = (event: LogEvent) => {
+          const logEntry: LogEntry = {
+            id: event.id,
+            timestamp: new Date(event.timestamp),
+            agentName: event.agentName,
+            message: event.message,
+            level: event.level
+          };
+          setLogs(prev => [logEntry, ...prev.slice(0, 49)]); // Keep last 50 logs
+        };
+
+        const handleConductorEvent = (event: ConductorEvent) => {
+          const logEntry: LogEntry = {
+            id: `conductor-${Date.now()}`,
+            timestamp: new Date(event.timestamp),
+            agentName: "Conductor",
+            message: event.message,
+            level: "info"
+          };
+          setLogs(prev => [logEntry, ...prev.slice(0, 49)]);
+        };
+
+        const handleTokenUsage = (event: TokenUsageEvent) => {
+          // Update token usage for agents (could be expanded to show in UI)
+          console.log(`Token usage update: Agent ${event.agentId} used ${event.tokensUsed} tokens`);
+        };
+
+        websocketClient.onNewLog(handleNewLog);
+        websocketClient.onConductorEvent(handleConductorEvent);
+        websocketClient.onTokenUsage(handleTokenUsage);
+      } catch (error) {
+        console.log('Realtime features unavailable:', error);
+        // App continues to work without realtime updates
+      }
     };
-
-    const handleConductorEvent = (event: ConductorEvent) => {
-      const logEntry: LogEntry = {
-        id: `conductor-${Date.now()}`,
-        timestamp: new Date(event.timestamp),
-        agentName: "Conductor",
-        message: event.message,
-        level: "info"
-      };
-      setLogs(prev => [logEntry, ...prev.slice(0, 49)]);
-    };
-
-    const handleTokenUsage = (event: TokenUsageEvent) => {
-      // Update token usage for agents (could be expanded to show in UI)
-      console.log(`Token usage update: Agent ${event.agentId} used ${event.tokensUsed} tokens`);
-    };
-
-    websocketClient.onNewLog(handleNewLog);
-    websocketClient.onConductorEvent(handleConductorEvent);
-    websocketClient.onTokenUsage(handleTokenUsage);
-
+    
+    setupWebSocket();
+    
     return () => {
-      websocketClient.offNewLog(handleNewLog);
-      websocketClient.offConductorEvent(handleConductorEvent);
-      websocketClient.offTokenUsage(handleTokenUsage);
+      // Cleanup
+      websocketClient.disconnect();
     };
   }, []);
 
