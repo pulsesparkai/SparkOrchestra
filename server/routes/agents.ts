@@ -29,7 +29,7 @@ const requireAuth = async (req: any, res: Response, next: Function) => {
 router.use(requireAuth);
 
 // POST /api/agents - Create new agent
-router.post('/', (async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -85,7 +85,7 @@ router.post('/', (async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-}) as express.RequestHandler);
+});
 
 // GET /api/agents - Get user's agents
 router.get('/', (async (req: Request, res: Response) => {
