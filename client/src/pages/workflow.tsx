@@ -93,15 +93,15 @@ export default function Workflow() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white mb-2">Workflow Designer</h1>
-            <p className="text-gray-400">Create and execute AI agent workflows</p>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">Workflow Designer</h1>
+            <p className="text-muted-foreground">Create and execute AI agent workflows</p>
           </div>
           <div className="flex items-center space-x-3">
             <Button
               variant="outline"
               size="sm"
               onClick={clearWorkflow}
-              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              className="border-border text-card-foreground hover:bg-muted"
               disabled={selectedAgents.length === 0}
             >
               <Trash2 className="w-4 h-4 mr-2" />
@@ -110,7 +110,7 @@ export default function Workflow() {
             <Button
               variant="outline"
               size="sm"
-              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              className="border-border text-card-foreground hover:bg-muted"
               disabled={selectedAgents.length === 0}
             >
               <Save className="w-4 h-4 mr-2" />
@@ -120,7 +120,7 @@ export default function Workflow() {
               size="sm"
               onClick={runWorkflow}
               disabled={selectedAgents.length === 0 || isRunning}
-              className="bg-purple-600 text-white hover:bg-purple-700"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
             >
               <Play className="w-4 h-4 mr-2" />
               {isRunning ? "Running..." : "Run Workflow"}
@@ -131,9 +131,9 @@ export default function Workflow() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Available Agents */}
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Available Agents</CardTitle>
+            <CardTitle className="text-card-foreground">Available Agents</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
