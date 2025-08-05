@@ -133,11 +133,11 @@ export function SupabaseAuth() {
       <CardContent>
         <Tabs defaultValue="magic" className="space-y-4">
           <TabsList className="grid w-full grid-cols-2 bg-gray-100">
-            <TabsTrigger value="magic" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-black">
+            <TabsTrigger value="magic" className="text-black data-[state=active]:bg-[#c85a3a] data-[state=active]:text-white">
               <Zap className="w-4 h-4 mr-2" />
               Magic Link
             </TabsTrigger>
-            <TabsTrigger value="password" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-black">
+            <TabsTrigger value="password" className="text-black data-[state=active]:bg-[#c85a3a] data-[state=active]:text-white">
               <Lock className="w-4 h-4 mr-2" />
               Password
             </TabsTrigger>
@@ -180,8 +180,7 @@ export function SupabaseAuth() {
                 disabled={isLoading || !email}
                 className="w-full text-white"
                 style={{
-                  backgroundColor: '#c85a3a',
-                  ':hover': { backgroundColor: '#b54e30' }
+                  backgroundColor: '#c85a3a'
                 }}
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#b54e30'}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#c85a3a'}
@@ -210,9 +209,9 @@ export function SupabaseAuth() {
           {/* Password Tab */}
           <TabsContent value="password" className="space-y-4">
             <Tabs defaultValue="signin" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-2 bg-gray-800">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 bg-gray-100">
+                <TabsTrigger value="signin" className="text-black data-[state=active]:bg-[#c85a3a] data-[state=active]:text-white">Sign In</TabsTrigger>
+                <TabsTrigger value="signup" className="text-black data-[state=active]:bg-[#c85a3a] data-[state=active]:text-white">Sign Up</TabsTrigger>
               </TabsList>
 
               {/* Sign In Form */}
@@ -225,9 +224,9 @@ export function SupabaseAuth() {
                   )}
                   
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email" className="text-gray-300">Email</Label>
+                    <Label htmlFor="signin-email" className="text-black">Email</Label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="signin-email"
                         type="email"
@@ -235,15 +234,16 @@ export function SupabaseAuth() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="pl-10 bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+                        className="pl-10 bg-white text-black border-gray-300 focus:border-gray-400 focus:ring-0"
+                        style={{borderColor: '#d0d0d0'}}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="signin-password" className="text-gray-300">Password</Label>
+                    <Label htmlFor="signin-password" className="text-black">Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="signin-password"
                         type="password"
@@ -251,7 +251,8 @@ export function SupabaseAuth() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="pl-10 bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+                        className="pl-10 bg-white text-black border-gray-300 focus:border-gray-400 focus:ring-0"
+                        style={{borderColor: '#d0d0d0'}}
                       />
                     </div>
                   </div>
@@ -259,7 +260,10 @@ export function SupabaseAuth() {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    className="w-full text-white"
+                    style={{backgroundColor: '#c85a3a'}}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#b54e30'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#c85a3a'}
                   >
                     {isLoading ? (
                       <div className="flex items-center space-x-2">
@@ -286,15 +290,15 @@ export function SupabaseAuth() {
                   )}
 
                   {success && (
-                    <Alert className="border-green-500 bg-green-900/20">
-                      <AlertDescription className="text-green-300">{success}</AlertDescription>
+                    <Alert className="border-accent bg-accent/20">
+                      <AlertDescription style={{color: '#ff6b35'}}>{success}</AlertDescription>
                     </Alert>
                   )}
                   
                   <div className="space-y-2">
-                    <Label htmlFor="signup-username" className="text-gray-300">Username</Label>
+                    <Label htmlFor="signup-username" className="text-black">Username</Label>
                     <div className="relative">
-                      <UserPlus className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <UserPlus className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="signup-username"
                         type="text"
@@ -302,15 +306,16 @@ export function SupabaseAuth() {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        className="pl-10 bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+                        className="pl-10 bg-white text-black border-gray-300 focus:border-gray-400 focus:ring-0"
+                        style={{borderColor: '#d0d0d0'}}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email" className="text-gray-300">Email</Label>
+                    <Label htmlFor="signup-email" className="text-black">Email</Label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="signup-email"
                         type="email"
@@ -318,15 +323,16 @@ export function SupabaseAuth() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="pl-10 bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+                        className="pl-10 bg-white text-black border-gray-300 focus:border-gray-400 focus:ring-0"
+                        style={{borderColor: '#d0d0d0'}}
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password" className="text-gray-300">Password</Label>
+                    <Label htmlFor="signup-password" className="text-black">Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
                         id="signup-password"
                         type="password"
@@ -335,16 +341,20 @@ export function SupabaseAuth() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         minLength={6}
-                        className="pl-10 bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+                        className="pl-10 bg-white text-black border-gray-300 focus:border-gray-400 focus:ring-0"
+                        style={{borderColor: '#d0d0d0'}}
                       />
                     </div>
-                    <p className="text-xs text-gray-500">Password must be at least 6 characters</p>
+                    <p className="text-xs text-black opacity-50">Password must be at least 6 characters</p>
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    className="w-full text-white"
+                    style={{backgroundColor: '#c85a3a'}}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#b54e30'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#c85a3a'}
                   >
                     {isLoading ? (
                       <div className="flex items-center space-x-2">
