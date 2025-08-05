@@ -1,5 +1,6 @@
 import { type User, type InsertUser, type Agent, type InsertAgent } from "@shared/schema";
-import { randomUUID } from "crypto";
+import crypto from "crypto";
+import { users } from "@shared/schema";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -35,15 +36,32 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await this.db.insert(users).values({
-      ...insertUser,
-      email: insertUser.email || null,
-      createdAt: new Date(),
-      stripeCustomerId: null,
-      stripeSubscriptionId: null,
-      userPlan: insertUser.userPlan || "free"
-    }).returning();
-    return user;
+    if ('db' in this) {
+      // Database storage
+      const [user] = await (this as DatabaseStorage).db.insert(users).values({
+        ...insertUser,
+        email: insertUser.email || null,
+        createdAt: new Date(),
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
+        userPlan: insertUser.userPlan || "free"
+      }).returning();
+      return user;
+    } else {
+      // Memory storage
+      const memStorage = this as MemStorage;
+      const newUser: User = {
+        ...insertUser,
+        id: crypto.randomUUID(),
+        email: insertUser.email || null,
+        createdAt: new Date(),
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
+        userPlan: insertUser.userPlan || "free"
+      };
+      memStorage.users.set(newUser.id, newUser);
+      return newUser;
+    }
   }
 
   async getAgent(id: string): Promise<Agent | undefined> {
@@ -65,7 +83,7 @@ export class MemStorage implements IStorage {
   }
 
   async createAgent(insertAgent: InsertAgent): Promise<Agent> {
-    const id = randomUUID();
+    const id = crypto.randomUUID();
     const now = new Date();
     const agent: Agent = { 
       id,
