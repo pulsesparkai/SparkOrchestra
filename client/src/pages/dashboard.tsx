@@ -48,6 +48,7 @@ export default function Dashboard() {
     // TODO: Redirect to upgrade flow/Stripe
     console.log("Redirecting to upgrade...");
   };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
@@ -77,6 +78,7 @@ export default function Dashboard() {
         />
       </div>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="bg-gray-900 border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -125,7 +127,8 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <Card className="bg-gray-900 border-gray-700">
           <CardHeader>
             <CardTitle className="text-white">Recent Activity</CardTitle>
@@ -170,7 +173,7 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {/* Quick Actions and Token Usage */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="bg-gray-900 border-gray-700">
           <CardHeader>
