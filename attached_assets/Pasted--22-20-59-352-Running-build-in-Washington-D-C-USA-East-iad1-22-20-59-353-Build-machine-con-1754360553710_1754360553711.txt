@@ -1,0 +1,64 @@
+[22:20:59.352] Running build in Washington, D.C., USA (East) – iad1
+[22:20:59.353] Build machine configuration: 4 cores, 8 GB
+[22:20:59.372] Cloning github.com/pulsesparkai/SparkOrchestra (Branch: main, Commit: 7ed05fb)
+[22:20:59.379] Skipping build cache, deployment was triggered without cache.
+[22:20:59.810] Cloning completed: 438.000ms
+[22:21:01.646] Running "vercel build"
+[22:21:02.184] Vercel CLI 44.6.4
+[22:21:02.351] WARN! Due to `builds` existing in your configuration file, the Build and Development Settings defined in your Project Settings will not apply. Learn More: https://vercel.link/unused-build-settings
+[22:21:02.823] Installing dependencies...
+[22:21:06.655] npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+[22:21:07.503] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[22:21:07.690] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[22:21:12.581] 
+[22:21:12.581] added 581 packages in 10s
+[22:21:12.581] 
+[22:21:12.581] 66 packages are looking for funding
+[22:21:12.581]   run `npm fund` for details
+[22:21:12.829] Using TypeScript 5.6.3 (local user-provided)
+[22:21:17.217] server/storage.ts(39,11): error TS2739: Type '{ id: `${string}-${string}-${string}-${string}-${string}`; username: string; password: string; email?: string | null | undefined; userPlan?: "free" | "early_adopter" | undefined; }' is missing the following properties from type '{ id: string; createdAt: Date | null; username: string; password: string; email: string | null; userPlan: "free" | "early_adopter"; stripeCustomerId: string | null; stripeSubscriptionId: string | null; }': createdAt, stripeCustomerId, stripeSubscriptionId
+[22:21:17.219] 
+[22:21:17.662] server/routes/agents.ts(30,18): error TS2769: No overload matches this call.
+[22:21:17.662]   The last overload gave the following error.
+[22:21:17.663]     Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<express.Response<any, Record<string, any>> | undefined>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+[22:21:17.663]       Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<Response<any, Record<string, any>> | undefined>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+[22:21:17.663] server/routes/agents.ts(88,17): error TS2769: No overload matches this call.
+[22:21:17.663]   The last overload gave the following error.
+[22:21:17.663]     Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<void>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+[22:21:17.663]       Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<void>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+[22:21:17.663] server/routes/agents.ts(112,20): error TS2769: No overload matches this call.
+[22:21:17.663]   The last overload gave the following error.
+[22:21:17.663]     Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<express.Response<any, Record<string, any>> | undefined>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+[22:21:17.663]       Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<Response<any, Record<string, any>> | undefined>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+[22:21:17.664] server/routes/agents.ts(159,23): error TS2769: No overload matches this call.
+[22:21:17.664]   The last overload gave the following error.
+[22:21:17.664]     Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<express.Response<any, Record<string, any>> | undefined>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+[22:21:17.664]       Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<Response<any, Record<string, any>> | undefined>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+[22:21:17.664] server/routes/agents.ts(194,26): error TS2769: No overload matches this call.
+[22:21:17.664]   The last overload gave the following error.
+[22:21:17.664]     Argument of type '(req: AuthenticatedRequest, res: Response) => Promise<express.Response<any, Record<string, any>> | undefined>' is not assignable to parameter of type 'Application<Record<string, any>>'.
+[22:21:17.664]       Type '(req: AuthenticatedRequest, res: Response<any, Record<string, any>>) => Promise<Response<any, Record<string, any>> | undefined>' is missing the following properties from type 'Application<Record<string, any>>': init, defaultConfiguration, engine, set, and 63 more.
+[22:21:17.664] 
+[22:21:17.775] server/services/anthropic.ts(26,26): error TS2339: Property 'apiKey' does not exist on type '{ id: string; status: string | null; userId: string; name: string; role: string; prompt: string; model: string; encryptedApiKey: string | null; conductorMonitoring: boolean | null; deletedAt: Date | null; createdAt: Date | null; updatedAt: Date | null; }'.
+[22:21:17.775] server/services/anthropic.ts(32,31): error TS2339: Property 'apiKey' does not exist on type '{ id: string; status: string | null; userId: string; name: string; role: string; prompt: string; model: string; encryptedApiKey: string | null; conductorMonitoring: boolean | null; deletedAt: Date | null; createdAt: Date | null; updatedAt: Date | null; }'.
+[22:21:17.775] server/services/anthropic.ts(33,39): error TS2339: Property 'apiKey' does not exist on type '{ id: string; status: string | null; userId: string; name: string; role: string; prompt: string; model: string; encryptedApiKey: string | null; conductorMonitoring: boolean | null; deletedAt: Date | null; createdAt: Date | null; updatedAt: Date | null; }'.
+[22:21:17.775] server/services/anthropic.ts(69,26): error TS2339: Property 'apiKey' does not exist on type '{ id: string; status: string | null; userId: string; name: string; role: string; prompt: string; model: string; encryptedApiKey: string | null; conductorMonitoring: boolean | null; deletedAt: Date | null; createdAt: Date | null; updatedAt: Date | null; }'.
+[22:21:17.775] server/services/anthropic.ts(75,31): error TS2339: Property 'apiKey' does not exist on type '{ id: string; status: string | null; userId: string; name: string; role: string; prompt: string; model: string; encryptedApiKey: string | null; conductorMonitoring: boolean | null; deletedAt: Date | null; createdAt: Date | null; updatedAt: Date | null; }'.
+[22:21:17.775] server/services/anthropic.ts(76,39): error TS2339: Property 'apiKey' does not exist on type '{ id: string; status: string | null; userId: string; name: string; role: string; prompt: string; model: string; encryptedApiKey: string | null; conductorMonitoring: boolean | null; deletedAt: Date | null; createdAt: Date | null; updatedAt: Date | null; }'.
+[22:21:17.775] 
+[22:21:18.181] server/services/encryption.ts(10,29): error TS2551: Property 'createCipherGCM' does not exist on type 'typeof import("crypto")'. Did you mean 'createCipher'?
+[22:21:18.181] server/services/encryption.ts(36,31): error TS2551: Property 'createDecipherGCM' does not exist on type 'typeof import("crypto")'. Did you mean 'createDecipher'?
+[22:21:18.181] 
+[22:21:18.303] server/services/workflowDatabase.ts(150,7): error TS2322: Type '{ id: string; workflowExecutionId: string; stepNumber: number; agentId: string; agentName: string; action: string; input: unknown; output: unknown; status: string; timestamp: Date; duration: number | null; tokensUsed: number | null; error: string | null; createdAt: Date; }[]' is not assignable to type 'WorkflowExecutionLog[]'.
+[22:21:18.303]   Type '{ id: string; workflowExecutionId: string; stepNumber: number; agentId: string; agentName: string; action: string; input: unknown; output: unknown; status: string; timestamp: Date; duration: number | null; tokensUsed: number | null; error: string | null; createdAt: Date; }' is not assignable to type 'WorkflowExecutionLog'.
+[22:21:18.303]     Types of property 'status' are incompatible.
+[22:21:18.303]       Type 'string' is not assignable to type '"completed" | "failed" | "started" | "skipped"'.
+[22:21:18.304] 
+[22:21:18.388] server/conductor/index.ts(241,45): error TS2304: Cannot find name 'userId'.
+[22:21:18.388] 
+[22:21:28.794] Build Completed in /vercel/output [26s]
+[22:21:29.039] Deploying outputs...
+[22:21:35.835] Deployment completed
+[22:21:46.440] Uploading build cache [89.38 MB]...
+[22:21:48.084] Build cache uploaded: 1.646s
+[22:21:50.310] Exiting build container
