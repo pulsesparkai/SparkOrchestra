@@ -206,7 +206,7 @@ export default function Conductor() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-foreground mb-2">Conductor Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">Welcome to Orchestra</h1>
         <p className="text-muted-foreground">Real-time monitoring and control of Orchestra workflows</p>
       </div>
 
