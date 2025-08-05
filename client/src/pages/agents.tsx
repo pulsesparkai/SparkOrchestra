@@ -26,6 +26,10 @@ export default function Agents() {
   const { toast } = useToast();
   const { trackEvent } = useAnalytics();
 
+  const { data: agents, isLoading } = useQuery<Agent[]>({
+    queryKey: ["/api/agents"],
+  });
+
   // Mock user data - would come from API/context in real app
   const userPlan = "free" as const;
   const agentCount = agents?.length || 0;
@@ -41,10 +45,6 @@ export default function Agents() {
       tokens_used: tokensUsed
     });
   }, [agentCount]);
-
-  const { data: agents, isLoading } = useQuery<Agent[]>({
-    queryKey: ["/api/agents"],
-  });
 
   const deleteAgentMutation = useMutation({
     mutationFn: (id: string) => apiRequest("DELETE", `/api/agents/${id}`),
@@ -128,6 +128,7 @@ export default function Agents() {
               <DialogTrigger asChild>
                 <Button 
                   size="sm"
+                  data-tour="create-agent-button"
                   className="bg-purple-600 text-white hover:bg-purple-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
@@ -363,7 +364,7 @@ export default function Agents() {
           });
           // TODO: Redirect to upgrade flow
         }}
-        onTrackEvent={trackEvent}
+
       />
     </div>
   );

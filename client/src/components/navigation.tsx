@@ -1,18 +1,20 @@
 import { Link, useLocation } from "wouter";
-import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User } from "lucide-react";
+import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TokenUsageIndicator } from "@/components/ui/token-usage-indicator";
+import { useTour } from "@/components/onboarding/tour-context";
 import orchestraLogo from '@assets/Lo_1754349496969.png';
 
 export default function Navigation() {
   const [location] = useLocation();
+  const { startTour } = useTour();
 
   const navItems = [
-    { path: "/dashboard", label: "Dashboard", icon: ChartLine },
-    { path: "/agents", label: "Agents", icon: Bot },
-    { path: "/workflow", label: "Workflow", icon: Table },
-    { path: "/conductor", label: "Conductor", icon: Eye },
-    { path: "/pricing", label: "Pricing", icon: DollarSign },
+    { path: "/dashboard", label: "Dashboard", icon: ChartLine, tourId: "dashboard-tab" },
+    { path: "/agents", label: "Agents", icon: Bot, tourId: "agents-tab" },
+    { path: "/workflow", label: "Workflow", icon: Table, tourId: "workflows-tab" },
+    { path: "/conductor", label: "Conductor", icon: Eye, tourId: "conductor-tab" },
+    { path: "/pricing", label: "Pricing", icon: DollarSign, tourId: "pricing-tab" },
   ];
 
   return (
@@ -38,6 +40,7 @@ export default function Navigation() {
                     <Button
                       variant="ghost"
                       size="sm"
+                      data-tour={item.tourId}
                       className={`
                         px-3 py-2 text-sm transition-colors
                         ${isActive 
@@ -57,6 +60,15 @@ export default function Navigation() {
           
           <div className="flex items-center space-x-4">
             <TokenUsageIndicator />
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={startTour}
+              className="text-secondary-foreground hover:text-secondary-foreground/80"
+              title="Start Tour"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </Button>
             <Button variant="ghost" size="sm" className="text-secondary-foreground hover:text-secondary-foreground/80">
               <Bell className="w-4 h-4" />
             </Button>

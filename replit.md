@@ -12,6 +12,20 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (August 2025)
 
+### Onboarding Tour Implementation (✅ COMPLETED - August 5, 2025)
+- ✅ Created interactive onboarding tour system without mascot per user preference
+- ✅ Built TourContext provider with step management and localStorage persistence
+- ✅ Implemented TourModal with spotlight effect highlighting tour targets
+- ✅ Added data-tour attributes to navigation tabs and create agent button
+- ✅ Created floating help button (bottom-right) for manual tour activation
+- ✅ Tour automatically starts for new users who haven't seen it before
+- ✅ Added help icon in navigation bar for quick tour access
+- ✅ Tour steps: Welcome → Agents → Create Agent → Workflows → Conductor → Complete
+- ✅ Smooth animations with Framer Motion for modal and spotlight transitions
+- ✅ Skip tour option and progress dots for navigation between steps
+
+## Recent Changes (August 2025)
+
 ### Complete Migration to Supabase Stack (✅ COMPLETED - August 2025)
 - ✅ Successfully migrated from Clerk authentication to Supabase Auth with magic link login
 - ✅ Replaced Neon PostgreSQL with Supabase database and Row Level Security policies

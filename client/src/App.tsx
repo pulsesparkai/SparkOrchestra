@@ -6,6 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/components/auth/auth-provider";
 import { AuthPage } from "@/components/auth/auth-page";
 import { AuthCallback } from "@/components/auth/auth-callback";
+import { TourProvider } from "@/components/onboarding/tour-context";
+import { TourModal } from "@/components/onboarding/tour-modal";
+import { HelpButton } from "@/components/onboarding/help-button";
 import Navigation from "@/components/navigation";
 import Dashboard from "@/pages/dashboard";
 import Agents from "@/pages/agents";
@@ -48,10 +51,14 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <Router />
-    </div>
+    <TourProvider>
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <Router />
+        <TourModal />
+        <HelpButton />
+      </div>
+    </TourProvider>
   );
 }
 
