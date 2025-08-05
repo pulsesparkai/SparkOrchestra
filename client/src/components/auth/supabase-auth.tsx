@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from './auth-provider';
 import { supabase } from '@/lib/supabase';
 import { Mail, Lock, LogIn, UserPlus, Zap, CheckCircle } from 'lucide-react';
+import orchestraLogo from '@assets/Lo_1754349496969.png';
 
 export function SupabaseAuth() {
   const [email, setEmail] = useState('');
@@ -124,7 +125,13 @@ export function SupabaseAuth() {
   return (
     <Card className="w-full max-w-md bg-white border" style={{borderColor: '#e4e4e4'}}>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold text-black">Welcome to Orchestra</CardTitle>
+        <CardTitle className="flex justify-center mb-4">
+          <img 
+            src={orchestraLogo}
+            alt="Orchestra" 
+            className="h-12 w-auto"
+          />
+        </CardTitle>
         <CardDescription className="text-black opacity-70">
           Sign in to manage your AI agents
         </CardDescription>
