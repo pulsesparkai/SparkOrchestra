@@ -36,31 +36,19 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    // Check if this is database storage by checking for the db property
-    if ('db' in this && this.db) {
-      const [user] = await this.db.insert(users).values({
-        ...insertUser,
-        email: insertUser.email || null,
-        createdAt: new Date(),
-        stripeCustomerId: null,
-        stripeSubscriptionId: null,
-        userPlan: insertUser.userPlan || "free"
-      }).returning();
-      return user;
-    } else {
-      // Memory storage
-      const newUser: User = {
-        ...insertUser,
-        id: crypto.randomUUID(),
-        email: insertUser.email || null,
-        createdAt: new Date(),
-        stripeCustomerId: null,
-        stripeSubscriptionId: null,
-        userPlan: insertUser.userPlan || "free"
-      };
-      this.users.set(newUser.id, newUser);
-      return newUser;
-    }
+    const id = crypto.randomUUID();
+    const user: User = {
+      id,
+      username: insertUser.username,
+      password: insertUser.password,
+      email: insertUser.email || null,
+      userPlan: insertUser.userPlan || "free",
+      createdAt: new Date(),
+      stripeCustomerId: null,
+      stripeSubscriptionId: null
+    };
+    this.users.set(id, user);
+    return user;
   }
 
   async getAgent(id: string): Promise<Agent | undefined> {
