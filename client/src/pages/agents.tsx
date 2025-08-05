@@ -119,7 +119,7 @@ export default function Agents() {
             <Button 
               variant="outline" 
               size="sm"
-              className="border-border text-card-foreground hover:bg-muted"
+              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
             >
               <Download className="w-4 h-4 mr-2" />
               Export Agents
@@ -129,15 +129,15 @@ export default function Agents() {
                 <Button 
                   size="sm"
                   data-tour="create-agent-button"
-                  className="bg-accent text-accent-foreground hover:bg-accent/90"
+                  className="bg-purple-600 text-white hover:bg-purple-700"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   New Agent
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-card border-border">
+              <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
                 <DialogHeader>
-                  <DialogTitle className="text-card-foreground">Create New Agent</DialogTitle>
+                  <DialogTitle className="text-white">Create New Agent</DialogTitle>
                 </DialogHeader>
                 <AgentForm 
                   onPreview={() => {}} 
@@ -167,11 +167,11 @@ export default function Agents() {
               placeholder="Search agents by name or role..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-accent focus:border-accent"
+              className="pl-10 border-gray-600 bg-gray-800 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
             />
           </div>
           <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-48 border-border bg-input text-foreground focus:ring-accent focus:border-accent">
+            <SelectTrigger className="w-48 border-gray-600 bg-gray-800 text-white focus:ring-purple-600 focus:border-purple-600">
               <SelectValue placeholder="Filter by role" />
             </SelectTrigger>
             <SelectContent>

@@ -101,7 +101,7 @@ export default function Workflow() {
               variant="outline"
               size="sm"
               onClick={clearWorkflow}
-              className="border-border text-card-foreground hover:bg-muted"
+              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
               disabled={selectedAgents.length === 0}
             >
               <Trash2 className="w-4 h-4 mr-2" />
@@ -110,7 +110,7 @@ export default function Workflow() {
             <Button
               variant="outline"
               size="sm"
-              className="border-border text-card-foreground hover:bg-muted"
+              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
               disabled={selectedAgents.length === 0}
             >
               <Save className="w-4 h-4 mr-2" />
@@ -120,7 +120,7 @@ export default function Workflow() {
               size="sm"
               onClick={runWorkflow}
               disabled={selectedAgents.length === 0 || isRunning}
-              className="bg-accent text-accent-foreground hover:bg-accent/90"
+              className="bg-purple-600 text-white hover:bg-purple-700"
             >
               <Play className="w-4 h-4 mr-2" />
               {isRunning ? "Running..." : "Run Workflow"}
@@ -131,9 +131,9 @@ export default function Workflow() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Available Agents */}
-        <Card className="bg-card border-border">
+        <Card className="bg-gray-900 border-gray-700">
           <CardHeader>
-            <CardTitle className="text-card-foreground">Available Agents</CardTitle>
+            <CardTitle className="text-white">Available Agents</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (

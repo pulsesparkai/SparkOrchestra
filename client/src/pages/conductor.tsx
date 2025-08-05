@@ -213,17 +213,17 @@ export default function Conductor() {
       {/* Top Row - Status and Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
         {/* Conductor Status */}
-        <Card className="bg-card border-border lg:col-span-2">
+        <Card className="bg-gray-900 border-gray-700 lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-card-foreground flex items-center space-x-2">
+            <CardTitle className="text-white flex items-center space-x-2">
               <Eye className="w-5 h-5" />
               <span>Conductor Status</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-4">
-              <Avatar className="w-16 h-16 bg-accent">
-                <AvatarFallback className="bg-accent text-accent-foreground text-xl">
+              <Avatar className="w-16 h-16 bg-purple-600">
+                <AvatarFallback className="bg-purple-600 text-white text-xl">
                   <Bot className="w-8 h-8" />
                 </AvatarFallback>
               </Avatar>
@@ -232,19 +232,19 @@ export default function Conductor() {
                   <span className={`px-2 py-1 text-xs rounded-full ${
                     conductorStatus.status === 'active' 
                       ? 'bg-green-500/20 text-green-400' 
-                      : 'bg-muted text-muted-foreground'
+                      : 'bg-gray-800 text-gray-400'
                   }`}>
                     <div className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${
                       conductorStatus.status === 'active' ? 'bg-green-500' : 'bg-gray-500'
                     }`}></div>
                     {conductorStatus.status}
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-gray-400">
                     Last update: {formatTime(conductorStatus.lastUpdate)}
                   </span>
                 </div>
-                <p className="text-card-foreground font-medium">{conductorStatus.currentActivity}</p>
-                <p className="text-sm text-muted-foreground">AI orchestration system online</p>
+                <p className="text-white font-medium">{conductorStatus.currentActivity}</p>
+                <p className="text-sm text-gray-400">AI orchestration system online</p>
               </div>
             </div>
           </CardContent>
@@ -252,14 +252,14 @@ export default function Conductor() {
 
         {/* System Health Metrics */}
         <div className="lg:col-span-2 grid grid-cols-2 gap-4">
-          <Card className="bg-card border-border">
+          <Card className="bg-gray-900 border-gray-700">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Agents</p>
-                  <p className="text-2xl font-bold text-card-foreground">{totalAgents}</p>
+                  <p className="text-sm text-gray-400">Total Agents</p>
+                  <p className="text-2xl font-bold text-white">{totalAgents}</p>
                 </div>
-                <Users className="w-8 h-8 text-accent" />
+                <Users className="w-8 h-8 text-purple-400" />
               </div>
             </CardContent>
           </Card>
