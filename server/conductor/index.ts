@@ -162,9 +162,8 @@ export class Conductor {
     
     // Only check token limits if using platform API key (not user's BYOAPI key)
     if (!usingUserKey) {
-      const userId = agent.userId;
       const estimatedTokens = 250; // Rough estimate for agent execution
-      const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
+      const tokenCheck = await tokenTracker.checkTokenLimit(agent.userId, estimatedTokens);
       
       if (!tokenCheck.allowed) {
         // Enhanced error with better messaging
