@@ -370,24 +370,3 @@ export default function Agents() {
     </div>
   );
 }
-
-      {/* Token Limit Modal */}
-      <TokenLimitModal
-        open={tokenLimitModalOpen}
-        onOpenChange={setTokenLimitModalOpen}
-        tokensUsed={tokensUsed}
-        tokensLimit={tokensLimit}
-        userPlan={userPlan}
-        onUpgrade={() => {
-          trackEvent("upgrade_clicked", {
-            source: "token_limit_modal",
-            tokens_used: tokensUsed,
-            tokens_limit: tokensLimit
-          });
-          // TODO: Redirect to upgrade flow
-        }}
-
-      />
-    </>
-  );
-}
