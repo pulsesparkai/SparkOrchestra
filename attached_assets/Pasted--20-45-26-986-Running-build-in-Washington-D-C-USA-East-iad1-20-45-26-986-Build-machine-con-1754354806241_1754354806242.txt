@@ -1,0 +1,53 @@
+[20:45:26.986] Running build in Washington, D.C., USA (East) – iad1
+[20:45:26.986] Build machine configuration: 4 cores, 8 GB
+[20:45:27.004] Cloning github.com/pulsesparkai/SparkOrchestra (Branch: main, Commit: 950aa68)
+[20:45:27.137] Previous build caches not available
+[20:45:27.504] Cloning completed: 499.000ms
+[20:45:27.784] Running "vercel build"
+[20:45:28.556] Vercel CLI 44.6.4
+[20:45:29.471] Installing dependencies...
+[20:45:33.343] npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+[20:45:34.168] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[20:45:34.188] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[20:45:39.315] 
+[20:45:39.316] added 581 packages in 10s
+[20:45:39.316] 
+[20:45:39.316] 66 packages are looking for funding
+[20:45:39.316]   run `npm fund` for details
+[20:45:39.377] Running "npm run build"
+[20:45:39.632] 
+[20:45:39.632] > rest-express@1.0.0 build
+[20:45:39.632] > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+[20:45:39.632] 
+[20:45:39.894] [36mvite v5.4.19 [32mbuilding for production...[36m[39m
+[20:45:39.944] transforming...
+[20:45:40.194] Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+[20:45:40.194]   npx update-browserslist-db@latest
+[20:45:40.194]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[20:45:41.148] [32m✓[39m 8 modules transformed.
+[20:45:41.149] [31mx[39m Build failed in 1.23s
+[20:45:41.149] [31merror during build:
+[20:45:41.149] [31m[vite:esbuild] Transform failed with 1 error:
+[20:45:41.149] /vercel/path0/client/src/pages/workflow.tsx:109:38: ERROR: Expected "]" but found "("[31m
+[20:45:41.149] file: [36m/vercel/path0/client/src/pages/workflow.tsx:109:38[31m
+[20:45:41.150] [33m
+[20:45:41.150] [33mExpected "]" but found "("[33m
+[20:45:41.150] 107|  function WorkflowCanvas() {
+[20:45:41.150] 108|    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+[20:45:41.150] 109|    const [edges, setEdges, onEdgesState([]);
+[20:45:41.150]    |                                        ^
+[20:45:41.150] 110|    const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+[20:45:41.150] 111|    const [nodeStatuses, setNodeStatuses] = useState<Record<string, "idle" | "running" | "complete" | "error">>({});
+[20:45:41.151] [31m
+[20:45:41.151]     at failureErrorWithLog (/vercel/path0/node_modules/vite/node_modules/esbuild/lib/main.js:1472:15)
+[20:45:41.151]     at /vercel/path0/node_modules/vite/node_modules/esbuild/lib/main.js:755:50
+[20:45:41.151]     at responseCallbacks.<computed> (/vercel/path0/node_modules/vite/node_modules/esbuild/lib/main.js:622:9)
+[20:45:41.152]     at handleIncomingPacket (/vercel/path0/node_modules/vite/node_modules/esbuild/lib/main.js:677:12)
+[20:45:41.152]     at Socket.readFromStdout (/vercel/path0/node_modules/vite/node_modules/esbuild/lib/main.js:600:7)
+[20:45:41.152]     at Socket.emit (node:events:518:28)
+[20:45:41.152]     at addChunk (node:internal/streams/readable:561:12)
+[20:45:41.152]     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+[20:45:41.152]     at Readable.push (node:internal/streams/readable:392:5)
+[20:45:41.152]     at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+[20:45:41.170] Error: Command "npm run build" exited with 1
+[20:45:44.239] Exiting build container
