@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { Agent } from '@shared/schema';
 import { EncryptionService } from './encryption';
+import { EncryptionService } from './encryption';
 
 /*
 <important_code_snippet_instructions>
@@ -24,23 +25,16 @@ export async function testAnthropicConnection(agent: Agent): Promise<{
   error?: string;
 }> {
   try {
-    // Decrypt the API key if available
-    let apiKey: string | undefined;
-    if (agent.encryptedApiKey) {
-      try {
-        apiKey = EncryptionService.decrypt(agent.encryptedApiKey);
-      } catch (error) {
-        console.error('Failed to decrypt API key:', error);
-      }
-    }
-    const finalApiKey = apiKey || process.env.ANTHROPIC_API_KEY;
+    const apiKey = agent.encryptedApiKey 
+      ? EncryptionService.decrypt(agent.encryptedApiKey)
+      : process.env.ANTHROPIC_API_KEY;
     
-    if (!finalApiKey) {
+    if (!apiKey) {
       throw new Error("No API key available for Anthropic");
     }
 
-    const clientToUse = apiKey 
-      ? new Anthropic({ apiKey: finalApiKey })
+    const clientToUse = agent.encryptedApiKey 
+      ? new Anthropic({ apiKey })
       : anthropic;
 
     const testPrompt = `You are ${agent.name}. ${agent.prompt}\n\nPlease respond with a brief confirmation that you understand your role.`;
@@ -76,23 +70,16 @@ export async function executeAgentTask(
   error?: string;
 }> {
   try {
-    // Decrypt the API key if available
-    let apiKey: string | undefined;
-    if (agent.encryptedApiKey) {
-      try {
-        apiKey = EncryptionService.decrypt(agent.encryptedApiKey);
-      } catch (error) {
-        console.error('Failed to decrypt API key:', error);
-      }
-    }
-    const finalApiKey = apiKey || process.env.ANTHROPIC_API_KEY;
+    const apiKey = agent.encryptedApiKey 
+      ? EncryptionService.decrypt(agent.encryptedApiKey)
+      : process.env.ANTHROPIC_API_KEY;
     
-    if (!finalApiKey) {
+    if (!apiKey) {
       throw new Error("No API key available for Anthropic");
     }
 
-    const clientToUse = apiKey 
-      ? new Anthropic({ apiKey: finalApiKey })
+    const clientToUse = agent.encryptedApiKey 
+      ? new Anthropic({ apiKey })
       : anthropic;
 
     const fullPrompt = `You are ${agent.name}. ${agent.prompt}\n\nUser input: ${input}`;
