@@ -100,7 +100,7 @@ export class WorkflowDatabase {
 
       return {
         ...execution,
-        logs: logs.map(log => ({
+        logs: logs.map((log: any) => ({
           ...log,
           status: log.status as "completed" | "failed" | "started" | "skipped"
         }))
@@ -124,7 +124,7 @@ export class WorkflowDatabase {
 
       // Get logs for each execution
       const executionsWithLogs = await Promise.all(
-        executions.map(async (execution) => {
+        executions.map(async (execution: any) => {
           const logs = await db
             .select()
             .from(workflowExecutionLogs)
@@ -133,7 +133,7 @@ export class WorkflowDatabase {
 
           return {
             ...execution,
-            logs: logs.map(log => ({
+            logs: logs.map((log: any) => ({
               ...log,
               status: log.status as "completed" | "failed" | "started" | "skipped"
             }))
@@ -159,7 +159,7 @@ export class WorkflowDatabase {
         .where(eq(workflowExecutionLogs.workflowExecutionId, executionId))
         .orderBy(workflowExecutionLogs.timestamp);
       
-      return logs.map(log => ({
+      return logs.map((log: any) => ({
         ...log,
         status: log.status as "completed" | "failed" | "started" | "skipped"
       })) as WorkflowExecutionLog[];

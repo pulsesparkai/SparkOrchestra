@@ -301,7 +301,7 @@ export class TokenTracker {
 
       // Create stats for each month
       const history: TokenUsageStats[] = months.map(month => {
-        const record = records.find(r => r.month === month);
+        const record = records.find((r: any) => r.month === month);
         const tokensUsed = record?.tokensUsed || 0;
 
         return {
