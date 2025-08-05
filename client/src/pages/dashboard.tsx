@@ -245,16 +245,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-      {/* Token Limit Modal */}
-      <TokenLimitModal
-        open={tokenLimitModalOpen}
-        onOpenChange={setTokenLimitModalOpen}
-        tokensUsed={tokensUsed}
-        tokensLimit={tokensLimit}
-        userPlan={userPlan}
-        onUpgrade={handleUpgrade}
-      />
-    </>
-  );
-}
