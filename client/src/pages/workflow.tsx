@@ -93,7 +93,7 @@ export default function Workflow() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground mb-2">Welcome to Orchestra</h1>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">Workflow Designer</h1>
             <p className="text-muted-foreground">Create and execute AI agent workflows</p>
           </div>
           <div className="flex items-center space-x-3">

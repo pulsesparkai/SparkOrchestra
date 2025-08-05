@@ -112,7 +112,7 @@ export default function Agents() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground mb-2">Welcome to Orchestra</h1>
+            <h1 className="text-2xl font-semibold text-foreground mb-2">Agent Management</h1>
             <p className="text-muted-foreground">Create and configure AI agents for your Orchestra workflows</p>
           </div>
           <div className="flex items-center space-x-3">
