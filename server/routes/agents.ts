@@ -285,5 +285,7 @@ router.post('/:id/test', async (req: Request, res: Response) => {
       success: false
     });
   }
+}
+)
 
 export default router;
