@@ -125,7 +125,7 @@ export function SupabaseAuth() {
   return (
     <Card className="w-full max-w-md bg-white border" style={{borderColor: '#e4e4e4'}}>
       <CardHeader className="text-center">
-        <CardTitle className="flex items-center justify-center gap-2 mb-4 text-2xl font-bold text-black">
+        <CardTitle className="flex items-center justify-center gap-2 mb-2 text-2xl font-bold text-black">
           <span style={{color: '#8B4513'}}>Welcome to</span>
           <img 
             src={orchestraLogo}
@@ -133,7 +133,7 @@ export function SupabaseAuth() {
             className="h-32 w-auto"
           />
         </CardTitle>
-        <CardDescription className="text-black opacity-70">
+        <CardDescription className="text-black opacity-70 mb-4">
           Sign in to manage your AI agents
         </CardDescription>
       </CardHeader>
