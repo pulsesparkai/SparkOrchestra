@@ -72,10 +72,8 @@ export default function Navigation() {
             <Button variant="ghost" size="sm" className="text-white hover:text-gray-300">
               <Bell className="w-4 h-4" />
             </Button>
-            <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
             <div className="w-8 h-8 bg-orchestra-brown rounded-full flex items-center justify-center">
               <User className="text-white w-4 h-4" />
-            </div>
             </div>
           </div>
         </div>
