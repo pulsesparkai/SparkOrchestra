@@ -96,5 +96,7 @@ app.use((req, res, next) => {
       log(`serving on port ${port}`);
     });
   }
+}
+)
 // Only ONE export at the very end
 export default app;
