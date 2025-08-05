@@ -97,8 +97,7 @@ app.use((req, res, next) => {
     });
   }
 
-  // Export for Vercel
-  if (process.env.VERCEL) {
-    export default app;
-  }
 })();
+
+// Export must be at top level (not inside any if/else)
+export default app;
