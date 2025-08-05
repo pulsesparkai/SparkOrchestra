@@ -131,7 +131,7 @@ export default function AgentList() {
                       </span>
                       <span>
                         <Key className="w-3 h-3 mr-1 inline" />
-                        {agent.apiKey ? "Custom" : "Environment"}
+                        {agent.encryptedApiKey ? "Custom" : "Environment"}
                       </span>
                       <span>
                         <Clock className="w-3 h-3 mr-1 inline" />

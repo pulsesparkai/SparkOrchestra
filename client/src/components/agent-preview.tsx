@@ -63,7 +63,7 @@ export default function AgentPreview({ agent }: AgentPreviewProps) {
                 </span>
                 <span>
                   <Key className="w-3 h-3 mr-1 inline" />
-                  API: {agent.apiKey ? "Custom" : "Environment"}
+                  API: {agent.encryptedApiKey ? "Custom" : "Environment"}
                 </span>
               </div>
             </div>

@@ -236,8 +236,3 @@ export default function Dashboard() {
         tokensLimit={tokensLimit}
         userPlan={userPlan}
         onUpgrade={handleUpgrade}
-        onTrackEvent={trackEvent}
-      />
-    </div>
-  );
-}
