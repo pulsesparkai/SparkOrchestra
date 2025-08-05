@@ -162,7 +162,8 @@ export class Conductor {
     
     // Only check token limits if using platform API key (not user's BYOAPI key)
     if (!usingUserKey) {
-      const estimatedTokens = tokenTracker.estimateTokens(agent.prompt);
+      const userId = agent.userId;
+      await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
       const userId = 'demo-user'; // TODO: Get from auth context
       const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
       

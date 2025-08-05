@@ -29,7 +29,7 @@ const requireAuth = async (req: any, res: Response, next: Function) => {
 router.use(requireAuth);
 
 // POST /api/agents - Create new agent
-router.post('/', requireAuth, async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -88,7 +88,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
 });
 
 // GET /api/agents - Get user's agents
-router.get('/', requireAuth, async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -113,7 +113,7 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 });
 
 // PUT /api/agents/:id - Update agent
-router.put('/:id', requireAuth, async (req: Request, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -161,7 +161,7 @@ router.put('/:id', requireAuth, async (req: Request, res: Response) => {
 });
 
 // DELETE /api/agents/:id - Soft delete agent
-router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -197,7 +197,7 @@ router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
 });
 
 // POST /api/agents/:id/test - Test agent with Anthropic
-router.post('/:id/test', requireAuth, async (req: Request, res: Response) => {
+router.post('/:id/test', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
