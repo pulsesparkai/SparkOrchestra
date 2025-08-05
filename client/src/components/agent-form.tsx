@@ -91,9 +91,9 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   };
 
   return (
-    <Card className="bg-card border-border">
+    <Card className="bg-white shadow-sm border border-gray-200">
       <CardHeader>
-        <CardTitle className="text-foreground">Create New Agent</CardTitle>
+        <CardTitle className="text-gray-900">Create New Agent</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -103,13 +103,13 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">
+                  <FormLabel className="text-gray-900">
                     Agent Name <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g., Content Analyzer, Data Processor"
-                      className="border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-orchestra-brown focus:border-orchestra-brown"
+                      className="border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-orchestra-brown focus:border-orchestra-brown"
                       {...field}
                     />
                   </FormControl>
@@ -123,12 +123,12 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               name="role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">
+                  <FormLabel className="text-gray-900">
                     Role <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="border-border bg-input text-foreground focus:ring-orchestra-brown focus:border-orchestra-brown">
+                      <SelectTrigger className="border-gray-300 bg-white text-gray-900 focus:ring-orchestra-brown focus:border-orchestra-brown">
                         <SelectValue placeholder="Select a role..." />
                       </SelectTrigger>
                     </FormControl>
@@ -149,13 +149,13 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               name="prompt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">
+                  <FormLabel className="text-gray-900">
                     Agent Prompt <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Describe the agent's role, capabilities, and instructions..."
-                      className="border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-orchestra-brown focus:border-orchestra-brown resize-none"
+                      className="border-gray-300 bg-white text-gray-900 placeholder:text-gray-500 focus:ring-orchestra-brown focus:border-orchestra-brown resize-none"
                       rows={4}
                       {...field}
                     />
@@ -170,12 +170,12 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               name="model"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">
+                  <FormLabel className="text-gray-900">
                     Language Model <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="border-border bg-input text-foreground focus:ring-orchestra-brown focus:border-orchestra-brown">
+                      <SelectTrigger className="border-gray-300 bg-white text-gray-900 focus:ring-orchestra-brown focus:border-orchestra-brown">
                         <SelectValue placeholder="Select a model..." />
                       </SelectTrigger>
                     </FormControl>
@@ -212,12 +212,12 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               control={form.control}
               name="conductorMonitoring"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-border bg-input p-4">
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-gray-300 bg-gray-50 p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-foreground">
+                    <FormLabel className="text-gray-900">
                       Enable Conductor Monitoring
                     </FormLabel>
-                    <FormDescription className="text-xs text-muted-foreground">
+                    <FormDescription className="text-xs text-gray-600">
                       Enable monitoring and intervention for this agent
                     </FormDescription>
                   </div>
@@ -235,7 +235,7 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1 border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+                className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                 onClick={handlePreview}
               >
                 <Eye className="w-4 h-4 mr-2" />

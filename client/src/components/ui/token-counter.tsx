@@ -44,13 +44,13 @@ export function TokenCounter({
   };
 
   return (
-    <Card className={cn("bg-card border-border", className)}>
+    <Card className={cn("bg-white shadow-sm border border-gray-200", className)}>
       <CardContent className="p-4 space-y-3">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Zap className="w-4 h-4 text-orchestra-brown" />
-            <span className="text-sm font-medium text-foreground">Orchestra Credits</span>
+            <span className="text-sm font-medium text-gray-900">Orchestra Credits</span>
           </div>
           <Badge variant={getBadgeVariant()} className="text-xs">
             {userPlan === "free" ? "Free Plan" : "Early Adopter"}
@@ -63,7 +63,7 @@ export function TokenCounter({
             <span className={cn("text-lg font-bold", getStatusColor())}>
               {tokensUsed.toLocaleString()}/{tokensLimit.toLocaleString()}
             </span>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-gray-600">
               {usagePercentage.toFixed(0)}% used
             </span>
           </div>
@@ -105,8 +105,8 @@ export function TokenCounter({
 
         {/* BYOAPI Prompt */}
         {showUpgradePrompt && (userPlan === "free" || isNearLimit) && (
-          <div className="space-y-2 pt-2 border-t border-border">
-            <div className="flex items-center space-x-2 text-sm text-foreground">
+          <div className="space-y-2 pt-2 border-t border-gray-200">
+            <div className="flex items-center space-x-2 text-sm text-gray-900">
               <Key className="w-4 h-4 text-green-400" />
               <span>Want unlimited usage?</span>
             </div>

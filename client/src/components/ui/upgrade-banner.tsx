@@ -73,7 +73,7 @@ export function UpgradeBanner({
   const { title, subtitle } = getBannerMessage();
 
   return (
-    <div className="relative mb-6 bg-gradient-to-r from-orchestra-brown/10 via-orange-600/10 to-orchestra-brown/10 border border-orchestra-brown/30 rounded-lg p-4 backdrop-blur-sm">
+    <div className="relative mb-6 bg-gradient-to-r from-orchestra-brown/10 via-orange-600/10 to-orchestra-brown/10 border border-orchestra-brown/30 rounded-lg p-4 shadow-sm">
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-orchestra-brown/5 via-orange-600/5 to-orchestra-brown/5 animate-pulse rounded-lg"></div>
       
@@ -82,7 +82,7 @@ export function UpgradeBanner({
         variant="ghost"
         size="sm"
         onClick={handleDismiss}
-        className="absolute top-2 right-2 text-gray-400 hover:text-white p-1 h-8 w-8"
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 p-1 h-8 w-8"
       >
         <X className="w-4 h-4" />
       </Button>
@@ -97,21 +97,21 @@ export function UpgradeBanner({
           {/* Content */}
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="text-white font-semibold">{title}</h3>
+              <h3 className="text-gray-900 font-semibold">{title}</h3>
               <Badge className="bg-gradient-to-r from-orchestra-brown to-orange-600 text-white border-0 text-xs px-2 py-0.5">
                 <Sparkles className="w-3 h-3 mr-1" />
                 LIMITED TIME
               </Badge>
             </div>
-            <p className="text-muted-foreground text-sm">{subtitle}</p>
+            <p className="text-gray-600 text-sm">{subtitle}</p>
           </div>
         </div>
 
         {/* CTA */}
         <div className="flex items-center space-x-4">
           <div className="text-right hidden sm:block">
-            <div className="text-foreground font-bold text-lg">$15/month</div>
-            <div className="text-muted-foreground text-xs">Cancel anytime</div>
+            <div className="text-gray-900 font-bold text-lg">$15/month</div>
+            <div className="text-gray-600 text-xs">Cancel anytime</div>
           </div>
           <Button
             onClick={handleUpgrade}

@@ -18,7 +18,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-background border-b border-border">
+    <nav className="bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
@@ -44,8 +44,8 @@ export default function Navigation() {
                       className={`
                         px-3 py-2 text-sm transition-colors
                         ${isActive 
-                          ? "bg-orchestra-brown/20 text-orchestra-brown" 
-                          : "text-foreground hover:text-muted-foreground"
+                          ? "bg-orchestra-brown text-white" 
+                          : "text-gray-700 hover:text-orchestra-brown"
                         }
                       `}
                     >
@@ -64,12 +64,12 @@ export default function Navigation() {
               variant="ghost" 
               size="sm" 
               onClick={startTour}
-              className="text-white hover:text-gray-300"
+              className="text-gray-700 hover:text-orchestra-brown"
               title="Start Tour"
             >
               <HelpCircle className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-white hover:text-gray-300">
+            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orchestra-brown">
               <Bell className="w-4 h-4" />
             </Button>
             <div className="w-8 h-8 bg-orchestra-brown rounded-full flex items-center justify-center">

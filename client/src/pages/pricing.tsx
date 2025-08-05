@@ -76,19 +76,19 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-gray-50 to-orange-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-orchestra-brown rounded-full flex items-center justify-center">
               <Star className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Simple, Transparent Pricing
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Start free or upgrade to unlock the full power of Orchestra
           </p>
         </div>
@@ -96,14 +96,14 @@ export default function Pricing() {
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
           {/* Free Plan */}
-          <Card className="bg-gray-900/80 border-gray-600 backdrop-blur-sm relative">
+          <Card className="bg-white border-gray-200 shadow-lg relative">
             <CardHeader className="text-center pb-6">
-              <CardTitle className="text-white text-2xl mb-2">Free Plan</CardTitle>
+              <CardTitle className="text-gray-900 text-2xl mb-2">Free Plan</CardTitle>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-white">$0</span>
-                <span className="text-gray-400 text-lg">/month</span>
+                <span className="text-4xl font-bold text-gray-900">$0</span>
+                <span className="text-gray-600 text-lg">/month</span>
               </div>
-              <p className="text-gray-300">
+              <p className="text-gray-600">
                 Perfect for getting started with AI orchestration
               </p>
             </CardHeader>
@@ -114,7 +114,7 @@ export default function Pricing() {
                 {freeFeatures.map((feature, index) => (
                   <div key={index} className="flex items-center space-x-3">
                     <Check className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    <span className="text-gray-300">{feature}</span>
+                    <span className="text-gray-700">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -122,7 +122,7 @@ export default function Pricing() {
               {/* Start Free Button */}
               <Button
                 onClick={handleStartFree}
-                className="w-full bg-gray-700 hover:bg-gray-600 text-white border-0 h-12 text-lg font-semibold"
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-900 border-0 h-12 text-lg font-semibold"
               >
                 Start Free
               </Button>
@@ -130,25 +130,25 @@ export default function Pricing() {
           </Card>
 
           {/* Early Adopter Plan */}
-          <Card className="bg-gray-900/80 border-purple-500 backdrop-blur-sm relative overflow-hidden">
+          <Card className="bg-white border-orchestra-brown shadow-lg relative overflow-hidden">
             {/* Recommended Badge */}
             <div className="absolute top-4 right-4 z-10">
-              <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-3 py-1">
+              <Badge className="bg-gradient-to-r from-orchestra-brown to-orange-600 text-white border-0 px-3 py-1">
                 <Crown className="w-3 h-3 mr-1" />
                 RECOMMENDED
               </Badge>
             </div>
 
             {/* Gradient Border Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 opacity-10 blur-sm"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-orchestra-brown via-orange-600 to-orchestra-brown opacity-10 blur-sm"></div>
             
             <CardHeader className="text-center pb-6 relative z-10">
-              <CardTitle className="text-white text-2xl mb-2">Early Adopter</CardTitle>
+              <CardTitle className="text-gray-900 text-2xl mb-2">Early Adopter</CardTitle>
               <div className="mb-4">
-                <span className="text-4xl font-bold text-white">$15</span>
-                <span className="text-gray-400 text-lg">/month</span>
+                <span className="text-4xl font-bold text-gray-900">$15</span>
+                <span className="text-gray-600 text-lg">/month</span>
               </div>
-              <p className="text-gray-300">
+              <p className="text-gray-600">
                 Use our credits or connect your Anthropic API for unlimited power
               </p>
             </CardHeader>
@@ -158,8 +158,8 @@ export default function Pricing() {
               <div className="space-y-3 mb-8">
                 {earlyAdopterFeatures.map((feature, index) => (
                   <div key={index} className="flex items-center space-x-3">
-                    <Check className="w-5 h-5 text-purple-400 flex-shrink-0" />
-                    <span className="text-gray-200">{feature}</span>
+                    <Check className="w-5 h-5 text-orchestra-brown flex-shrink-0" />
+                    <span className="text-gray-700">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -168,7 +168,7 @@ export default function Pricing() {
               <Button
                 onClick={handleUpgrade}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 h-12 text-lg font-semibold transition-all duration-200 transform hover:scale-105"
+                className="w-full bg-gradient-to-r from-orchestra-brown to-orange-600 hover:from-orchestra-brown-hover hover:to-orange-700 text-white border-0 h-12 text-lg font-semibold transition-all duration-200 transform hover:scale-105"
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">

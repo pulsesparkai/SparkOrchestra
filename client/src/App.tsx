@@ -37,10 +37,10 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-orchestra-brown border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-muted-foreground mt-4">Loading Orchestra...</p>
+          <p className="text-gray-600 mt-4">Loading Orchestra...</p>
         </div>
       </div>
     );
@@ -52,7 +52,7 @@ function AppContent() {
 
   return (
     <TourProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gray-50">
         <Navigation />
         <Router />
         <TourModal />

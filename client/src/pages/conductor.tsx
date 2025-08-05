@@ -204,19 +204,19 @@ export default function Conductor() {
   const successRate = totalAgents > 0 ? Math.round((activeAgents / totalAgents) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-foreground mb-2">Conductor Dashboard</h1>
-        <p className="text-muted-foreground">Real-time monitoring and control of Orchestra workflows</p>
+        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Conductor Dashboard</h1>
+        <p className="text-gray-600">Real-time monitoring and control of Orchestra workflows</p>
       </div>
 
       {/* Top Row - Status and Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
         {/* Conductor Status */}
-        <Card className="bg-card border-border lg:col-span-2">
+        <Card className="bg-white shadow-sm border border-gray-200 lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-foreground flex items-center space-x-2">
+            <CardTitle className="text-gray-900 flex items-center space-x-2">
               <Eye className="w-5 h-5" />
               <span>Conductor Status</span>
             </CardTitle>
@@ -244,8 +244,8 @@ export default function Conductor() {
                     Last update: {formatTime(conductorStatus.lastUpdate)}
                   </span>
                 </div>
-                <p className="text-foreground font-medium">{conductorStatus.currentActivity}</p>
-                <p className="text-sm text-muted-foreground">AI orchestration system online</p>
+                <p className="text-gray-900 font-medium">{conductorStatus.currentActivity}</p>
+                <p className="text-sm text-gray-600">AI orchestration system online</p>
               </div>
             </div>
           </CardContent>
@@ -253,48 +253,48 @@ export default function Conductor() {
 
         {/* System Health Metrics */}
         <div className="lg:col-span-2 grid grid-cols-2 gap-4">
-          <Card className="bg-card border-border">
+          <Card className="bg-white shadow-sm border border-gray-200">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Agents</p>
-                  <p className="text-2xl font-bold text-foreground">{totalAgents}</p>
+                  <p className="text-sm text-gray-600">Total Agents</p>
+                  <p className="text-2xl font-bold text-gray-900">{totalAgents}</p>
                 </div>
                 <Users className="w-8 h-8 text-orchestra-brown" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-border">
+          <Card className="bg-white shadow-sm border border-gray-200">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Active Workflows</p>
-                  <p className="text-2xl font-bold text-foreground">{activeWorkflows.length}</p>
+                  <p className="text-sm text-gray-600">Active Workflows</p>
+                  <p className="text-2xl font-bold text-gray-900">{activeWorkflows.length}</p>
                 </div>
                 <Workflow className="w-8 h-8 text-blue-400" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-border">
+          <Card className="bg-white shadow-sm border border-gray-200">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Success Rate</p>
-                  <p className="text-2xl font-bold text-foreground">{successRate}%</p>
+                  <p className="text-sm text-gray-600">Success Rate</p>
+                  <p className="text-2xl font-bold text-gray-900">{successRate}%</p>
                 </div>
                 <TrendingUp className="w-8 h-8 text-green-400" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-card border-border">
+          <Card className="bg-white shadow-sm border border-gray-200">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Active Agents</p>
-                  <p className="text-2xl font-bold text-foreground">{activeAgents}</p>
+                  <p className="text-sm text-gray-600">Active Agents</p>
+                  <p className="text-2xl font-bold text-gray-900">{activeAgents}</p>
                 </div>
                 <Zap className="w-8 h-8 text-yellow-400" />
               </div>
@@ -307,38 +307,38 @@ export default function Conductor() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Active Workflows */}
         <div className="lg:col-span-1">
-          <Card className="bg-card border-border h-96">
+          <Card className="bg-white shadow-sm border border-gray-200 h-96">
             <CardHeader>
-              <CardTitle className="text-foreground">Active Workflows</CardTitle>
+              <CardTitle className="text-gray-900">Active Workflows</CardTitle>
             </CardHeader>
             <CardContent>
               {activeWorkflows.length === 0 ? (
                 <div className="text-center py-16">
-                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Workflow className="w-8 h-8 text-muted-foreground" />
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Workflow className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-muted-foreground">No active workflows</p>
-                  <p className="text-sm text-muted-foreground mt-1">Start a workflow to begin monitoring</p>
+                  <p className="text-gray-600">No active workflows</p>
+                  <p className="text-sm text-gray-500 mt-1">Start a workflow to begin monitoring</p>
                 </div>
               ) : (
                 <ScrollArea className="h-80">
                   <div className="space-y-4">
                     {activeWorkflows.map((workflow) => (
-                      <div key={workflow.id} className="p-3 bg-input rounded-lg border border-border">
+                      <div key={workflow.id} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-foreground text-sm">{workflow.name}</h4>
+                          <h4 className="font-medium text-gray-900 text-sm">{workflow.name}</h4>
                           <Badge className={getWorkflowStatusColor(workflow.status)}>
                             {workflow.status}
                           </Badge>
                         </div>
                         <div className="mb-2">
-                          <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                          <div className="flex justify-between text-xs text-gray-600 mb-1">
                             <span>Progress</span>
                             <span>{workflow.progress}%</span>
                           </div>
                           <Progress value={workflow.progress} className="h-2" />
                         </div>
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center justify-between text-xs text-gray-600">
                           <span>{workflow.agents.length} agents</span>
                           <span>{formatTime(workflow.startTime)}</span>
                         </div>
@@ -353,9 +353,9 @@ export default function Conductor() {
 
         {/* Real-time Log Stream */}
         <div className="lg:col-span-2">
-          <Card className="bg-card border-border h-96">
+          <Card className="bg-white shadow-sm border border-gray-200 h-96">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-foreground">Real-time Activity Log</CardTitle>
+              <CardTitle className="text-gray-900">Real-time Activity Log</CardTitle>
               <Badge className="bg-green-100 text-green-800">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
                 Live
@@ -366,27 +366,27 @@ export default function Conductor() {
                 <div className="space-y-2">
                   {logs.length === 0 ? (
                     <div className="text-center py-16">
-                      <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Activity className="w-8 h-8 text-muted-foreground" />
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Activity className="w-8 h-8 text-gray-400" />
                       </div>
-                      <p className="text-muted-foreground">Waiting for activity...</p>
+                      <p className="text-gray-600">Waiting for activity...</p>
                     </div>
                   ) : (
                     logs.map((log) => (
-                      <div key={log.id} className="flex items-start space-x-3 p-2 hover:bg-muted rounded text-sm">
+                      <div key={log.id} className="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded text-sm">
                         <div className="flex-shrink-0 mt-0.5">
                           {getLogIcon(log.level)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-2 mb-1">
-                            <span className="text-xs text-muted-foreground font-mono">
+                            <span className="text-xs text-gray-600 font-mono">
                               {formatTime(log.timestamp)}
                             </span>
                             <Badge variant="secondary" className="text-xs">
                               {log.agentName}
                             </Badge>
                           </div>
-                          <p className="text-foreground">{log.message}</p>
+                          <p className="text-gray-900">{log.message}</p>
                         </div>
                       </div>
                     ))
@@ -399,9 +399,9 @@ export default function Conductor() {
       </div>
 
       {/* Intervention Panel */}
-      <Card className="bg-card border-border mt-8">
+      <Card className="bg-white shadow-sm border border-gray-200 mt-8">
         <CardHeader>
-          <CardTitle className="text-foreground">Intervention Controls</CardTitle>
+          <CardTitle className="text-gray-900">Intervention Controls</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-4">
@@ -436,7 +436,7 @@ export default function Conductor() {
               Retry Failed Agents
             </Button>
             <div className="flex-1" />
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-gray-600">
               <Clock className="w-4 h-4 inline mr-1" />
               System uptime: 2h 34m
             </div>
