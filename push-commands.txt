@@ -1,0 +1,27 @@
+# Commands to push TypeScript fixes to GitHub
+
+Run these commands in your local terminal:
+
+1. First, make sure you're in the project directory:
+   cd /path/to/your/orchestra-project
+
+2. Add all the changes:
+   git add -A
+
+3. Commit with a descriptive message:
+   git commit -m "Fix all TypeScript compilation errors for Vercel deployment
+
+   - Fixed encryption.ts crypto method names (createCipheriv/createDecipheriv)
+   - Fixed anthropic.ts to decrypt encryptedApiKey instead of using apiKey
+   - Fixed storage.ts createUser with all required properties
+   - Fixed conductor/index.ts undefined userId reference
+   - Fixed workflowDatabase.ts status type casting
+   - All route handlers properly typed with AuthenticatedRequest
+   
+   Build now completes successfully without TypeScript errors."
+
+4. Push to GitHub:
+   git push origin main
+
+Once pushed, Vercel will automatically detect the new commit and start a deployment.
+The deployment should now succeed without TypeScript compilation errors.
