@@ -130,7 +130,7 @@ export function SupabaseAuth() {
           <img 
             src={orchestraLogo}
             alt="Orchestra" 
-            className="h-24 w-auto"
+            className="h-32 w-auto"
           />
         </CardTitle>
         <CardDescription className="text-black opacity-70">
