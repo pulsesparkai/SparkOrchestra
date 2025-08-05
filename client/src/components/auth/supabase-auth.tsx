@@ -126,11 +126,11 @@ export function SupabaseAuth() {
     <Card className="w-full max-w-md bg-white border" style={{borderColor: '#e4e4e4'}}>
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center gap-2 mb-4 text-2xl font-bold text-black">
-          <span>Welcome to</span>
+          <span style={{color: '#c85a3a'}}>Welcome to</span>
           <img 
             src={orchestraLogo}
             alt="Orchestra" 
-            className="h-12 w-auto"
+            className="h-16 w-auto"
           />
         </CardTitle>
         <CardDescription className="text-black opacity-70">
