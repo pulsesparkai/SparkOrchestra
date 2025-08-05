@@ -164,7 +164,6 @@ export class Conductor {
     if (!usingUserKey) {
       const userId = agent.userId;
       await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
-      const userId = 'demo-user'; // TODO: Get from auth context
       const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
       
       if (!tokenCheck.allowed) {
