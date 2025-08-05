@@ -163,7 +163,7 @@ export class Conductor {
     // Only check token limits if using platform API key (not user's BYOAPI key)
     if (!usingUserKey) {
       const userId = agent.userId;
-      await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
+      const estimatedTokens = 250; // Rough estimate for agent execution
       const tokenCheck = await tokenTracker.checkTokenLimit(userId, estimatedTokens);
       
       if (!tokenCheck.allowed) {
@@ -238,8 +238,7 @@ ${agent.prompt}`;
 
       // Only record token usage if using platform API key (not user's BYOAPI key)
       if (!usingUserKey) {
-        const userId = agent.userId;
-        await tokenTracker.recordTokenUsage(userId, tokensUsed, agentId, context.workflowId);
+        await tokenTracker.recordTokenUsage(agent.userId, tokensUsed, agentId, context.workflowId);
       }
 
       // Update execution tracking
