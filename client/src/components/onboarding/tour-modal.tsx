@@ -101,7 +101,7 @@ export function TourModal() {
             <div className="absolute inset-0 bg-black/60" />
             {targetElement && (
               <motion.div
-                className="absolute ring-4 ring-[#c85a3a]/50 rounded-lg"
+                className="absolute ring-4 ring-orchestra-brown/50 rounded-lg"
                 style={{
                   top: targetElement.getBoundingClientRect().top - 4,
                   left: targetElement.getBoundingClientRect().left - 4,
@@ -121,7 +121,7 @@ export function TourModal() {
       <AnimatePresence>
         {isActive && (
           <motion.div
-            className="fixed z-50 bg-white dark:bg-gray-900 rounded-lg shadow-2xl p-6 max-w-sm"
+            className="fixed z-50 bg-card rounded-lg shadow-2xl p-6 max-w-sm border border-border"
             style={{
               top: modalPosition.top,
               left: modalPosition.left,
@@ -135,17 +135,17 @@ export function TourModal() {
             {/* Close button */}
             <button
               onClick={skipTour}
-              className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="absolute top-2 right-2 p-1 rounded-full hover:bg-muted transition-colors"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="w-4 h-4 text-muted-foreground" />
             </button>
 
             {/* Content */}
             <div className="text-center mb-6 mt-2">
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
                 {currentStepData.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-muted-foreground">
                 {currentStepData.content}
               </p>
             </div>
@@ -166,10 +166,10 @@ export function TourModal() {
                   }}
                   className={`w-2 h-2 rounded-full transition-all ${
                     index === currentStep
-                      ? 'bg-[#c85a3a] w-6'
+                      ? 'bg-orchestra-brown w-6'
                       : index < currentStep
-                      ? 'bg-[#c85a3a]/50'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      ? 'bg-orchestra-brown/50'
+                      : 'bg-muted'
                   }`}
                 />
               ))}
@@ -182,7 +182,7 @@ export function TourModal() {
                 size="sm"
                 onClick={previousStep}
                 disabled={currentStep === 0}
-                className="text-gray-600 dark:text-gray-300"
+                className="text-muted-foreground"
               >
                 <ChevronLeft className="w-4 h-4 mr-1" />
                 Back
@@ -192,7 +192,7 @@ export function TourModal() {
                 variant="ghost"
                 size="sm"
                 onClick={skipTour}
-                className="text-gray-500 dark:text-gray-400"
+                className="text-muted-foreground"
               >
                 <SkipForward className="w-4 h-4 mr-1" />
                 Skip tour
@@ -201,7 +201,7 @@ export function TourModal() {
               <Button
                 size="sm"
                 onClick={isLastStep ? endTour : nextStep}
-                className="bg-[#c85a3a] hover:bg-[#a84830] text-white"
+                className="bg-orchestra-brown hover:bg-orchestra-brown-hover text-white"
               >
                 {isLastStep ? 'Get Started' : 'Next'}
                 {!isLastStep && <ChevronRight className="w-4 h-4 ml-1" />}
