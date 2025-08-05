@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 89.4%); /* #e4e4e4 */
-  --foreground: hsl(0, 0%, 10%); /* #1a1a1a - primary text */
-  --muted: hsl(0, 0%, 100%); /* #ffffff - card backgrounds */
-  --muted-foreground: hsl(0, 0%, 40%); /* #666666 - secondary text */
-  --popover: hsl(0, 0%, 100%); /* #ffffff */
+  --background: hsl(0, 0%, 10%); /* #1a1a1a - dark background */
+  --foreground: hsl(0, 0%, 89.4%); /* #e4e4e4 - light text */
+  --muted: hsl(0, 0%, 16%); /* #2a2a2a - dark card backgrounds */
+  --muted-foreground: hsl(0, 0%, 60%); /* #999999 - secondary text */
+  --popover: hsl(0, 0%, 16%); /* #2a2a2a */
   --popover-foreground: hsl(0, 0%, 10%);
-  --card: hsl(0, 0%, 100%); /* #ffffff - light card background */
-  --card-foreground: hsl(0, 0%, 10%);
-  --border: hsl(0, 0%, 24%); /* #3d3d3d - borders */
-  --input: hsl(0, 0%, 100%); /* #ffffff */
+  --card: hsl(0, 0%, 16%); /* #2a2a2a - dark card background */
+  --card-foreground: hsl(0, 0%, 89.4%); /* #e4e4e4 */
+  --border: hsl(0, 0%, 30%); /* #4d4d4d - borders */
+  --input: hsl(0, 0%, 16%); /* #2a2a2a */
   --primary: hsl(22, 100%, 12%); /* #3d1700 - dark brown */
   --primary-foreground: hsl(0, 0%, 89.4%); /* #e4e4e4 */
   --secondary: hsl(0, 0%, 16%); /* #2a2a2a - dark sections */
@@ -30,16 +30,16 @@
 }
 
 .dark {
-  --background: hsl(0, 0%, 89.4%); /* Keep same #e4e4e4 for consistency */
-  --foreground: hsl(0, 0%, 10%);
-  --muted: hsl(0, 0%, 100%);
-  --muted-foreground: hsl(0, 0%, 40%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(0, 0%, 10%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(0, 0%, 10%);
-  --border: hsl(0, 0%, 24%);
-  --input: hsl(0, 0%, 100%);
+  --background: hsl(0, 0%, 10%); /* #1a1a1a - dark background */
+  --foreground: hsl(0, 0%, 89.4%); /* #e4e4e4 - light text */
+  --muted: hsl(0, 0%, 16%); /* #2a2a2a - dark card backgrounds */
+  --muted-foreground: hsl(0, 0%, 60%); /* #999999 - secondary text */
+  --popover: hsl(0, 0%, 16%); /* #2a2a2a */
+  --popover-foreground: hsl(0, 0%, 89.4%);
+  --card: hsl(0, 0%, 16%); /* #2a2a2a - dark card background */
+  --card-foreground: hsl(0, 0%, 89.4%);
+  --border: hsl(0, 0%, 30%); /* #4d4d4d - borders */
+  --input: hsl(0, 0%, 16%); /* #2a2a2a */
   --primary: hsl(22, 100%, 12%); /* #3d1700 */
   --primary-foreground: hsl(0, 0%, 89.4%);
   --secondary: hsl(0, 0%, 16%); /* #2a2a2a */

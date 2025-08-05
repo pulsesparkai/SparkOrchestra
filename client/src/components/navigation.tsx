@@ -18,7 +18,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-secondary border-b border-border">
+    <nav className="bg-card border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
@@ -44,8 +44,8 @@ export default function Navigation() {
                       className={`
                         px-3 py-2 text-sm transition-colors
                         ${isActive 
-                          ? "bg-primary/20 text-primary" 
-                          : "text-secondary-foreground hover:text-secondary-foreground/80"
+                          ? "bg-accent/20 text-accent" 
+                          : "text-card-foreground hover:text-card-foreground/80"
                         }
                       `}
                     >
@@ -64,16 +64,16 @@ export default function Navigation() {
               variant="ghost" 
               size="sm" 
               onClick={startTour}
-              className="text-secondary-foreground hover:text-secondary-foreground/80"
+              className="text-card-foreground hover:text-card-foreground/80"
               title="Start Tour"
             >
               <HelpCircle className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-secondary-foreground hover:text-secondary-foreground/80">
+            <Button variant="ghost" size="sm" className="text-card-foreground hover:text-card-foreground/80">
               <Bell className="w-4 h-4" />
             </Button>
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <User className="text-primary-foreground w-4 h-4" />
+            <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+              <User className="text-accent-foreground w-4 h-4" />
             </div>
           </div>
         </div>

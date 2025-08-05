@@ -80,91 +80,91 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Total Agents</CardTitle>
-            <Bot className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Agents</CardTitle>
+            <Bot className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{agentCount}</div>
-            <p className="text-xs text-gray-500">
+            <div className="text-2xl font-bold text-card-foreground">{agentCount}</div>
+            <p className="text-xs text-muted-foreground">
               {userPlan === "free" ? `${agentCount}/${maxAgents} agents` : "Unlimited agents"}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Active Workflows</CardTitle>
-            <Zap className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Active Workflows</CardTitle>
+            <Zap className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
-            <p className="text-xs text-gray-500">No workflows running</p>
+            <div className="text-2xl font-bold text-card-foreground">0</div>
+            <p className="text-xs text-muted-foreground">No workflows running</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Tasks Completed</CardTitle>
-            <Clock className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Tasks Completed</CardTitle>
+            <Clock className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
-            <p className="text-xs text-gray-500">No tasks completed</p>
+            <div className="text-2xl font-bold text-card-foreground">0</div>
+            <p className="text-xs text-muted-foreground">No tasks completed</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Performance</CardTitle>
-            <TrendingUp className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Performance</CardTitle>
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">--</div>
-            <p className="text-xs text-gray-500">No data available</p>
+            <div className="text-2xl font-bold text-card-foreground">--</div>
+            <p className="text-xs text-muted-foreground">No data available</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Recent Activity</CardTitle>
+            <CardTitle className="text-card-foreground">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-6 h-6 text-gray-400" />
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-6 h-6 text-muted-foreground" />
               </div>
-              <p className="text-gray-400">No recent activity</p>
-              <p className="text-sm text-gray-500 mt-1">Create your first agent to get started</p>
+              <p className="text-muted-foreground">No recent activity</p>
+              <p className="text-sm text-muted-foreground mt-1">Create your first agent to get started</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">System Status</CardTitle>
+            <CardTitle className="text-card-foreground">System Status</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">API Services</span>
-                <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                <span className="text-sm text-card-foreground">API Services</span>
+                <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
                   Operational
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Agent Runtime</span>
-                <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                <span className="text-sm text-card-foreground">Agent Runtime</span>
+                <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
                   Ready
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Workflow Engine</span>
-                <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                <span className="text-sm text-card-foreground">Workflow Engine</span>
+                <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
                   Ready
                 </span>
               </div>
@@ -175,14 +175,14 @@ export default function Dashboard() {
 
       {/* Quick Actions and Token Usage */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Quick Actions</CardTitle>
+            <CardTitle className="text-card-foreground">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Link href="/agents">
               <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
                 onClick={() => trackEvent("quick_action_clicked", { action: "create_agent" })}
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -192,7 +192,7 @@ export default function Dashboard() {
             <Link href="/workflow">
               <Button 
                 variant="outline" 
-                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700"
+                className="w-full border-border text-card-foreground hover:bg-muted"
                 onClick={() => trackEvent("quick_action_clicked", { action: "design_workflow" })}
               >
                 Design Workflow
@@ -201,28 +201,28 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Token Usage</CardTitle>
+            <CardTitle className="text-card-foreground">Token Usage</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Monthly Usage</span>
-                <span className="text-white font-medium">{tokensUsed} / {tokensLimit}</span>
+                <span className="text-muted-foreground">Monthly Usage</span>
+                <span className="text-card-foreground font-medium">{tokensUsed} / {tokensLimit}</span>
               </div>
-              <div className="w-full bg-gray-700 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div 
                   className={`h-2 rounded-full transition-all duration-300 ${
                     tokensUsed >= tokensLimit ? 'bg-red-500' : 
                     tokensUsed >= tokensLimit * 0.8 ? 'bg-yellow-500' : 
-                    'bg-purple-600'
+                    'bg-accent'
                   }`}
                   style={{ width: `${Math.min((tokensUsed / tokensLimit) * 100, 100)}%` }}
                 />
               </div>
               {tokensUsed >= tokensLimit * 0.8 && userPlan === "free" && (
-                <p className="text-yellow-400 text-sm">
+                <p className="text-yellow-500 text-sm">
                   ⚠️ Approaching token limit
                 </p>
               )}
