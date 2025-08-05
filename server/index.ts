@@ -99,7 +99,5 @@ app.use((req, res, next) => {
 
 })();
 
-// Export must be at top level (not inside any if/else)
-export default app;
-// Export must be at top level (not inside any if/else)
+// Only ONE export at the very end
 export default app;
