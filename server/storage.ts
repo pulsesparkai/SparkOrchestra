@@ -35,18 +35,14 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = {
-      id,
-      username: insertUser.username,
-      password: insertUser.password,
+    const [user] = await this.db.insert(users).values({
+      ...insertUser,
       email: insertUser.email || null,
-      userPlan: insertUser.userPlan || "free",
+      createdAt: new Date(),
       stripeCustomerId: null,
       stripeSubscriptionId: null,
-      createdAt: new Date()
-    };
-    this.users.set(id, user);
+      userPlan: insertUser.userPlan || "free"
+    }).returning();
     return user;
   }
 
