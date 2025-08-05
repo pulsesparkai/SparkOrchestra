@@ -1,7 +1,7 @@
 import { db } from '../db';
 import { tokenUsage, users } from '../../shared/schema';
 import { eq, and } from 'drizzle-orm';
-import { getWebSocketManager } from '../websocket';
+import { getWebSocketManager } from '../websocket-mock';
 import type { User } from '../../shared/schema';
 
 export interface TokenUsageStats {
