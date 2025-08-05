@@ -50,10 +50,11 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-white mb-2">Dashboard</h1>
-        <p className="text-gray-400">Monitor your Orchestra workflows and agents</p>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">Dashboard</h1>
+        <p className="text-muted-foreground">Monitor your Orchestra workflows and agents</p>
       </div>
 
       {/* Upgrade Banner */}
@@ -80,90 +81,90 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Total Agents</CardTitle>
-            <Bot className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Agents</CardTitle>
+            <Bot className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{agentCount}</div>
-            <p className="text-xs text-gray-400">
+            <div className="text-2xl font-bold text-foreground">{agentCount}</div>
+            <p className="text-xs text-muted-foreground">
               {userPlan === "free" ? `${agentCount}/${maxAgents} agents` : "Unlimited agents"}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Active Workflows</CardTitle>
-            <Zap className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Active Workflows</CardTitle>
+            <Zap className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
-            <p className="text-xs text-gray-400">No workflows running</p>
+            <div className="text-2xl font-bold text-foreground">0</div>
+            <p className="text-xs text-muted-foreground">No workflows running</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Tasks Completed</CardTitle>
-            <Clock className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Tasks Completed</CardTitle>
+            <Clock className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">0</div>
-            <p className="text-xs text-gray-400">No tasks completed</p>
+            <div className="text-2xl font-bold text-foreground">0</div>
+            <p className="text-xs text-muted-foreground">No tasks completed</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-400">Performance</CardTitle>
-            <TrendingUp className="w-4 h-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium text-muted-foreground">Performance</CardTitle>
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">--</div>
-            <p className="text-xs text-gray-400">No data available</p>
+            <div className="text-2xl font-bold text-foreground">--</div>
+            <p className="text-xs text-muted-foreground">No data available</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Recent Activity</CardTitle>
+            <CardTitle className="text-foreground">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-6 h-6 text-gray-400" />
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-6 h-6 text-muted-foreground" />
               </div>
-              <p className="text-gray-400">No recent activity</p>
-              <p className="text-sm text-gray-400 mt-1">Create your first agent to get started</p>
+              <p className="text-muted-foreground">No recent activity</p>
+              <p className="text-sm text-muted-foreground mt-1">Create your first agent to get started</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">System Status</CardTitle>
+            <CardTitle className="text-foreground">System Status</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white">API Services</span>
+                <span className="text-sm text-foreground">API Services</span>
                 <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
                   Operational
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white">Agent Runtime</span>
+                <span className="text-sm text-foreground">Agent Runtime</span>
                 <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
                   Ready
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white">Workflow Engine</span>
+                <span className="text-sm text-foreground">Workflow Engine</span>
                 <span className="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">
                   Ready
                 </span>
@@ -175,14 +176,14 @@ export default function Dashboard() {
 
       {/* Quick Actions and Token Usage */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Quick Actions</CardTitle>
+            <CardTitle className="text-foreground">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Link href="/agents">
               <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-orchestra-brown hover:bg-orchestra-brown-hover text-white"
                 onClick={() => trackEvent("quick_action_clicked", { action: "create_agent" })}
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -192,7 +193,7 @@ export default function Dashboard() {
             <Link href="/workflow">
               <Button 
                 variant="outline" 
-                className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                className="w-full border-border text-muted-foreground hover:bg-muted hover:text-foreground"
                 onClick={() => trackEvent("quick_action_clicked", { action: "design_workflow" })}
               >
                 Design Workflow
@@ -201,22 +202,22 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Token Usage</CardTitle>
+            <CardTitle className="text-foreground">Token Usage</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Monthly Usage</span>
-                <span className="text-white font-medium">{tokensUsed} / {tokensLimit}</span>
+                <span className="text-muted-foreground">Monthly Usage</span>
+                <span className="text-foreground font-medium">{tokensUsed} / {tokensLimit}</span>
               </div>
               <div className="w-full bg-muted rounded-full h-2">
                 <div 
                   className={`h-2 rounded-full transition-all duration-300 ${
                     tokensUsed >= tokensLimit ? 'bg-red-500' : 
                     tokensUsed >= tokensLimit * 0.8 ? 'bg-yellow-500' : 
-                    'bg-purple-600'
+                    'bg-orchestra-brown'
                   }`}
                   style={{ width: `${Math.min((tokensUsed / tokensLimit) * 100, 100)}%` }}
                 />
@@ -230,6 +231,9 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      </div>
+    </div>
 
       {/* Token Limit Modal */}
       <TokenLimitModal

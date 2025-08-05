@@ -108,7 +108,8 @@ export default function Agents() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -119,7 +120,7 @@ export default function Agents() {
             <Button 
               variant="outline" 
               size="sm"
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="border-border text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <Download className="w-4 h-4 mr-2" />
               Export Agents
@@ -129,15 +130,15 @@ export default function Agents() {
                 <Button 
                   size="sm"
                   data-tour="create-agent-button"
-                  className="bg-purple-600 text-white hover:bg-purple-700"
+                  className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   New Agent
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
+              <DialogContent className="max-w-2xl bg-card border-border">
                 <DialogHeader>
-                  <DialogTitle className="text-white">Create New Agent</DialogTitle>
+                  <DialogTitle className="text-foreground">Create New Agent</DialogTitle>
                 </DialogHeader>
                 <AgentForm 
                   onPreview={() => {}} 
@@ -167,11 +168,11 @@ export default function Agents() {
               placeholder="Search agents by name or role..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 border-gray-600 bg-gray-800 text-white placeholder:text-gray-500 focus:ring-purple-600 focus:border-purple-600"
+              className="pl-10 border-border bg-input text-foreground placeholder:text-muted-foreground focus:ring-orchestra-brown focus:border-orchestra-brown"
             />
           </div>
           <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-48 border-gray-600 bg-gray-800 text-white focus:ring-purple-600 focus:border-purple-600">
+            <SelectTrigger className="w-48 border-border bg-input text-foreground focus:ring-orchestra-brown focus:border-orchestra-brown">
               <SelectValue placeholder="Filter by role" />
             </SelectTrigger>
             <SelectContent>
@@ -189,24 +190,24 @@ export default function Agents() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="bg-gray-900 border-gray-700 animate-pulse">
+            <Card key={i} className="bg-card border-border animate-pulse">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gray-700 rounded-lg"></div>
+                  <div className="w-12 h-12 bg-muted rounded-lg"></div>
                   <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-700 rounded w-3/4"></div>
-                    <div className="h-3 bg-gray-700 rounded w-1/2"></div>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                    <div className="h-3 bg-muted rounded w-1/2"></div>
                   </div>
                 </div>
                 <div className="mt-4 space-y-2">
-                  <div className="h-3 bg-gray-700 rounded w-full"></div>
-                  <div className="h-3 bg-gray-700 rounded w-2/3"></div>
+                  <div className="h-3 bg-muted rounded w-full"></div>
+                  <div className="h-3 bg-muted rounded w-2/3"></div>
                 </div>
                 <div className="flex justify-between items-center mt-4">
-                  <div className="h-6 bg-gray-700 rounded w-20"></div>
+                  <div className="h-6 bg-muted rounded w-20"></div>
                   <div className="flex space-x-2">
-                    <div className="h-8 w-16 bg-gray-700 rounded"></div>
-                    <div className="h-8 w-16 bg-gray-700 rounded"></div>
+                    <div className="h-8 w-16 bg-muted rounded"></div>
+                    <div className="h-8 w-16 bg-muted rounded"></div>
                   </div>
                 </div>
               </CardContent>
@@ -215,13 +216,13 @@ export default function Agents() {
         </div>
       ) : filteredAgents.length === 0 ? (
         <div className="text-center py-20">
-          <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Bot className="w-10 h-10 text-gray-400" />
+          <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+            <Bot className="w-10 h-10 text-muted-foreground" />
           </div>
-          <h3 className="text-xl font-medium text-white mb-2">
+          <h3 className="text-xl font-medium text-foreground mb-2">
             {agents?.length === 0 ? "No agents created yet" : "No agents match your search"}
           </h3>
-          <p className="text-gray-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             {agents?.length === 0 
               ? "Create your first agent to get started with Orchestra workflows"
               : "Try adjusting your search terms or filters"
@@ -230,14 +231,14 @@ export default function Agents() {
           {agents?.length === 0 && (
             <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-purple-600 text-white hover:bg-purple-700">
+                <Button className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover">
                   <Plus className="w-4 h-4 mr-2" />
                   Create Your First Agent
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl bg-gray-900 border-gray-700">
+              <DialogContent className="max-w-2xl bg-card border-border">
                 <DialogHeader>
-                  <DialogTitle className="text-white">Create New Agent</DialogTitle>
+                  <DialogTitle className="text-foreground">Create New Agent</DialogTitle>
                 </DialogHeader>
                 <AgentForm 
                   onPreview={() => {}} 
@@ -250,15 +251,15 @@ export default function Agents() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAgents.map((agent) => (
-            <Card key={agent.id} className="bg-gray-900 border-gray-700 hover:border-purple-600/50 transition-colors">
+            <Card key={agent.id} className="bg-card border-border hover:border-orchestra-brown/50 transition-colors">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-orchestra-brown rounded-lg flex items-center justify-center flex-shrink-0">
                       <Bot className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-white truncate mb-1">
+                      <h3 className="font-semibold text-foreground truncate mb-1">
                         {agent.name}
                       </h3>
                       <div className="flex items-center space-x-2">
@@ -276,26 +277,26 @@ export default function Agents() {
                 </div>
 
                 <div className="space-y-3 mb-4">
-                  <div className="flex items-center text-sm text-gray-300">
-                    <Zap className="w-4 h-4 mr-2 text-gray-400" />
+                  <div className="flex items-center text-sm text-foreground">
+                    <Zap className="w-4 h-4 mr-2 text-muted-foreground" />
                     <span className="font-medium">{agent.model}</span>
                   </div>
 
-                  <div className="flex items-center text-sm text-gray-300">
-                    <Calendar className="w-4 h-4 mr-2 text-gray-400" />
+                  <div className="flex items-center text-sm text-foreground">
+                    <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
                     <span>Created {formatDate(agent.createdAt || new Date())}</span>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm text-gray-300">
+                  <div className="flex items-center justify-between text-sm text-foreground">
                     <div className="flex items-center">
-                      <Bot className="w-4 h-4 mr-2 text-gray-400" />
+                      <Bot className="w-4 h-4 mr-2 text-muted-foreground" />
                       <span>1,234 tokens used this month</span>
                     </div>
                     <ApiKeyIndicator hasApiKey={!!(agent as any).hasApiKey} />
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                <div className="flex items-center justify-between pt-4 border-t border-border">
                   <span className={`px-2 py-1 text-xs rounded-full ${
                     agent.status === 'active' 
                       ? 'bg-green-100 text-green-800' 
@@ -311,14 +312,14 @@ export default function Agents() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                      className="border-border text-muted-foreground hover:bg-muted hover:text-foreground"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+                      className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
                       onClick={() => handleDelete(agent.id, agent.name)}
                       disabled={deleteAgentMutation.isPending}
                     >
@@ -348,6 +349,9 @@ export default function Agents() {
           // TODO: Redirect to upgrade flow
         }}
       />
+
+      </div>
+    </div>
 
       {/* Token Limit Modal */}
       <TokenLimitModal

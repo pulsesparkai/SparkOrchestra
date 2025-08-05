@@ -20,12 +20,12 @@ export function HelpButton() {
             variant="ghost"
             size="sm"
             onClick={startTour}
-            className="fixed bottom-6 right-6 h-12 w-12 rounded-full bg-[#c85a3a] hover:bg-[#a84830] text-white shadow-lg z-50"
+            className="fixed bottom-6 right-6 h-12 w-12 rounded-full bg-orchestra-brown hover:bg-orchestra-brown-hover text-white shadow-lg z-50"
           >
             <HelpCircle className="h-5 w-5" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="left" className="bg-gray-900 text-white border-gray-700">
+        <TooltipContent side="left" className="bg-card text-foreground border-border">
           <p>Start guided tour</p>
         </TooltipContent>
       </Tooltip>

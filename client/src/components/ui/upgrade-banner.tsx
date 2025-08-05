@@ -73,9 +73,9 @@ export function UpgradeBanner({
   const { title, subtitle } = getBannerMessage();
 
   return (
-    <div className="relative mb-6 bg-gradient-to-r from-purple-600/10 via-pink-600/10 to-purple-600/10 border border-purple-500/30 rounded-lg p-4 backdrop-blur-sm">
+    <div className="relative mb-6 bg-gradient-to-r from-orchestra-brown/10 via-orange-600/10 to-orchestra-brown/10 border border-orchestra-brown/30 rounded-lg p-4 backdrop-blur-sm">
       {/* Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/5 via-pink-600/5 to-purple-600/5 animate-pulse rounded-lg"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-orchestra-brown/5 via-orange-600/5 to-orchestra-brown/5 animate-pulse rounded-lg"></div>
       
       {/* Dismiss Button */}
       <Button
@@ -90,7 +90,7 @@ export function UpgradeBanner({
       <div className="relative z-10 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {/* Icon */}
-          <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 bg-gradient-to-r from-orchestra-brown to-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
             <Crown className="w-6 h-6 text-white" />
           </div>
 
@@ -98,24 +98,24 @@ export function UpgradeBanner({
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="text-white font-semibold">{title}</h3>
-              <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 text-xs px-2 py-0.5">
+              <Badge className="bg-gradient-to-r from-orchestra-brown to-orange-600 text-white border-0 text-xs px-2 py-0.5">
                 <Sparkles className="w-3 h-3 mr-1" />
                 LIMITED TIME
               </Badge>
             </div>
-            <p className="text-gray-300 text-sm">{subtitle}</p>
+            <p className="text-muted-foreground text-sm">{subtitle}</p>
           </div>
         </div>
 
         {/* CTA */}
         <div className="flex items-center space-x-4">
           <div className="text-right hidden sm:block">
-            <div className="text-white font-bold text-lg">$15/month</div>
-            <div className="text-gray-400 text-xs">Cancel anytime</div>
+            <div className="text-foreground font-bold text-lg">$15/month</div>
+            <div className="text-muted-foreground text-xs">Cancel anytime</div>
           </div>
           <Button
             onClick={handleUpgrade}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 px-6 py-2 font-semibold transition-all duration-200 transform hover:scale-105"
+            className="bg-gradient-to-r from-orchestra-brown to-orange-600 hover:from-orchestra-brown-hover hover:to-orange-700 text-white border-0 px-6 py-2 font-semibold transition-all duration-200 transform hover:scale-105"
           >
             <div className="flex items-center space-x-2">
               <span>Upgrade Now</span>

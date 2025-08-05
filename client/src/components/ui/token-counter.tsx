@@ -44,13 +44,13 @@ export function TokenCounter({
   };
 
   return (
-    <Card className={cn("bg-gray-900/50 border-gray-700", className)}>
+    <Card className={cn("bg-card border-border", className)}>
       <CardContent className="p-4 space-y-3">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Zap className="w-4 h-4 text-purple-400" />
-            <span className="text-sm font-medium text-gray-300">Orchestra Credits</span>
+            <Zap className="w-4 h-4 text-orchestra-brown" />
+            <span className="text-sm font-medium text-foreground">Orchestra Credits</span>
           </div>
           <Badge variant={getBadgeVariant()} className="text-xs">
             {userPlan === "free" ? "Free Plan" : "Early Adopter"}
@@ -63,7 +63,7 @@ export function TokenCounter({
             <span className={cn("text-lg font-bold", getStatusColor())}>
               {tokensUsed.toLocaleString()}/{tokensLimit.toLocaleString()}
             </span>
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-muted-foreground">
               {usagePercentage.toFixed(0)}% used
             </span>
           </div>
@@ -77,7 +77,7 @@ export function TokenCounter({
                 ? "rgb(239 68 68)" // red-500
                 : isNearLimit 
                   ? "rgb(234 179 8)" // yellow-500  
-                  : "rgb(168 85 247)" // purple-500
+                  : "rgb(200 90 58)" // orchestra-brown
             } as React.CSSProperties}
           />
         </div>
@@ -105,8 +105,8 @@ export function TokenCounter({
 
         {/* BYOAPI Prompt */}
         {showUpgradePrompt && (userPlan === "free" || isNearLimit) && (
-          <div className="space-y-2 pt-2 border-t border-gray-700">
-            <div className="flex items-center space-x-2 text-sm text-gray-300">
+          <div className="space-y-2 pt-2 border-t border-border">
+            <div className="flex items-center space-x-2 text-sm text-foreground">
               <Key className="w-4 h-4 text-green-400" />
               <span>Want unlimited usage?</span>
             </div>
@@ -114,7 +114,7 @@ export function TokenCounter({
               {userPlan === "free" && (
                 <button
                   onClick={onUpgrade}
-                  className="flex-1 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium rounded transition-colors"
+                  className="flex-1 px-3 py-1.5 bg-orchestra-brown hover:bg-orchestra-brown-hover text-white text-xs font-medium rounded transition-colors"
                 >
                   Upgrade to Early Adopter
                 </button>

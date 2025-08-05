@@ -18,7 +18,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-gray-900 border-b border-gray-700">
+    <nav className="bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
@@ -44,8 +44,8 @@ export default function Navigation() {
                       className={`
                         px-3 py-2 text-sm transition-colors
                         ${isActive 
-                          ? "bg-purple-600/20 text-purple-400" 
-                          : "text-white hover:text-gray-300"
+                          ? "bg-orchestra-brown/20 text-orchestra-brown" 
+                          : "text-foreground hover:text-muted-foreground"
                         }
                       `}
                     >
@@ -73,6 +73,7 @@ export default function Navigation() {
               <Bell className="w-4 h-4" />
             </Button>
             <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-orchestra-brown rounded-full flex items-center justify-center">
               <User className="text-white w-4 h-4" />
             </div>
           </div>

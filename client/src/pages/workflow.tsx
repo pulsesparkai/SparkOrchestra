@@ -89,7 +89,8 @@ export default function Workflow() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -101,7 +102,7 @@ export default function Workflow() {
               variant="outline"
               size="sm"
               onClick={clearWorkflow}
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="border-border text-muted-foreground hover:bg-muted hover:text-foreground"
               disabled={selectedAgents.length === 0}
             >
               <Trash2 className="w-4 h-4 mr-2" />
@@ -110,7 +111,7 @@ export default function Workflow() {
             <Button
               variant="outline"
               size="sm"
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+              className="border-border text-muted-foreground hover:bg-muted hover:text-foreground"
               disabled={selectedAgents.length === 0}
             >
               <Save className="w-4 h-4 mr-2" />
@@ -120,7 +121,7 @@ export default function Workflow() {
               size="sm"
               onClick={runWorkflow}
               disabled={selectedAgents.length === 0 || isRunning}
-              className="bg-purple-600 text-white hover:bg-purple-700"
+              className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover"
             >
               <Play className="w-4 h-4 mr-2" />
               {isRunning ? "Running..." : "Run Workflow"}
@@ -131,9 +132,9 @@ export default function Workflow() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Available Agents */}
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Available Agents</CardTitle>
+            <CardTitle className="text-foreground">Available Agents</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -152,26 +153,26 @@ export default function Workflow() {
               </div>
             ) : !agents || agents.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Bot className="w-8 h-8 text-gray-400" />
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Bot className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <p className="text-gray-400 mb-2">No agents available</p>
-                <p className="text-sm text-gray-500">Create agents first to use in workflows</p>
+                <p className="text-muted-foreground mb-2">No agents available</p>
+                <p className="text-sm text-muted-foreground">Create agents first to use in workflows</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {agents.map((agent) => (
                   <div
                     key={agent.id}
-                    className="p-3 bg-gray-800 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+                    className="p-3 bg-input border border-border rounded-lg hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-10 bg-orchestra-brown rounded-lg flex items-center justify-center">
                           {getRoleIcon(agent.role || "Custom")}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-white text-sm truncate">{agent.name}</h3>
+                          <h3 className="font-medium text-foreground text-sm truncate">{agent.name}</h3>
                           <div className="flex items-center space-x-2">
                             <Badge variant="secondary" className="text-xs">
                               {agent.role || "Custom"}
@@ -186,7 +187,7 @@ export default function Workflow() {
                         size="sm"
                         onClick={() => addAgentToWorkflow(agent)}
                         disabled={selectedAgents.find(a => a.id === agent.id) !== undefined}
-                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        className="bg-orchestra-brown hover:bg-orchestra-brown-hover text-white"
                       >
                         {selectedAgents.find(a => a.id === agent.id) ? "Added" : "Add"}
                       </Button>
@@ -199,42 +200,42 @@ export default function Workflow() {
         </Card>
 
         {/* Workflow Builder */}
-        <Card className="bg-gray-900 border-gray-700">
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-white">Workflow Sequence</CardTitle>
+            <CardTitle className="text-foreground">Workflow Sequence</CardTitle>
           </CardHeader>
           <CardContent>
             {selectedAgents.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-8 h-8 text-gray-400" />
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <p className="text-gray-400 mb-2">No agents in workflow</p>
-                <p className="text-sm text-gray-500">Add agents from the left panel</p>
+                <p className="text-muted-foreground mb-2">No agents in workflow</p>
+                <p className="text-sm text-muted-foreground">Add agents from the left panel</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {selectedAgents.map((agent, index) => (
                   <div key={agent.id} className="relative">
-                    <div className="p-3 bg-gray-800 border border-gray-600 rounded-lg">
+                    <div className="p-3 bg-input border border-border rounded-lg">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                          <div className="w-8 h-8 bg-orchestra-brown rounded-lg flex items-center justify-center text-white text-sm font-bold">
                             {index + 1}
                           </div>
-                          <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                          <div className="w-8 h-8 bg-orchestra-brown rounded-lg flex items-center justify-center">
                             {getRoleIcon(agent.role || "Custom")}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-white text-sm truncate">{agent.name}</h3>
-                            <p className="text-xs text-gray-400">{agent.role || "Custom"}</p>
+                            <h3 className="font-medium text-foreground text-sm truncate">{agent.name}</h3>
+                            <p className="text-xs text-muted-foreground">{agent.role || "Custom"}</p>
                           </div>
                         </div>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => removeAgentFromWorkflow(agent.id)}
-                          className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+                          className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -244,7 +245,7 @@ export default function Workflow() {
                     {/* Arrow connector */}
                     {index < selectedAgents.length - 1 && (
                       <div className="flex justify-center py-2">
-                        <div className="w-0.5 h-4 bg-purple-500"></div>
+                        <div className="w-0.5 h-4 bg-orchestra-brown"></div>
                       </div>
                     )}
                   </div>
@@ -257,28 +258,30 @@ export default function Workflow() {
 
       {/* Workflow Status */}
       {selectedAgents.length > 0 && (
-        <Card className="bg-gray-900 border-gray-700 mt-8">
+        <Card className="bg-card border-border mt-8">
           <CardHeader>
-            <CardTitle className="text-white">Workflow Summary</CardTitle>
+            <CardTitle className="text-foreground">Workflow Summary</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-300">
+                <div className="text-sm text-foreground">
                   <span className="font-medium">{selectedAgents.length}</span> agents selected
                 </div>
-                <div className="text-sm text-gray-300">
+                <div className="text-sm text-foreground">
                   Sequential execution order
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-400">Ready to execute</span>
+                <span className="text-xs text-muted-foreground">Ready to execute</span>
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               </div>
             </div>
           </CardContent>
         </Card>
       )}
+
+      </div>
     </div>
   );
 }
