@@ -1,4 +1,6 @@
 import { Switch, Route } from "wouter";
+import { useLocation } from "wouter";
+import React from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,7 +20,16 @@ import Conductor from "@/pages/conductor";
 import Pricing from "@/pages/pricing";
 import NotFound from "@/pages/not-found";
 
-function Router() {
+// Redirect component for authenticated users
+function Redirect({ to }: { to: string }) {
+  const [, setLocation] = useLocation();
+  
+  React.useEffect(() => {
+    setLocation(to);
+  }, [to, setLocation]);
+  
+  return null;
+}
   return (
     <Switch>
       <Route path="/" component={Landing} />
@@ -36,6 +47,7 @@ function Router() {
 
 function AppContent() {
   const { user, loading } = useAuth();
+  const [location] = useLocation();
 
   if (loading) {
     return (
@@ -48,24 +60,36 @@ function AppContent() {
     );
   }
 
-  // Show landing page for unauthenticated users at root
-  // Auth page is now at /login route
+  // If user is authenticated, show the protected app
+  if (user) {
+    return (
+      <TourProvider>
+        <div className="min-h-screen bg-gray-50">
+          <Navigation />
+          <Switch>
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/agents" component={Agents} />
+            <Route path="/workflow" component={Workflow} />
+            <Route path="/conductor" component={Conductor} />
+            <Route path="/pricing" component={Pricing} />
+            <Route path="/" component={() => <Redirect to="/dashboard" />} />
+            <Route component={NotFound} />
+          </Switch>
+          <TourModal />
+          <HelpButton />
+        </div>
+      </TourProvider>
+    );
+  }
 
+  // If user is not authenticated, show public routes
   return (
-    <>
-      {user ? (
-        <TourProvider>
-          <div className="min-h-screen bg-gray-50">
-            <Navigation />
-            <Router />
-            <TourModal />
-            <HelpButton />
-          </div>
-        </TourProvider>
-      ) : (
-        <Router />
-      )}
-    </>
+    <Switch>
+      <Route path="/" component={Landing} />
+      <Route path="/login" component={AuthPage} />
+      <Route path="/auth/callback" component={AuthCallback} />
+      <Route component={() => <Redirect to="/" />} />
+    </Switch>
   );
 }
 
