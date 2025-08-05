@@ -22,6 +22,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { user: currentUser } = await auth.getCurrentUser();
       setUser(currentUser);
       setLoading(false);
+      
+      // Connect to Supabase Realtime only after authentication
+      if (currentUser) {
+        try {
+          const { websocketClient } = await import('@/lib/websocket');
+          await websocketClient.connect();
+          console.log('Connected to Supabase Realtime after authentication');
+        } catch (error) {
+          console.warn('Failed to connect to Supabase Realtime:', error);
+        }
+      }
     };
 
     getInitialSession();
@@ -30,6 +41,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // Connect/disconnect realtime based on auth state
+      if (session?.user) {
+        // User signed in - connect to realtime
+        import('@/lib/websocket').then(({ websocketClient }) => {
+          websocketClient.connect().catch(error => {
+            console.warn('Failed to connect to Supabase Realtime:', error);
+          });
+        });
+      } else {
+        // User signed out - disconnect from realtime
+        import('@/lib/websocket').then(({ websocketClient }) => {
+          websocketClient.disconnect();
+        });
+      }
     });
 
     return () => subscription.unsubscribe();

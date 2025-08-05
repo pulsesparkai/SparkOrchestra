@@ -229,10 +229,3 @@ class SupabaseRealtimeClient {
 
 // Create singleton instance with the same interface as the original websocketClient
 export const websocketClient = new SupabaseRealtimeClient();
-
-// Auto-connect when module loads
-if (typeof window !== "undefined") {
-  websocketClient.connect().catch(error => {
-    console.warn("Failed to auto-connect to Supabase Realtime:", error.message);
-  });
-}

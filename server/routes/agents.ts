@@ -197,7 +197,7 @@ router.delete('/:id', (async (req: Request, res: Response) => {
 }) as express.RequestHandler);
 
 // POST /api/agents/:id/test - Test agent with Anthropic
-router.post('/:id/test', (async (req: Request, res: Response) => {
+router.post('/:id/test', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -285,6 +285,5 @@ router.post('/:id/test', (async (req: Request, res: Response) => {
       success: false
     });
   }
-}) as express.RequestHandler);
 
 export default router;
