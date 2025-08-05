@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/components/auth/auth-provider";
 import { AuthPage } from "@/components/auth/auth-page";
 import { AuthCallback } from "@/components/auth/auth-callback";
+import Landing from "@/pages/landing";
 import { TourProvider } from "@/components/onboarding/tour-context";
 import { TourModal } from "@/components/onboarding/tour-modal";
 import { HelpButton } from "@/components/onboarding/help-button";
@@ -20,12 +21,13 @@ import NotFound from "@/pages/not-found";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
+      <Route path="/" component={Landing} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/agents" component={Agents} />
       <Route path="/workflow" component={Workflow} />
       <Route path="/conductor" component={Conductor} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/login" component={AuthPage} />
       <Route path="/auth/callback" component={AuthCallback} />
       <Route component={NotFound} />
     </Switch>
@@ -46,19 +48,24 @@ function AppContent() {
     );
   }
 
-  if (!user) {
-    return <AuthPage />;
-  }
+  // Show landing page for unauthenticated users at root
+  // Auth page is now at /login route
 
   return (
-    <TourProvider>
-      <div className="min-h-screen bg-gray-50">
-        <Navigation />
+    <>
+      {user ? (
+        <TourProvider>
+          <div className="min-h-screen bg-gray-50">
+            <Navigation />
+            <Router />
+            <TourModal />
+            <HelpButton />
+          </div>
+        </TourProvider>
+      ) : (
         <Router />
-        <TourModal />
-        <HelpButton />
-      </div>
-    </TourProvider>
+      )}
+    </>
   );
 }
 
