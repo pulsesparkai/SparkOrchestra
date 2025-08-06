@@ -89,24 +89,24 @@ export default function Landing() {
       title: "Content Generation Pipeline",
       description: "Research → Analysis → Writing → Review",
       stats: "4x faster content creation",
-      gradient: "from-orange-100 to-amber-100"
+      gradient: "from-orange-600/20 to-red-600/20"
     },
     {
       title: "Data Processing Workflows",
       description: "Extract → Transform → Analyze → Report",
       stats: "90% reduction in manual work",
-      gradient: "from-amber-100 to-orange-100"
+      gradient: "from-amber-600/20 to-orange-600/20"
     },
     {
       title: "Customer Support Automation",
       description: "Classify → Route → Respond → Escalate",
       stats: "24/7 intelligent responses",
-      gradient: "from-orange-100 to-red-100"
+      gradient: "from-yellow-600/20 to-amber-600/20"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <header className="bg-gray-900 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,7 +135,7 @@ export default function Landing() {
             </nav>
             
             <div className="flex items-center space-x-4">
-              <Button className="bg-white text-gray-900 hover:bg-gray-100">
+              <Button variant="ghost" className="text-white bg-white/10 hover:bg-white/20">
                 Contact Sales
               </Button>
               <Link href="/login">
@@ -149,24 +149,24 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gray-50">
+      <section className="relative overflow-hidden bg-gray-900">
         {/* Abstract Background Graphics */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-200/30 to-amber-200/30 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-200/30 to-orange-200/30 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-amber-200/20 to-orange-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-600/20 to-amber-600/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-600/20 to-orange-600/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-amber-600/10 to-orange-600/10 rounded-full blur-3xl"></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
           <div className="text-center">
-            <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-8 leading-tight">
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
               The AI orchestrator
-              <span className="block bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
                 engineered for automation
               </span>
             </h1>
             
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
               A full-stack platform for creating, managing, and monitoring intelligent AI agent workflows. 
               Build sophisticated automation with real-time conductor oversight and enterprise-grade security.
             </p>
@@ -175,7 +175,7 @@ export default function Landing() {
               <Link href="/login">
                 <Button 
                   size="lg"
-                  className="bg-orchestra-brown hover:bg-orchestra-brown-hover text-white px-10 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-10 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                   <Zap className="w-5 h-5 mr-2" />
                   Get Started Free
@@ -185,7 +185,7 @@ export default function Landing() {
                 <Button 
                   variant="outline" 
                   size="lg"
-                  className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900 px-10 py-4 text-lg rounded-lg"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white px-10 py-4 text-lg rounded-lg"
                 >
                   Sign In
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -197,13 +197,13 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-white">
+      <section id="features" className="py-24 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Powerful AI Orchestration
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Everything you need to build, deploy, and monitor sophisticated AI agent workflows
             </p>
           </div>
@@ -212,15 +212,15 @@ export default function Landing() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <Card key={index} className="bg-white border-gray-200 hover:border-orchestra-brown/50 transition-all duration-300 hover:shadow-lg group">
+                <Card key={index} className="bg-gray-800 border-gray-700 hover:border-orange-600/50 transition-all duration-300 hover:shadow-lg group">
                   <CardHeader>
-                    <div className="w-12 h-12 bg-gradient-to-r from-orchestra-brown to-orange-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                    <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <CardTitle className="text-gray-900 text-lg">{feature.title}</CardTitle>
+                    <CardTitle className="text-white text-lg">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 text-sm">{feature.description}</p>
+                    <p className="text-gray-400 text-sm">{feature.description}</p>
                   </CardContent>
                 </Card>
               );
@@ -230,13 +230,13 @@ export default function Landing() {
       </section>
 
       {/* Infrastructure Section */}
-      <section id="infrastructure" className="py-24 bg-gray-50">
+      <section id="infrastructure" className="py-24 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Orchestra's Infrastructure
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Orchestra manages every aspect of AI orchestration—from agent creation to workflow execution and real-time monitoring
             </p>
           </div>
@@ -245,15 +245,15 @@ export default function Landing() {
             {infrastructureCapabilities.map((capability, index) => {
               const Icon = capability.icon;
               return (
-                <Card key={index} className="bg-white border-gray-200 hover:border-orchestra-brown/30 transition-all duration-300 group">
+                <Card key={index} className="bg-gray-900 border-gray-700 hover:border-orange-600/30 transition-all duration-300 group">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 bg-gradient-to-r from-orchestra-brown/20 to-orange-600/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
-                        <Icon className="w-5 h-5 text-orchestra-brown" />
+                      <div className="w-10 h-10 bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
+                        <Icon className="w-5 h-5 text-orange-400" />
                       </div>
                       <div>
-                        <h3 className="text-gray-900 font-semibold mb-2">{capability.title}</h3>
-                        <p className="text-gray-600 text-sm">{capability.description}</p>
+                        <h3 className="text-white font-semibold mb-2">{capability.title}</h3>
+                        <p className="text-gray-400 text-sm">{capability.description}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -265,26 +265,27 @@ export default function Landing() {
       </section>
 
       {/* Use Cases Section */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Built for Every Use Case
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-400">
               From content generation to data processing, Orchestra handles complex AI workflows
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {useCases.map((useCase, index) => (
-              <Card key={index} className={`bg-gradient-to-br ${useCase.gradient} border-gray-200 hover:border-orchestra-brown/50 transition-all duration-300 group overflow-hidden relative`}>
+              <Card key={index} className={`bg-gradient-to-br ${useCase.gradient} border-gray-700 hover:border-orange-600/50 transition-all duration-300 group overflow-hidden relative`}>
+                <div className="absolute inset-0 bg-gray-800/80"></div>
                 <CardContent className="relative z-10 p-8">
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-4">{useCase.title}</h3>
-                    <p className="text-gray-700 mb-6">{useCase.description}</p>
-                    <div className="text-3xl font-bold text-orchestra-brown mb-2">{useCase.stats}</div>
-                    <Badge className="bg-orchestra-brown/20 text-orchestra-brown border-orchestra-brown/30">
+                    <h3 className="text-2xl font-bold text-white mb-4">{useCase.title}</h3>
+                    <p className="text-gray-300 mb-6">{useCase.description}</p>
+                    <div className="text-3xl font-bold text-orange-400 mb-2">{useCase.stats}</div>
+                    <Badge className="bg-orange-600/20 text-orange-300 border-orange-600/30">
                       Proven Results
                     </Badge>
                   </div>
@@ -296,49 +297,49 @@ export default function Landing() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-gray-50">
+      <section id="pricing" className="py-24 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-400">
               Start free or unlock unlimited power with Early Adopter
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Free Plan */}
-            <Card className="bg-white border-gray-200 shadow-lg">
+            <Card className="bg-gray-900 border-gray-700 shadow-lg">
               <CardHeader className="text-center">
-                <CardTitle className="text-gray-900 text-2xl mb-2">Free Plan</CardTitle>
+                <CardTitle className="text-white text-2xl mb-2">Free Plan</CardTitle>
                 <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">$0</span>
-                  <span className="text-gray-600 text-lg">/month</span>
+                  <span className="text-4xl font-bold text-white">$0</span>
+                  <span className="text-gray-400 text-lg">/month</span>
                 </div>
-                <p className="text-gray-600">Perfect for getting started</p>
+                <p className="text-gray-400">Perfect for getting started</p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">100 tokens per month</span>
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span className="text-gray-300">100 tokens per month</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">2 agents maximum</span>
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span className="text-gray-300">2 agents maximum</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">Basic monitoring</span>
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span className="text-gray-300">Basic monitoring</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                    <span className="text-gray-700">Community support</span>
+                    <CheckCircle className="w-5 h-5 text-green-400" />
+                    <span className="text-gray-300">Community support</span>
                   </div>
                 </div>
                 <Link href="/login">
-                  <Button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-900">
+                  <Button className="w-full bg-gray-700 hover:bg-gray-600 text-white">
                     Start Free
                   </Button>
                 </Link>
@@ -346,53 +347,53 @@ export default function Landing() {
             </Card>
 
             {/* Early Adopter Plan */}
-            <Card className="bg-white border-orchestra-brown shadow-lg relative overflow-hidden">
+            <Card className="bg-gray-900 border-orange-600 shadow-lg relative overflow-hidden">
               <div className="absolute top-4 right-4">
-                <Badge className="bg-gradient-to-r from-orchestra-brown to-orange-600 text-white">
+                <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
                   <Crown className="w-3 h-3 mr-1" />
                   RECOMMENDED
                 </Badge>
               </div>
               
-              <div className="absolute inset-0 bg-gradient-to-br from-orchestra-brown/5 to-orange-600/5"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"></div>
               
               <CardHeader className="relative z-10 text-center">
-                <CardTitle className="text-gray-900 text-2xl mb-2">Early Adopter</CardTitle>
+                <CardTitle className="text-white text-2xl mb-2">Early Adopter</CardTitle>
                 <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">$15</span>
-                  <span className="text-gray-600 text-lg">/month</span>
+                  <span className="text-4xl font-bold text-white">$15</span>
+                  <span className="text-gray-400 text-lg">/month</span>
                 </div>
-                <p className="text-gray-600">Unlimited power with your API</p>
+                <p className="text-gray-400">Unlimited power with your API</p>
               </CardHeader>
               <CardContent className="relative z-10">
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orchestra-brown" />
-                    <span className="text-gray-700">1,000 Orchestra credits per month</span>
+                    <CheckCircle className="w-5 h-5 text-orange-400" />
+                    <span className="text-gray-300">1,000 Orchestra credits per month</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orchestra-brown" />
-                    <span className="text-gray-700">Bring your own API key for unlimited usage</span>
+                    <CheckCircle className="w-5 h-5 text-orange-400" />
+                    <span className="text-gray-300">Bring your own API key for unlimited usage</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orchestra-brown" />
-                    <span className="text-gray-700">Unlimited agents</span>
+                    <CheckCircle className="w-5 h-5 text-orange-400" />
+                    <span className="text-gray-300">Unlimited agents</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orchestra-brown" />
-                    <span className="text-gray-700">Full conductor orchestration</span>
+                    <CheckCircle className="w-5 h-5 text-orange-400" />
+                    <span className="text-gray-300">Full conductor orchestration</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orchestra-brown" />
-                    <span className="text-gray-700">Real-time monitoring</span>
+                    <CheckCircle className="w-5 h-5 text-orange-400" />
+                    <span className="text-gray-300">Real-time monitoring</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orchestra-brown" />
-                    <span className="text-gray-700">Priority support</span>
+                    <CheckCircle className="w-5 h-5 text-orange-400" />
+                    <span className="text-gray-300">Priority support</span>
                   </div>
                 </div>
                 <Link href="/login">
-                  <Button className="w-full bg-gradient-to-r from-orchestra-brown to-orange-600 hover:from-orchestra-brown-hover hover:to-orange-700 text-white">
+                  <Button className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white">
                     Upgrade Now
                   </Button>
                 </Link>
@@ -403,37 +404,37 @@ export default function Landing() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white border-y border-gray-200">
+      <section className="py-16 bg-gray-900 border-y border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-orchestra-brown mb-2">10x</div>
-              <div className="text-gray-600">Faster Workflows</div>
+              <div className="text-4xl font-bold text-orange-400 mb-2">10x</div>
+              <div className="text-gray-400">Faster Workflows</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-orchestra-brown mb-2">99.9%</div>
-              <div className="text-gray-600">Uptime SLA</div>
+              <div className="text-4xl font-bold text-orange-400 mb-2">99.9%</div>
+              <div className="text-gray-400">Uptime SLA</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-orchestra-brown mb-2">500+</div>
-              <div className="text-gray-600">Early Adopters</div>
+              <div className="text-4xl font-bold text-orange-400 mb-2">500+</div>
+              <div className="text-gray-400">Early Adopters</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-orchestra-brown mb-2">24/7</div>
-              <div className="text-gray-600">Monitoring</div>
+              <div className="text-4xl font-bold text-orange-400 mb-2">24/7</div>
+              <div className="text-gray-400">Monitoring</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="py-24 bg-gradient-to-r from-gray-50 via-orange-50 to-gray-50 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orchestra-brown/5 to-orange-600/5"></div>
+      <section className="py-24 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-amber-600/10"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl font-bold text-white mb-6">
             Ready to Orchestrate Your AI?
           </h2>
-          <p className="text-xl text-gray-600 mb-12">
+          <p className="text-xl text-gray-300 mb-12">
             Join the early adopters building the future of AI automation with Orchestra
           </p>
           
@@ -441,13 +442,13 @@ export default function Landing() {
             <Link href="/login">
               <Button 
                 size="lg"
-                className="bg-gradient-to-r from-orchestra-brown to-orange-600 hover:from-orchestra-brown-hover hover:to-orange-700 text-white px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
               >
                 <Star className="w-6 h-6 mr-2" />
                 Start Building Today
               </Button>
             </Link>
-            <div className="flex items-center text-sm text-gray-600">
+            <div className="flex items-center text-sm text-gray-400">
               <Clock className="w-4 h-4 mr-2" />
               Setup takes less than 2 minutes
             </div>
@@ -516,7 +517,7 @@ export default function Landing() {
                     placeholder="Enter email" 
                     className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 text-sm"
                   />
-                  <Button size="sm" className="bg-orchestra-brown hover:bg-orchestra-brown-hover text-white">
+                  <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white">
                     <Mail className="w-4 h-4" />
                   </Button>
                 </div>
