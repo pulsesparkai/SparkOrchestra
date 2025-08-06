@@ -403,30 +403,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-gray-900 border-y border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-orange-400 mb-2">10x</div>
-              <div className="text-gray-400">Faster Workflows</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-orange-400 mb-2">99.9%</div>
-              <div className="text-gray-400">Uptime SLA</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-orange-400 mb-2">500+</div>
-              <div className="text-gray-400">Early Adopters</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-orange-400 mb-2">24/7</div>
-              <div className="text-gray-400">Monitoring</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Call to Action */}
       <section className="py-24 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-amber-600/10"></div>
