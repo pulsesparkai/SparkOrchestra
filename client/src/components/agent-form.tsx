@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { insertAgentSchema, type InsertAgent, type Agent } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/auth/auth-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,7 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   const [showApiKey, setShowApiKey] = useState(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState(true);
   const { toast } = useToast();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const form = useForm<InsertAgent>({
@@ -41,7 +43,16 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
 
   const createAgentMutation = useMutation({
     mutationFn: async (data: InsertAgent) => {
-      const response = await apiRequest("POST", "/api/agents", data);
+      if (!user?.id) {
+        throw new Error("User not authenticated");
+      }
+      
+      const agentData = {
+        ...data,
+        userId: user.id
+      };
+      
+      const response = await apiRequest("POST", "/api/agents", agentData);
       return response.json();
     },
     onSuccess: () => {
@@ -65,9 +76,19 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
 
   const handlePreview = () => {
     const values = form.getValues();
+    if (!user?.id) {
+      toast({
+        title: "Authentication Error",
+        description: "Please log in to create agents",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (values.name && values.role && values.prompt && values.model) {
       onPreview({
         ...values,
+        userId: user.id,
         id: "preview",
         status: "active",
         createdAt: new Date(),
