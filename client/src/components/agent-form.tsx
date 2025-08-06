@@ -22,6 +22,9 @@ interface AgentFormProps {
   onSuccess?: () => void;
 }
 
+// Create form schema without userId (it's added during submission)
+const formSchema = insertAgentSchema.omit({ userId: true });
+type FormData = Omit<InsertAgent, 'userId'>;
 export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   const [showApiKey, setShowApiKey] = useState(false);
   const [isApiKeyValid, setIsApiKeyValid] = useState(true);
@@ -29,8 +32,8 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const form = useForm<InsertAgent>({
-    resolver: zodResolver(insertAgentSchema),
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       role: "Custom",
@@ -42,7 +45,7 @@ export default function AgentForm({ onPreview, onSuccess }: AgentFormProps) {
   });
 
   const createAgentMutation = useMutation({
-    mutationFn: async (data: InsertAgent) => {
+    mutationFn: async (data: FormData) => {
       if (!user?.id) {
         throw new Error("User not authenticated");
       }

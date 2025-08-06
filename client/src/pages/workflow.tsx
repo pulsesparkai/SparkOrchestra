@@ -5,6 +5,7 @@ import { Play, Save, Trash2, Settings, Bot, Search, FileText, BarChart3, PenTool
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/auth/auth-provider";
 import type { Agent } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -27,7 +28,9 @@ function WorkflowCanvas() {
 export default function Workflow() {
   const [selectedAgents, setSelectedAgents] = useState<Agent[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const { data: agents, isLoading } = useQuery<Agent[]>({
     queryKey: ["/api/agents"],
@@ -57,6 +60,14 @@ export default function Workflow() {
       return;
     }
 
+    if (!user?.id) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to run workflows.",
+        variant: "destructive",
+      });
+      return;
+    }
     setIsRunning(true);
     try {
       const workflowId = `workflow-${Date.now()}`;
@@ -64,7 +75,8 @@ export default function Workflow() {
 
       await apiRequest("POST", "/api/workflows/run", {
         workflowId,
-        agentIds
+        agentIds,
+        userId: user.id
       });
 
       toast({
@@ -82,6 +94,43 @@ export default function Workflow() {
     }
   };
 
+  const saveWorkflow = async () => {
+    if (selectedAgents.length === 0) {
+      toast({
+        title: "No Agents to Save",
+        description: "Add agents to the workflow before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const workflowData = {
+        name: `Workflow ${new Date().toLocaleDateString()}`,
+        agents: selectedAgents.map(a => ({ id: a.id, name: a.name, role: a.role })),
+        createdAt: new Date().toISOString()
+      };
+
+      // Save to localStorage for now (could be enhanced to save to database)
+      const savedWorkflows = JSON.parse(localStorage.getItem('orchestra-workflows') || '[]');
+      savedWorkflows.push(workflowData);
+      localStorage.setItem('orchestra-workflows', JSON.stringify(savedWorkflows));
+
+      toast({
+        title: "Workflow Saved",
+        description: `Saved workflow with ${selectedAgents.length} agents`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Save Failed",
+        description: "Failed to save workflow",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
   const clearWorkflow = () => {
     setSelectedAgents([]);
     toast({
@@ -126,11 +175,12 @@ export default function Workflow() {
             <Button
               variant="outline"
               size="sm"
+              onClick={saveWorkflow}
               className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-              disabled={selectedAgents.length === 0}
+              disabled={selectedAgents.length === 0 || isSaving}
             >
               <Save className="w-4 h-4 mr-2" />
-              Save
+              {isSaving ? "Saving..." : "Save"}
             </Button>
             <Button
               size="sm"

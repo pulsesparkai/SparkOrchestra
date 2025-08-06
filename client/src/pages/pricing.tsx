@@ -48,21 +48,18 @@ export default function Pricing() {
   ];
 
   const handleStartFree = () => {
-    // TODO: Redirect to sign up with free plan
-    toast({
-      title: "Sign Up Coming Soon",
-      description: "Free account creation will be available shortly!",
-    });
+    // Redirect to login page for free signup
+    window.location.href = "/login";
   };
 
   const handleUpgrade = async () => {
     setIsLoading(true);
     
     try {
-      // TODO: Redirect to Stripe checkout
+      // TODO: Implement Stripe checkout
       toast({
-        title: "Stripe Checkout Coming Soon",
-        description: "Payment processing will be available shortly. Thanks for your interest!",
+        title: "Upgrade Coming Soon",
+        description: "Stripe integration will be available shortly. Thanks for your interest!",
       });
     } catch (error) {
       toast({

@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
 import { EncryptionService } from '../services/encryption';
 import { supabaseAdmin } from '../lib/supabase';
 import Anthropic from '@anthropic-ai/sdk';
@@ -29,7 +28,7 @@ const requireAuth = async (req: any, res: Response, next: Function) => {
 router.use(requireAuth);
 
 // POST /api/agents - Create new agent
-router.post('/', (async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -85,10 +84,10 @@ router.post('/', (async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-}) as express.RequestHandler);
+});
 
 // GET /api/agents - Get user's agents
-router.get('/', (async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -110,10 +109,10 @@ router.get('/', (async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-}) as express.RequestHandler);
+});
 
 // PUT /api/agents/:id - Update agent
-router.put('/:id', (async (req: Request, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -134,8 +133,7 @@ router.put('/:id', (async (req: Request, res: Response) => {
     
     // Handle API key encryption if provided
     if (updateData.apiKey) {
-      const saltRounds = 12;
-      const encryptedApiKey = await bcrypt.hash(updateData.apiKey, saltRounds);
+      const encryptedApiKey = EncryptionService.encrypt(updateData.apiKey);
       delete updateData.apiKey; // Remove plain text API key
       updateData.encryptedApiKey = encryptedApiKey;
     }
@@ -158,10 +156,10 @@ router.put('/:id', (async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-}) as express.RequestHandler);
+});
 
 // DELETE /api/agents/:id - Soft delete agent
-router.delete('/:id', (async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const userId = authReq.user.id;
@@ -194,7 +192,7 @@ router.delete('/:id', (async (req: Request, res: Response) => {
       error: error?.message || 'Unknown error'
     });
   }
-}) as express.RequestHandler);
+});
 
 // POST /api/agents/:id/test - Test agent with Anthropic
 router.post('/:id/test', async (req: Request, res: Response) => {
@@ -217,9 +215,15 @@ router.post('/:id/test', async (req: Request, res: Response) => {
     let apiKey = process.env.ANTHROPIC_API_KEY;
     
     if (agent.encryptedApiKey) {
-      // For testing purposes, we would need to decrypt the API key
-      // In production, you'd implement proper key decryption
-      console.log('Agent has custom API key configured');
+      try {
+        apiKey = EncryptionService.decrypt(agent.encryptedApiKey);
+      } catch (error) {
+        console.error('Failed to decrypt API key:', error);
+        return res.status(400).json({
+          message: 'Failed to decrypt API key',
+          requiresApiKey: true
+        });
+      }
     }
 
     if (!apiKey) {
@@ -285,7 +289,6 @@ router.post('/:id/test', async (req: Request, res: Response) => {
       success: false
     });
   }
-}
-)
+});
 
 export default router;

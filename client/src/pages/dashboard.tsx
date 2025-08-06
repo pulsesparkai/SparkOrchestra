@@ -45,8 +45,8 @@ export default function Dashboard() {
       tokens_used: tokensUsed
     });
     
-    // TODO: Redirect to upgrade flow/Stripe
-    console.log("Redirecting to upgrade...");
+    // Redirect to pricing page
+    window.location.href = "/pricing";
   };
 
   return (

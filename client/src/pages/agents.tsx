@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TokenLimitModal } from "@/components/ui/token-limit-modal";
 import { ApiKeyIndicator } from "@/components/ui/api-key-indicator";
+import { Link } from "wouter";
 import type { Agent } from "@shared/schema";
 
 export default function Agents() {
@@ -103,10 +104,44 @@ export default function Agents() {
       tokens_used: tokensUsed
     });
     
-    // TODO: Redirect to upgrade flow/Stripe
-    console.log("Redirecting to upgrade...");
+    // Redirect to pricing page
+    window.location.href = "/pricing";
   };
 
+  const handleExportAgents = () => {
+    if (!agents || agents.length === 0) {
+      toast({
+        title: "No Agents to Export",
+        description: "Create some agents first before exporting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const exportData = agents.map(agent => ({
+      name: agent.name,
+      role: agent.role,
+      prompt: agent.prompt,
+      model: agent.model,
+      conductorMonitoring: agent.conductorMonitoring,
+      createdAt: agent.createdAt
+    }));
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `orchestra-agents-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Agents Exported",
+      description: `Exported ${agents.length} agents to JSON file.`,
+    });
+  };
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -120,6 +155,7 @@ export default function Agents() {
               <Button 
                 variant="outline" 
                 size="sm"
+                onClick={handleExportAgents}
                 className="border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
               >
                 <Download className="w-4 h-4 mr-2" />
@@ -136,7 +172,7 @@ export default function Agents() {
                     New Agent
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl bg-white border border-gray-200">
+                <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-white border border-gray-200">
                   <DialogHeader>
                     <DialogTitle className="text-gray-900">Create New Agent</DialogTitle>
                   </DialogHeader>

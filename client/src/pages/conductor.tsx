@@ -22,9 +22,11 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/components/auth/auth-provider";
 import type { Agent } from "@shared/schema";
 import { websocketClient, type LogEvent, type ConductorEvent, type TokenUsageEvent } from "@/lib/websocket";
 import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface LogEntry {
   id: string;
@@ -45,6 +47,8 @@ interface WorkflowStatus {
 
 export default function Conductor() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [activeWorkflows, setActiveWorkflows] = useState<WorkflowStatus[]>([
     {
       id: "wf-001",
@@ -75,6 +79,8 @@ export default function Conductor() {
 
   // WebSocket setup for real-time updates
   useEffect(() => {
+    if (!user?.id) return;
+
     const setupWebSocket = async () => {
       try {
         await websocketClient.connect();
@@ -121,7 +127,7 @@ export default function Conductor() {
     return () => {
       websocketClient.disconnect();
     };
-  }, []);
+  }, [user?.id]);
 
   // Update conductor status
   useEffect(() => {
@@ -161,29 +167,102 @@ export default function Conductor() {
   };
 
   const handlePauseWorkflow = async (workflowId: string) => {
+    if (!user?.id) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to control workflows.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      await apiRequest("POST", `/api/workflows/${workflowId}/pause`);
+      if (workflowId === "all") {
+        // Pause all running workflows
+        const runningWorkflows = activeWorkflows.filter(w => w.status === "running");
+        for (const workflow of runningWorkflows) {
+          await apiRequest("POST", `/api/workflows/${workflow.id}/pause`);
+        }
+      } else {
+        await apiRequest("POST", `/api/workflows/${workflowId}/pause`);
+      }
       setActiveWorkflows(prev => 
-        prev.map(w => w.id === workflowId ? { ...w, status: "paused" } : w)
+        workflowId === "all" 
+          ? prev.map(w => w.status === "running" ? { ...w, status: "paused" } : w)
+          : prev.map(w => w.id === workflowId ? { ...w, status: "paused" } : w)
       );
+      toast({
+        title: "Workflow Paused",
+        description: workflowId === "all" ? "All workflows paused" : "Workflow paused successfully",
+      });
     } catch (error: any) {
       console.error("Failed to pause workflow:", error);
+      toast({
+        title: "Error",
+        description: "Failed to pause workflow",
+        variant: "destructive",
+      });
     }
   };
 
   const handleResumeWorkflow = async (workflowId: string) => {
+    if (!user?.id) {
+      toast({
+        title: "Authentication Required", 
+        description: "Please log in to control workflows.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      await apiRequest("POST", `/api/workflows/${workflowId}/resume`);
+      if (workflowId === "all") {
+        // Resume all paused workflows
+        const pausedWorkflows = activeWorkflows.filter(w => w.status === "paused");
+        for (const workflow of pausedWorkflows) {
+          await apiRequest("POST", `/api/workflows/${workflow.id}/resume`);
+        }
+      } else {
+        await apiRequest("POST", `/api/workflows/${workflowId}/resume`);
+      }
       setActiveWorkflows(prev => 
-        prev.map(w => w.id === workflowId ? { ...w, status: "running" } : w)
+        workflowId === "all"
+          ? prev.map(w => w.status === "paused" ? { ...w, status: "running" } : w)
+          : prev.map(w => w.id === workflowId ? { ...w, status: "running" } : w)
       );
+      toast({
+        title: "Workflow Resumed",
+        description: workflowId === "all" ? "All workflows resumed" : "Workflow resumed successfully",
+      });
     } catch (error: any) {
       console.error("Failed to resume workflow:", error);
+      toast({
+        title: "Error",
+        description: "Failed to resume workflow",
+        variant: "destructive",
+      });
     }
   };
 
   const handleRetryFailed = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to retry workflows.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const failedWorkflows = activeWorkflows.filter(w => w.status === "failed");
+    
+    if (failedWorkflows.length === 0) {
+      toast({
+        title: "No Failed Workflows",
+        description: "There are no failed workflows to retry.",
+      });
+      return;
+    }
     
     for (const workflow of failedWorkflows) {
       try {
@@ -196,6 +275,11 @@ export default function Conductor() {
     setActiveWorkflows(prev => 
       prev.map(w => w.status === "failed" ? { ...w, status: "running", progress: 0 } : w)
     );
+    
+    toast({
+      title: "Workflows Retried",
+      description: `Retried ${failedWorkflows.length} failed workflows`,
+    });
   };
 
   const formatTime = (date: Date) => {
