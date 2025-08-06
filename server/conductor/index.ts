@@ -237,7 +237,6 @@ ${agent.prompt}`;
 
       // Only record token usage if using platform API key (not user's BYOAPI key)
       if (!usingUserKey) {
-        const userId = agent.userId;
         await tokenTracker.recordTokenUsage(agent.userId, actualTokensUsed, agentId, context.workflowId);
       }
 

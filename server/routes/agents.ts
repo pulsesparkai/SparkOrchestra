@@ -28,10 +28,9 @@ const requireAuth = async (req: any, res: Response, next: Function) => {
 router.use(requireAuth);
 
 // POST /api/agents - Create new agent
-router.post('/', async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
+router.post('/', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = authReq.user.id;
+    const userId = req.user.id;
     
     // Check agent limits based on user's plan
     const currentAgents = await storage.getAgentsByUserId(userId);
@@ -87,10 +86,9 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // GET /api/agents - Get user's agents
-router.get('/', async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
+router.get('/', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = authReq.user.id;
+    const userId = req.user.id;
     
     const agents = await storage.getAgentsByUserId(userId);
     
@@ -112,11 +110,10 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // PUT /api/agents/:id - Update agent
-router.put('/:id', async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
+router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = authReq.user.id;
-    const agentId = authReq.params.id;
+    const userId = req.user.id;
+    const agentId = req.params.id;
     
     // Check if agent belongs to user
     const existingAgent = await storage.getAgent(agentId);
@@ -159,11 +156,10 @@ router.put('/:id', async (req: Request, res: Response) => {
 });
 
 // DELETE /api/agents/:id - Soft delete agent
-router.delete('/:id', async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
+router.delete('/:id', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = authReq.user.id;
-    const agentId = authReq.params.id;
+    const userId = req.user.id;
+    const agentId = req.params.id;
     
     // Check if agent belongs to user
     const existingAgent = await storage.getAgent(agentId);
@@ -195,11 +191,10 @@ router.delete('/:id', async (req: Request, res: Response) => {
 });
 
 // POST /api/agents/:id/test - Test agent with Anthropic
-router.post('/:id/test', async (req: Request, res: Response) => {
-  const authReq = req as AuthenticatedRequest;
+router.post('/:id/test', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = authReq.user.id;
-    const agentId = authReq.params.id;
+    const userId = req.user.id;
+    const agentId = req.params.id;
     
     // Get agent and verify ownership
     const agent = await storage.getAgent(agentId);
@@ -239,7 +234,7 @@ router.post('/:id/test', async (req: Request, res: Response) => {
     });
 
     // Test prompt
-    const testPrompt = authReq.body.prompt || `Hello! I'm testing the connection. Please respond with a brief confirmation that you're working properly.`;
+    const testPrompt = req.body.prompt || `Hello! I'm testing the connection. Please respond with a brief confirmation that you're working properly.`;
     
     const systemPrompt = agent.prompt || `You are ${agent.name}, a helpful AI assistant with the role of ${agent.role}.`;
 
