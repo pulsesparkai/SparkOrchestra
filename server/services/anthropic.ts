@@ -24,7 +24,7 @@ export async function testAnthropicConnection(agent: Agent): Promise<{
   error?: string;
 }> {
   try {
-    const apiKey = agent.encryptedApiKey 
+    const apiKey = agent.encryptedApiKey
       ? EncryptionService.decrypt(agent.encryptedApiKey)
       : process.env.ANTHROPIC_API_KEY;
     
@@ -32,7 +32,7 @@ export async function testAnthropicConnection(agent: Agent): Promise<{
       throw new Error("No API key available for Anthropic");
     }
 
-    const clientToUse = agent.encryptedApiKey 
+    const clientToUse = agent.encryptedApiKey
       ? new Anthropic({ apiKey })
       : anthropic;
 
@@ -69,7 +69,7 @@ export async function executeAgentTask(
   error?: string;
 }> {
   try {
-    const apiKey = agent.encryptedApiKey 
+    const apiKey = agent.encryptedApiKey
       ? EncryptionService.decrypt(agent.encryptedApiKey)
       : process.env.ANTHROPIC_API_KEY;
     
@@ -77,7 +77,7 @@ export async function executeAgentTask(
       throw new Error("No API key available for Anthropic");
     }
 
-    const clientToUse = agent.encryptedApiKey 
+    const clientToUse = agent.encryptedApiKey
       ? new Anthropic({ apiKey })
       : anthropic;
 

@@ -39,11 +39,11 @@ export class MemStorage implements IStorage {
     const id = crypto.randomUUID();
     const user: User = {
       id,
+      createdAt: new Date(),
       username: insertUser.username,
       password: insertUser.password,
       email: insertUser.email || null,
       userPlan: insertUser.userPlan || "free",
-      createdAt: new Date(),
       stripeCustomerId: null,
       stripeSubscriptionId: null
     };

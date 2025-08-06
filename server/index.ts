@@ -5,6 +5,13 @@ import { supabaseAdmin } from "./lib/supabase";
 import broadcastRoutes from "./routes/broadcast";
 import path from "path";
 
+// Check for Anthropic API key on startup
+if (!process.env.ANTHROPIC_API_KEY) {
+  console.warn('⚠️ ANTHROPIC_API_KEY not set. BYOAPI functionality will still work with user-provided keys.');
+} else {
+  console.log('✅ Anthropic API key configured for platform usage');
+}
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
