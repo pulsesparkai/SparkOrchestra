@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { LiveDemoPreview } from "@/components/live-demo-preview";
-import { MessageSquare, BarChart3 } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import orchestraLogo from '@assets/Lo_1754349496969.png';
 
 export default function Landing() {
