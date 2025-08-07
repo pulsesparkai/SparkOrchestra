@@ -443,13 +443,12 @@ export default function Workflow() {
                   <div className="text-sm text-blue-600 font-medium">
                     ⚡ Estimated time savings: ~{Math.max(0, (selectedAgents.length - 1) * 15)} seconds
                   </div>
-                )}
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-gray-500 mb-1">Execution Time</div>
-                  <div className="text-sm font-medium text-gray-900">
-                    ~{executionMode === 'parallel' ? 30 : selectedAgents.length * 30}s
-                  </div>
+                 </div>
+                 <div className="text-right">
+                   <div className="text-xs text-gray-500 mb-1">Execution Time</div>
+                   <div className="text-sm font-medium text-gray-900">
+                     ~{executionMode === 'parallel' ? 30 : selectedAgents.length * 30}s
+                   </div>
                 </div>
               </div>
             </div>
@@ -457,7 +456,5 @@ export default function Workflow() {
         </Card>
       )}
 
-      </div>
-    </div>
   );
 }
