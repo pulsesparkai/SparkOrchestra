@@ -24,12 +24,37 @@ import {
   Globe,
   Mail
 } from "lucide-react";
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import { Link } from "wouter";
 import { LiveDemoPreview } from "@/components/live-demo-preview";
 import { MessageSquare } from "lucide-react";
+import { ComparisonAnimation } from "@/components/comparison-animation";
 import orchestraLogo from '@assets/Lo_1754349496969.png';
 
+// Animated section wrapper component
+function AnimatedSection({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.2 });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 50 }}
+      transition={{ duration: 0.6 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function Landing() {
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0.8]);
+
   const features = [
     {
       icon: Zap,
@@ -151,262 +176,338 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gray-800">
+      <motion.section 
+        className="relative overflow-hidden bg-gray-800"
+        style={{ y: heroY }}
+      >
         {/* Abstract Background Graphics */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-600/10 to-amber-600/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-600/10 to-orange-600/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-amber-600/5 to-orange-600/5 rounded-full blur-3xl animate-pulse"></div>
+          <motion.div
+            animate={{ 
+              x: [0, 30, 0],
+              y: [0, -30, 0],
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
+            className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-600/10 to-amber-600/10 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ 
+              x: [0, -20, 0],
+              y: [0, 20, 0],
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-600/10 to-orange-600/10 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ 
+              scale: [1, 1.1, 1],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ duration: 15, repeat: Infinity }}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-amber-600/5 to-orange-600/5 rounded-full blur-3xl"
+          />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <motion.div 
+          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32"
+          style={{ opacity: heroOpacity }}
+        >
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-center lg:text-left">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight">
-              The AI orchestrator that runs
-              <span className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-                agents in parallel
-              </span>
-              <span className="block text-4xl md:text-5xl text-gray-300 mt-2">
-                engineered for 10x faster automation
-              </span>
-            </h1>
-            
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-              Orchestra is the only platform that executes multiple AI agents simultaneously. 
-              Build workflows that complete in seconds, not minutes. Watch agents collaborate in real-time with full conductor oversight.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <Link href="/login">
-                <Button 
-                  size="lg"
-                  className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-10 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+              <motion.h1 
+                className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                The AI orchestrator that runs
+                <motion.span 
+                  className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                  <Zap className="w-5 h-5 mr-2" />
-                  Get Started Free
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white px-10 py-4 text-lg rounded-lg"
+                  agents in parallel
+                </motion.span>
+                <motion.span 
+                  className="block text-4xl md:text-5xl text-gray-300 mt-2"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                  Sign In
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
+                  engineered for 10x faster automation
+                </motion.span>
+              </motion.h1>
+            
+              <motion.p 
+                className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                Orchestra is the only platform that executes multiple AI agents simultaneously. 
+                Build workflows that complete in seconds, not minutes. Watch agents collaborate in real-time with full conductor oversight.
+              </motion.p>
+            
+              <motion.div 
+                className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                <Link href="/login">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button 
+                      size="lg"
+                      className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-10 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                    >
+                      <Zap className="w-5 h-5 mr-2" />
+                      Get Started Free
+                    </Button>
+                  </motion.div>
+                </Link>
+                <Link href="/login">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white px-10 py-4 text-lg rounded-lg"
+                    >
+                      Sign In
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </motion.div>
+                </Link>
+              </motion.div>
             </div>
             
             {/* Live Demo Preview */}
-            <div className="hidden lg:block">
+            <motion.div 
+              className="hidden lg:block"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 1 }}
+            >
               <LiveDemoPreview />
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-gray-800">
+      <AnimatedSection id="features" className="py-24 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             <h2 className="text-4xl font-bold text-white mb-4">
               Built for Parallel Performance
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               The only platform designed from the ground up for simultaneous AI agent execution
             </p>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <Card key={index} className="bg-gray-700 border-gray-600 hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl hover:scale-105 group">
-                  <CardHeader>
-                    <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                    <CardTitle className="text-white text-lg">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400 text-sm">{feature.description}</p>
-                  </CardContent>
-                </Card>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                >
+                  <Card className="bg-gray-700 border-gray-600 hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group h-full">
+                    <CardHeader>
+                      <motion.div 
+                        className="w-12 h-12 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center mb-4"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Icon className="w-6 h-6 text-white" />
+                      </motion.div>
+                      <CardTitle className="text-white text-lg">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-400 text-sm">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Infrastructure Section */}
-      <section id="infrastructure" className="py-24 bg-gray-700">
+      <AnimatedSection id="infrastructure" className="py-24 bg-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl font-bold text-white mb-4">
               Orchestra's Infrastructure
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Orchestra manages every aspect of AI orchestration—from agent creation to workflow execution and real-time monitoring
             </p>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {infrastructureCapabilities.map((capability, index) => {
               const Icon = capability.icon;
               return (
-                <Card key={index} className="bg-gray-600 border-gray-500 hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group">
-                  <CardContent className="p-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
-                        <Icon className="w-5 h-5 text-orange-400" />
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                >
+                  <Card className="bg-gray-600 border-gray-500 hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group h-full">
+                    <CardContent className="p-6">
+                      <div className="flex items-start space-x-4">
+                        <motion.div 
+                          className="w-10 h-10 bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-lg flex items-center justify-center flex-shrink-0"
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Icon className="w-5 h-5 text-orange-400" />
+                        </motion.div>
+                        <div>
+                          <h3 className="text-white font-semibold mb-2">{capability.title}</h3>
+                          <p className="text-gray-400 text-sm">{capability.description}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-white font-semibold mb-2">{capability.title}</h3>
-                        <p className="text-gray-400 text-sm">{capability.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Use Cases Section */}
-      <section className="py-24 bg-gray-800">
+      <AnimatedSection className="py-24 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl font-bold text-white mb-4">
               Real-World Performance Gains
             </h2>
             <p className="text-xl text-gray-400">
               See how parallel execution transforms workflow performance across industries
             </p>
-          </div>
+          </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {useCases.map((useCase, index) => (
-              <Card key={index} className={`bg-gradient-to-br ${useCase.gradient} border-gray-700 hover:border-orange-600/50 transition-all duration-300 group overflow-hidden relative`}>
-                <div className="absolute inset-0 bg-gray-700/90"></div>
-                <CardContent className="relative z-10 p-8">
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold text-white mb-4">{useCase.title}</h3>
-                    <p className="text-gray-300 mb-6">{useCase.description}</p>
-                    <div className="text-3xl font-bold text-orange-400 mb-2">{useCase.stats}</div>
-                    <Badge className="bg-orange-600/20 text-orange-300 border-orange-600/30">
-                      Proven Results
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2, duration: 0.6 }}
+                whileHover={{ scale: 1.05, y: -10 }}
+              >
+                <Card className={`bg-gradient-to-br ${useCase.gradient} border-gray-700 hover:border-orange-600/50 transition-all duration-300 group overflow-hidden relative h-full`}>
+                  <motion.div 
+                    className="absolute inset-0 bg-gray-700/90"
+                    whileHover={{ backgroundColor: 'rgba(55, 65, 81, 0.85)' }}
+                  />
+                  <CardContent className="relative z-10 p-8">
+                    <div className="text-center">
+                      <motion.h3 
+                        className="text-2xl font-bold text-white mb-4"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        {useCase.title}
+                      </motion.h3>
+                      <p className="text-gray-300 mb-6">{useCase.description}</p>
+                      <motion.div 
+                        className="text-3xl font-bold text-orange-400 mb-2"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {useCase.stats}
+                      </motion.div>
+                      <Badge className="bg-orange-600/20 text-orange-300 border-orange-600/30">
+                        Proven Results
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Sequential vs Parallel Comparison */}
-      <section className="py-24 bg-gray-700">
+      <AnimatedSection className="py-24 bg-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             <h2 className="text-4xl font-bold text-white mb-4">
               Sequential vs Parallel: See the Difference
             </h2>
             <p className="text-xl text-gray-400">
               Orchestra's parallel execution delivers 70% faster workflows on average
             </p>
-          </div>
+          </motion.div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Traditional Sequential */}
-            <Card className="bg-gray-600 border-gray-500 shadow-xl">
-              <CardHeader className="text-center">
-                <CardTitle className="text-white text-xl mb-2">Traditional Sequential</CardTitle>
-                <Badge variant="secondary" className="bg-gray-500 text-gray-300">
-                  Old Way
-                </Badge>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {['Research Agent', 'Analysis Agent', 'Writer Agent'].map((name, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gray-500 rounded-lg flex items-center justify-center text-white text-sm font-bold">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-white text-sm font-medium">{name}</div>
-                        <div className="text-xs text-gray-400">Waits for previous agent</div>
-                      </div>
-                      {index < 2 && (
-                        <div className="text-gray-500">→</div>
-                      )}
-                    </div>
-                  ))}
-                  <div className="text-center pt-4 border-t border-gray-500">
-                    <div className="text-2xl font-bold text-gray-300">45 seconds</div>
-                    <div className="text-xs text-gray-400">Total execution time</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Orchestra Parallel */}
-            <Card className="bg-gray-600 border-orange-600 shadow-xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"></div>
-              <CardHeader className="relative z-10 text-center">
-                <CardTitle className="text-white text-xl mb-2">Orchestra Parallel</CardTitle>
-                <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
-                  <Zap className="w-3 h-3 mr-1" />
-                  70% Faster
-                </Badge>
-              </CardHeader>
-              <CardContent className="relative z-10">
-                <div className="space-y-4">
-                  <div className="text-center">
-                    <div className="text-xs text-orange-300 mb-3">Level 1 - All Execute Together</div>
-                    <div className="grid grid-cols-3 gap-2">
-                      {['Research', 'Analysis', 'Writer'].map((name, index) => (
-                        <div key={index} className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-2 text-center">
-                          <div className="w-6 h-6 bg-orange-600 rounded-lg flex items-center justify-center mx-auto mb-1">
-                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                          </div>
-                          <div className="text-xs text-white font-medium">{name}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="text-center pt-4 border-t border-orange-600/30">
-                    <div className="text-2xl font-bold text-orange-400">15 seconds</div>
-                    <div className="text-xs text-orange-300">Parallel execution time</div>
-                    <div className="text-sm text-green-400 font-medium mt-2">
-                      ⚡ 30 seconds saved
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <ComparisonAnimation />
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-gray-700">
+      <AnimatedSection id="pricing" className="py-24 bg-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl font-bold text-white mb-4">
               Choose Your Performance Level
             </h2>
             <p className="text-xl text-gray-400">
               From getting started to enterprise scale - we have the right plan for you
             </p>
-          </div>
+          </motion.div>
           
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Starter Plan */}
-            <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+            >
+              <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
               <CardHeader className="text-center">
                 <CardTitle className="text-white text-2xl mb-2">Starter</CardTitle>
                 <div className="mb-4">
@@ -439,23 +540,46 @@ export default function Landing() {
                   </div>
                 </div>
                 <Link href="/login">
-                  <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200">
                     Start Starter Plan
-                  </Button>
+                    </Button>
+                  </motion.div>
                 </Link>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
             {/* Pro Plan */}
-            <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              whileHover={{ scale: 1.05, y: -10 }}
+            >
+              <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full">
               <div className="absolute top-4 right-4">
-                <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
                   <Crown className="w-3 h-3 mr-1" />
                   RECOMMENDED
-                </Badge>
+                  </Badge>
+                </motion.div>
               </div>
               
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"></div>
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"
+                animate={{ 
+                  background: [
+                    'linear-gradient(135deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.1))',
+                    'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1))'
+                  ]
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
               
               <CardHeader className="relative z-10 text-center">
                 <CardTitle className="text-white text-2xl mb-2">Pro</CardTitle>
@@ -493,15 +617,24 @@ export default function Landing() {
                   </div>
                 </div>
                 <Link href="/login">
-                  <Button className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white transform hover:scale-105 transition-all duration-200">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white transition-all duration-200">
                     Choose Pro
-                  </Button>
+                    </Button>
+                  </motion.div>
                 </Link>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
             {/* Enterprise Plan */}
-            <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+            >
+              <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
               <CardHeader className="text-center">
                 <CardTitle className="text-white text-2xl mb-2">Enterprise</CardTitle>
                 <div className="mb-4">
@@ -545,39 +678,82 @@ export default function Landing() {
                   Contact Sales
                 </Button>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Call to Action */}
-      <section className="py-24 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-amber-600/10"></div>
+      <AnimatedSection className="py-24 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 relative overflow-hidden">
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-amber-600/10"
+          animate={{ 
+            background: [
+              'linear-gradient(90deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.1))',
+              'linear-gradient(90deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1))'
+            ]
+          }}
+          transition={{ duration: 5, repeat: Infinity }}
+        />
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-5xl font-bold text-white mb-6">
+          <motion.h2 
+            className="text-5xl font-bold text-white mb-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             Ready to Orchestrate Your AI?
-          </h2>
-          <p className="text-xl text-gray-300 mb-12">
+          </motion.h2>
+          <motion.p 
+            className="text-xl text-gray-300 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             Join the early adopters building the future of AI automation with Orchestra
-          </p>
+          </motion.p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+          <motion.div 
+            className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             <Link href="/login">
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 animate-pulse"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{ 
+                  boxShadow: [
+                    '0 10px 30px rgba(234, 88, 12, 0.3)',
+                    '0 15px 40px rgba(234, 88, 12, 0.4)',
+                    '0 10px 30px rgba(234, 88, 12, 0.3)'
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
               >
-                <Star className="w-6 h-6 mr-2" />
-                Start Building Today
-              </Button>
+                <Button 
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                  <Star className="w-6 h-6 mr-2" />
+                  Start Building Today
+                </Button>
+              </motion.div>
             </Link>
-            <div className="flex items-center text-sm text-gray-400">
+            <motion.div 
+              className="flex items-center text-sm text-gray-400"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
               <Clock className="w-4 h-4 mr-2" />
               <span>Setup takes less than 2 minutes • No credit card required</span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* Footer */}
       <footer className="bg-gray-900 border-t border-gray-700 py-16">
