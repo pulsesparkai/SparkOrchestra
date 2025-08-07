@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/auth/auth-provider";
 import type { Agent } from "@shared/schema";
+import { useUserData } from "@/hooks/use-user-data";
 import { apiRequest } from "@/lib/queryClient";
 import type { ExecutionMode } from "@shared/schema";
 
@@ -34,6 +35,7 @@ export default function Workflow() {
   const [showParallelVisualization, setShowParallelVisualization] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const { userData } = useUserData();
 
   const { data: agents, isLoading } = useQuery<Agent[]>({
     queryKey: ["/api/agents"],

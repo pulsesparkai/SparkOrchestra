@@ -4,6 +4,7 @@ import { UpgradeBanner } from "@/components/ui/upgrade-banner";
 import { TokenLimitModal } from "@/components/ui/token-limit-modal";
 import { TokenCounter } from "@/components/ui/token-counter";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { useUserData } from "@/hooks/use-user-data";
 import { Bot, Zap, Clock, TrendingUp, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { useState, useEffect } from "react";
@@ -11,15 +12,18 @@ import { useState, useEffect } from "react";
 export default function Dashboard() {
   const [tokenLimitModalOpen, setTokenLimitModalOpen] = useState(false);
   const { trackEvent, trackTokenUsage, trackAgentUsage } = useAnalytics();
+  const { userData, isLoading: userDataLoading } = useUserData();
 
-  // Mock user data - would come from API/context in real app
-  const userPlan = "free" as const;
-  const agentCount = 1;
-  const maxAgents = 2;
-  const tokensUsed = 85;
-  const tokensLimit = 100;
+  // Use real data or defaults while loading
+  const userPlan = userData?.userPlan || "free";
+  const agentCount = userData?.agentCount || 0;
+  const maxAgents = userData?.agentLimit || 2;
+  const tokensUsed = userData?.tokensUsed || 0;
+  const tokensLimit = userData?.tokenLimit || 100;
 
   useEffect(() => {
+    if (!userData) return;
+
     // Track dashboard view
     trackEvent("dashboard_viewed", {
       user_plan: userPlan,

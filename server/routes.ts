@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertAgentSchema } from "@shared/schema";
 import { testAnthropicConnection } from "./services/anthropic";
 import agentRoutes from "./routes/agents";
+import userRoutes from "./routes/users";
 import { conductor } from "./conductor";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -47,6 +48,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Use the new agent routes with Clerk authentication and bcryptjs encryption
   app.use('/api/agents', agentRoutes);
+
+  // User profile routes
+  app.use('/api/users', userRoutes);
 
   // Import enhanced workflow routes with token enforcement
   const { registerWorkflowRoutes } = await import('./routes/workflows');

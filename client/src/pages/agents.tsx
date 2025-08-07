@@ -13,6 +13,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TokenLimitModal } from "@/components/ui/token-limit-modal";
+import { useUserData } from "@/hooks/use-user-data";
 import { ApiKeyIndicator } from "@/components/ui/api-key-indicator";
 import { Link } from "wouter";
 import type { Agent } from "@shared/schema";
@@ -26,17 +27,18 @@ export default function Agents() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { trackEvent } = useAnalytics();
+  const { userData } = useUserData();
 
   const { data: agents, isLoading } = useQuery<Agent[]>({
     queryKey: ["/api/agents"],
   });
 
-  // Mock user data - would come from API/context in real app
-  const userPlan = "free" as const;
+  // Use real data
+  const userPlan = userData?.userPlan || "free";
   const agentCount = agents?.length || 0;
-  const maxAgents = 2;
-  const tokensUsed = 95; // Near limit to show prompts
-  const tokensLimit = 100;
+  const maxAgents = userData?.agentLimit || 2;
+  const tokensUsed = userData?.tokensUsed || 0;
+  const tokensLimit = userData?.tokenLimit || 100;
 
   useEffect(() => {
     // Track page view
@@ -76,7 +78,8 @@ export default function Agents() {
 
   const filteredAgents = agents?.filter((agent) => {
     const matchesSearch = agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         agent.role?.toLowerCase().includes(searchTerm.toLowerCase());
+                         agent.prompt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (agent.role && agent.role.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesRole = roleFilter === "all" || agent.role === roleFilter;
     return matchesSearch && matchesRole;
   }) || [];

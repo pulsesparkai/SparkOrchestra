@@ -1,26 +1,42 @@
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useUserData } from "@/hooks/use-user-data";
 import { Zap, AlertTriangle, Key } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TokenCounterProps {
-  tokensUsed: number;
-  tokensLimit: number;
-  userPlan: "free" | "early_adopter";
   className?: string;
   showUpgradePrompt?: boolean;
   onUpgrade?: () => void;
 }
 
 export function TokenCounter({
-  tokensUsed,
-  tokensLimit,
-  userPlan,
   className,
   showUpgradePrompt = false,
   onUpgrade
 }: TokenCounterProps) {
+  const { userData, isLoading } = useUserData();
+  
+  // Use real data or defaults while loading
+  const tokensUsed = userData?.tokensUsed || 0;
+  const tokensLimit = userData?.tokenLimit || 100;
+  const userPlan = userData?.userPlan || "free";
+  
+  if (isLoading) {
+    return (
+      <Card className={cn("bg-white shadow-sm border border-gray-200", className)}>
+        <CardContent className="p-4">
+          <div className="animate-pulse space-y-3">
+            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+            <div className="h-2 bg-gray-200 rounded w-full"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const usagePercentage = Math.min((tokensUsed / tokensLimit) * 100, 100);
   const isNearLimit = usagePercentage >= 80;
   const isExceeded = tokensUsed >= tokensLimit;

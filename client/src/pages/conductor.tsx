@@ -25,6 +25,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/components/auth/auth-provider";
 import type { Agent } from "@shared/schema";
 import { websocketClient, type LogEvent, type ConductorEvent, type TokenUsageEvent } from "@/lib/websocket";
+import { useUserData } from "@/hooks/use-user-data";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -48,25 +49,9 @@ interface WorkflowStatus {
 export default function Conductor() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const { user } = useAuth();
+  const { userData } = useUserData();
   const { toast } = useToast();
-  const [activeWorkflows, setActiveWorkflows] = useState<WorkflowStatus[]>([
-    {
-      id: "wf-001",
-      name: "Content Generation Pipeline",
-      status: "running",
-      progress: 65,
-      agents: ["Research Agent", "Writer Agent"],
-      startTime: new Date(Date.now() - 1000 * 60 * 30) // 30 minutes ago
-    },
-    {
-      id: "wf-002", 
-      name: "Data Analysis Workflow",
-      status: "paused",
-      progress: 40,
-      agents: ["Analysis Agent", "Report Agent"],
-      startTime: new Date(Date.now() - 1000 * 60 * 60) // 1 hour ago
-    }
-  ]);
+  const [activeWorkflows, setActiveWorkflows] = useState<WorkflowStatus[]>([]);
   const [conductorStatus, setConductorStatus] = useState({
     status: "active",
     currentActivity: "Monitoring 2 workflows",
