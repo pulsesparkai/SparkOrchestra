@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase, auth } from '@/lib/supabase';
+import { useLocation } from 'wouter';
 import type { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     // Get initial session
@@ -76,10 +78,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
-    setLoading(true);
-    const { error } = await auth.signOut();
-    setLoading(false);
-    return { error };
+    try {
+      setLoading(true);
+      const { error } = await auth.signOut();
+      if (!error) {
+        setUser(null);
+        setLocation('/');
+      }
+      setLoading(false);
+      return { error };
+    } catch (error) {
+      console.error('Error signing out:', error);
+      setLoading(false);
+      return { error };
+    }
   };
 
   const value = {
