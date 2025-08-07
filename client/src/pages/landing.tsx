@@ -106,9 +106,9 @@ export default function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-800">
       {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-800">
+      <header className="bg-gray-800 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
@@ -135,7 +135,7 @@ export default function Landing() {
             </nav>
             
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-white bg-white/10 hover:bg-white/20">
+              <Button variant="ghost" className="text-white bg-orange-600/20 hover:bg-orange-600/30 border border-orange-600/30">
                 Contact Sales
               </Button>
               <Link href="/login">
@@ -149,16 +149,17 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gray-900">
+      <section className="relative overflow-hidden bg-gray-800">
         {/* Abstract Background Graphics */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-600/20 to-amber-600/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-600/20 to-orange-600/20 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-amber-600/10 to-orange-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-600/10 to-amber-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-600/10 to-orange-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-amber-600/5 to-orange-600/5 rounded-full blur-3xl animate-pulse"></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-          <div className="text-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="text-center lg:text-left">
             <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
               The AI orchestrator
               <span className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
@@ -192,12 +193,49 @@ export default function Landing() {
                 </Button>
               </Link>
             </div>
+            </div>
+            
+            {/* Live Demo Preview */}
+            <div className="hidden lg:block">
+              <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-6 shadow-2xl">
+                <div className="text-center mb-4">
+                  <h3 className="text-white font-semibold mb-2">Live Workflow Preview</h3>
+                  <div className="text-sm text-orange-400 bg-orange-600/20 px-3 py-1 rounded-full inline-block">
+                    ⚡ Executing in parallel...
+                  </div>
+                </div>
+                
+                {/* Mini Workflow Visualization */}
+                <div className="space-y-4">
+                  <div className="text-xs text-gray-400 text-center">Level 1 - Simultaneous Execution</div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {['Research Agent', 'Analysis Agent', 'Writer Agent'].map((name, index) => (
+                      <div key={index} className="bg-gray-600 border border-orange-600/30 rounded-lg p-3 text-center">
+                        <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center mx-auto mb-2">
+                          <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                        </div>
+                        <div className="text-xs text-white font-medium">{name}</div>
+                        <div className="w-full bg-gray-500 rounded-full h-1 mt-2">
+                          <div 
+                            className="bg-orange-400 h-1 rounded-full transition-all duration-1000"
+                            style={{ width: `${65 + (index * 10)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-green-400 font-medium">⚡ Time saved: ~30 seconds</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-gray-900">
+      <section id="features" className="py-24 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -212,7 +250,7 @@ export default function Landing() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <Card key={index} className="bg-gray-800 border-gray-700 hover:border-orange-600/50 transition-all duration-300 hover:shadow-lg group">
+                <Card key={index} className="bg-gray-700 border-gray-600 hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl hover:scale-105 group">
                   <CardHeader>
                     <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                       <Icon className="w-6 h-6 text-white" />
@@ -230,7 +268,7 @@ export default function Landing() {
       </section>
 
       {/* Infrastructure Section */}
-      <section id="infrastructure" className="py-24 bg-gray-800">
+      <section id="infrastructure" className="py-24 bg-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -245,7 +283,7 @@ export default function Landing() {
             {infrastructureCapabilities.map((capability, index) => {
               const Icon = capability.icon;
               return (
-                <Card key={index} className="bg-gray-900 border-gray-700 hover:border-orange-600/30 transition-all duration-300 group">
+                <Card key={index} className="bg-gray-600 border-gray-500 hover:border-orange-600/50 transition-all duration-300 hover:shadow-xl group">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
                       <div className="w-10 h-10 bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200">
@@ -265,7 +303,7 @@ export default function Landing() {
       </section>
 
       {/* Use Cases Section */}
-      <section className="py-24 bg-gray-900">
+      <section className="py-24 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -279,7 +317,7 @@ export default function Landing() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {useCases.map((useCase, index) => (
               <Card key={index} className={`bg-gradient-to-br ${useCase.gradient} border-gray-700 hover:border-orange-600/50 transition-all duration-300 group overflow-hidden relative`}>
-                <div className="absolute inset-0 bg-gray-800/80"></div>
+                <div className="absolute inset-0 bg-gray-700/90"></div>
                 <CardContent className="relative z-10 p-8">
                   <div className="text-center">
                     <h3 className="text-2xl font-bold text-white mb-4">{useCase.title}</h3>
@@ -297,7 +335,7 @@ export default function Landing() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-gray-800">
+      <section id="pricing" className="py-24 bg-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -310,7 +348,7 @@ export default function Landing() {
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Free Plan */}
-            <Card className="bg-gray-900 border-gray-700 shadow-lg">
+            <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300">
               <CardHeader className="text-center">
                 <CardTitle className="text-white text-2xl mb-2">Free Plan</CardTitle>
                 <div className="mb-4">
@@ -339,7 +377,7 @@ export default function Landing() {
                   </div>
                 </div>
                 <Link href="/login">
-                  <Button className="w-full bg-gray-700 hover:bg-gray-600 text-white">
+                  <Button className="w-full bg-gray-500 hover:bg-gray-400 text-white transition-all duration-200">
                     Start Free
                   </Button>
                 </Link>
@@ -347,7 +385,7 @@ export default function Landing() {
             </Card>
 
             {/* Early Adopter Plan */}
-            <Card className="bg-gray-900 border-orange-600 shadow-lg relative overflow-hidden">
+            <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
               <div className="absolute top-4 right-4">
                 <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
                   <Crown className="w-3 h-3 mr-1" />
@@ -404,7 +442,7 @@ export default function Landing() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-24 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-amber-600/10"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-5xl font-bold text-white mb-6">
@@ -418,7 +456,7 @@ export default function Landing() {
             <Link href="/login">
               <Button 
                 size="lg"
-                className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-12 py-4 text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 animate-pulse"
               >
                 <Star className="w-6 h-6 mr-2" />
                 Start Building Today
@@ -426,14 +464,14 @@ export default function Landing() {
             </Link>
             <div className="flex items-center text-sm text-gray-400">
               <Clock className="w-4 h-4 mr-2" />
-              Setup takes less than 2 minutes
+              <span>Setup takes less than 2 minutes • No credit card required</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 border-t border-gray-800 py-16">
+      <footer className="bg-gray-900 border-t border-gray-700 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Company Info */}
@@ -457,10 +495,10 @@ export default function Landing() {
             <div>
               <h3 className="text-white font-semibold mb-4">Product</h3>
               <div className="space-y-2">
-                <a href="#features" className="block text-gray-400 hover:text-white text-sm transition-colors">Features</a>
-                <a href="#pricing" className="block text-gray-400 hover:text-white text-sm transition-colors">Pricing</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Documentation</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">API Reference</a>
+                <a href="#features" className="block text-gray-400 hover:text-orange-400 transition-colors">Features</a>
+                <a href="#pricing" className="block text-gray-400 hover:text-orange-400 transition-colors">Pricing</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Documentation</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">API Reference</a>
               </div>
             </div>
 
@@ -468,10 +506,10 @@ export default function Landing() {
             <div>
               <h3 className="text-white font-semibold mb-4">Solutions</h3>
               <div className="space-y-2">
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Content Generation</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Data Processing</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Customer Support</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Enterprise</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Content Generation</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Data Processing</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Customer Support</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Enterprise</a>
               </div>
             </div>
 
@@ -479,10 +517,10 @@ export default function Landing() {
             <div>
               <h3 className="text-white font-semibold mb-4">Company</h3>
               <div className="space-y-2">
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">About</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Blog</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Careers</a>
-                <a href="#" className="block text-gray-400 hover:text-white text-sm transition-colors">Contact</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">About</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Blog</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Careers</a>
+                <a href="#" className="block text-gray-400 hover:text-orange-400 transition-colors">Contact</a>
               </div>
               
               {/* Newsletter Signup */}
@@ -491,7 +529,7 @@ export default function Landing() {
                 <div className="flex space-x-2">
                   <Input 
                     placeholder="Enter email" 
-                    className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 text-sm"
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 text-sm focus:border-orange-600"
                   />
                   <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white">
                     <Mail className="w-4 h-4" />
