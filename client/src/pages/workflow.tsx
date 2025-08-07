@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/auth/auth-provider";
 import type { Agent } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
+import type { ExecutionMode } from "@shared/schema";
 
 // Import React Flow hooks properly
 import { useNodesState, useEdgesState } from 'reactflow';
@@ -29,6 +30,8 @@ export default function Workflow() {
   const [selectedAgents, setSelectedAgents] = useState<Agent[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [executionMode, setExecutionMode] = useState<ExecutionMode>('sequential');
+  const [showParallelVisualization, setShowParallelVisualization] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -76,12 +79,13 @@ export default function Workflow() {
       await apiRequest("POST", "/api/workflows/run", {
         workflowId,
         agentIds,
-        userId: user.id
+        userId: user.id,
+        executionMode
       });
 
       toast({
         title: "Workflow Started",
-        description: `Running workflow with ${agentIds.length} agents`,
+        description: `Running workflow with ${agentIds.length} agents in ${executionMode} mode`,
       });
     } catch (error: any) {
       toast({
@@ -172,6 +176,17 @@ export default function Workflow() {
               <Trash2 className="w-4 h-4 mr-2" />
               Clear
             </Button>
+            <div className="flex items-center space-x-2">
+              <label className="text-sm text-gray-700">Mode:</label>
+              <select
+                value={executionMode}
+                onChange={(e) => setExecutionMode(e.target.value as ExecutionMode)}
+                className="px-3 py-1 border border-gray-300 rounded text-sm bg-white text-gray-900"
+              >
+                <option value="sequential">Sequential</option>
+                <option value="parallel">Parallel</option>
+              </select>
+            </div>
             <Button
               variant="outline"
               size="sm"
@@ -189,7 +204,7 @@ export default function Workflow() {
               className="bg-orchestra-brown text-white hover:bg-orchestra-brown-hover"
             >
               <Play className="w-4 h-4 mr-2" />
-              {isRunning ? "Running..." : "Run Workflow"}
+              {isRunning ? "Running..." : `Run ${executionMode === 'parallel' ? 'Parallel' : 'Sequential'}`}
             </Button>
           </div>
         </div>
@@ -267,7 +282,14 @@ export default function Workflow() {
         {/* Workflow Builder */}
         <Card className="bg-white shadow-sm border border-gray-200">
           <CardHeader>
-            <CardTitle className="text-gray-900">Workflow Sequence</CardTitle>
+            <CardTitle className="text-gray-900 flex items-center justify-between">
+              <span>Workflow {executionMode === 'parallel' ? 'Levels' : 'Sequence'}</span>
+              {selectedAgents.length > 1 && executionMode === 'parallel' && (
+                <div className="text-sm text-green-600 bg-green-100 px-2 py-1 rounded">
+                  ⚡ Time saved: ~{Math.max(0, (selectedAgents.length - 1) * 15)}s
+                </div>
+              )}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {selectedAgents.length === 0 ? (
@@ -279,42 +301,78 @@ export default function Workflow() {
                 <p className="text-sm text-gray-500">Add agents from the left panel</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {selectedAgents.map((agent, index) => (
-                  <div key={agent.id} className="relative">
-                    <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-orchestra-brown rounded-lg flex items-center justify-center text-white text-sm font-bold">
-                            {index + 1}
-                          </div>
-                          <div className="w-8 h-8 bg-orchestra-brown rounded-lg flex items-center justify-center">
-                            {getRoleIcon(agent.role || "Custom")}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-gray-900 text-sm truncate">{agent.name}</h3>
-                            <p className="text-xs text-gray-600">{agent.role || "Custom"}</p>
+              <div className={executionMode === 'parallel' ? 'space-y-2' : 'space-y-3'}>
+                {executionMode === 'parallel' ? (
+                  // Parallel visualization - all agents in one level
+                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="text-sm font-medium text-blue-800 mb-3 flex items-center">
+                      <Zap className="w-4 h-4 mr-2" />
+                      Level 1 - All agents execute simultaneously
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {selectedAgents.map((agent) => (
+                        <div key={agent.id} className="p-3 bg-white border border-blue-200 rounded-lg">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-6 h-6 bg-orchestra-brown rounded-lg flex items-center justify-center">
+                                {getRoleIcon(agent.role || "Custom")}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-medium text-gray-900 text-sm truncate">{agent.name}</h3>
+                                <p className="text-xs text-gray-600">{agent.role || "Custom"}</p>
+                              </div>
+                            </div>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeAgentFromWorkflow(agent.id)}
+                              className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
                           </div>
                         </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeAgentFromWorkflow(agent.id)}
-                          className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      ))}
                     </div>
-                    
-                    {/* Arrow connector */}
-                    {index < selectedAgents.length - 1 && (
-                      <div className="flex justify-center py-2">
-                        <div className="w-0.5 h-4 bg-orchestra-brown"></div>
-                      </div>
-                    )}
                   </div>
-                ))}
+                ) : (
+                  // Sequential visualization - existing layout
+                  selectedAgents.map((agent, index) => (
+                    <div key={agent.id} className="relative">
+                      <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-orchestra-brown rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                              {index + 1}
+                            </div>
+                            <div className="w-8 h-8 bg-orchestra-brown rounded-lg flex items-center justify-center">
+                              {getRoleIcon(agent.role || "Custom")}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-medium text-gray-900 text-sm truncate">{agent.name}</h3>
+                              <p className="text-xs text-gray-600">{agent.role || "Custom"}</p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeAgentFromWorkflow(agent.id)}
+                            className="border-red-500 text-red-400 hover:bg-red-500 hover:text-white"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Arrow connector for sequential */}
+                      {index < selectedAgents.length - 1 && (
+                        <div className="flex justify-center py-2">
+                          <div className="w-0.5 h-4 bg-orchestra-brown"></div>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
             )}
           </CardContent>
@@ -334,12 +392,65 @@ export default function Workflow() {
                   <span className="font-medium">{selectedAgents.length}</span> agents selected
                 </div>
                 <div className="text-sm text-gray-900">
-                  Sequential execution order
+                  {executionMode === 'parallel' ? 'Parallel execution' : 'Sequential execution order'}
                 </div>
+                {executionMode === 'parallel' && selectedAgents.length > 1 && (
+                  <div className="text-sm text-green-600 font-medium">
+                    ⚡ ~{Math.max(0, (selectedAgents.length - 1) * 15)}s faster
+                  </div>
+                )}
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-600">Ready to execute</span>
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs text-gray-600">
+                  {executionMode === 'parallel' ? 'All agents run simultaneously' : 'Agents run one after another'}
+                </span>
+                <div className={`w-2 h-2 rounded-full ${
+                  executionMode === 'parallel' ? 'bg-blue-500' : 'bg-green-500'
+                }`}></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Execution Mode Info */}
+      {selectedAgents.length > 0 && (
+        <Card className="bg-white shadow-sm border border-gray-200 mt-8">
+          <CardContent className="p-4">
+            <div className="flex items-start space-x-4">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                executionMode === 'parallel' ? 'bg-blue-100' : 'bg-green-100'
+              }`}>
+                {executionMode === 'parallel' ? (
+                  <Zap className={`w-5 h-5 text-blue-600`} />
+                ) : (
+                  <div className="w-5 h-5 border-2 border-green-600 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                  </div>
+                )}
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-gray-900 mb-1">
+                  {executionMode === 'parallel' ? 'Parallel Execution' : 'Sequential Execution'}
+                </h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  {executionMode === 'parallel' 
+                    ? 'All agents will execute simultaneously, sharing data through inter-agent communication.'
+                    : 'Agents will execute one after another, passing data sequentially through the workflow.'
+                  }
+                </p>
+                {executionMode === 'parallel' && selectedAgents.length > 1 && (
+                  <div className="text-sm text-blue-600 font-medium">
+                    ⚡ Estimated time savings: ~{Math.max(0, (selectedAgents.length - 1) * 15)} seconds
+                  </div>
+                )}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs text-gray-500 mb-1">Execution Time</div>
+                <div className="text-sm font-medium text-gray-900">
+                  ~{executionMode === 'parallel' ? 30 : selectedAgents.length * 30}s
+                </div>
               </div>
             </div>
           </CardContent>

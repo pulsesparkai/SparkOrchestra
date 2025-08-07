@@ -113,3 +113,39 @@ export type WorkflowExecution = typeof workflowExecutions.$inferSelect;
 export type WorkflowExecutionLog = typeof workflowExecutionLogs.$inferSelect;
 export type TokenUsage = typeof tokenUsage.$inferSelect;
 export type ExecutionLimits = typeof executionLimits.$inferSelect;
+
+// Parallel execution types
+export type ExecutionMode = 'parallel' | 'sequential';
+
+export interface AgentMessage {
+  id: string;
+  fromAgent: string;
+  toAgent: string;
+  data: any;
+  timestamp: Date;
+  workflowId: string;
+}
+
+export interface AgentDependency {
+  agentId: string;
+  dependsOn: string[];
+  level: number;
+}
+
+export interface ParallelExecutionMetrics {
+  workflowId: string;
+  totalAgents: number;
+  executionLevels: number;
+  sequentialTime: number;
+  parallelTime: number;
+  timeSaved: number;
+  agentMetrics: Array<{
+    agentId: string;
+    agentName: string;
+    startTime: Date;
+    endTime: Date;
+    duration: number;
+    level: number;
+    status: 'completed' | 'failed' | 'blocked';
+  }>;
+}

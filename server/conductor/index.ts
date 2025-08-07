@@ -5,6 +5,9 @@ import { getWebSocketManager } from '../websocket-mock';
 import { tokenTracker } from '../services/tokenTracker';
 import { EncryptionService } from '../services/encryption';
 import type { Agent } from '../../shared/schema';
+import { ParallelExecutor, DependencyAnalyzer } from './parallel-executor';
+import { MessageBus } from './agent-communicator';
+import type { ExecutionMode, ParallelExecutionMetrics, AgentDependency } from '../../shared/schema';
 
 export interface WorkflowContext {
   workflowId: string;
@@ -22,6 +25,9 @@ export interface WorkflowContext {
   status: 'idle' | 'running' | 'paused' | 'completed' | 'error';
   startTime?: Date;
   endTime?: Date;
+  executionMode?: ExecutionMode;
+  messageBus?: MessageBus;
+  parallelMetrics?: ParallelExecutionMetrics;
 }
 
 export interface AgentExecution {
@@ -46,7 +52,13 @@ export class Conductor {
   /**
    * Orchestrate a workflow by executing agents in sequence or parallel
    */
-  async orchestrateWorkflow(workflowId: string, agentIds: string[], userId: string): Promise<WorkflowContext> {
+  async orchestrateWorkflow(
+    workflowId: string, 
+    agentIds: string[], 
+    userId: string,
+    executionMode: ExecutionMode = 'sequential',
+    dependencies: AgentDependency[] = []
+  ): Promise<WorkflowContext> {
     try {
       // Validate user owns all agents
       const agents = await Promise.all(
@@ -66,7 +78,9 @@ export class Conductor {
         currentData: {},
         executionLog: [],
         status: 'running',
-        startTime: new Date()
+        startTime: new Date(),
+        executionMode,
+        messageBus: new MessageBus(workflowId)
       };
 
       this.workflows.set(workflowId, context);
@@ -83,20 +97,30 @@ export class Conductor {
       // Log workflow initiation
       this.addExecutionLog(context, 'conductor', 'workflow_started', {
         agentIds,
-        totalAgents: agents.length
+        totalAgents: agents.length,
+        executionMode
       });
 
-      // Execute agents sequentially (can be modified for parallel execution)
-      for (const agent of agents) {
-        if (context.status === 'paused') {
-          await this.waitForResume(workflowId);
-        }
+      // Execute agents based on mode
+      if (executionMode === 'parallel') {
+        const parallelExecutor = new ParallelExecutor();
+        context.parallelMetrics = await parallelExecutor.executeParallel(
+          context,
+          (agentId, ctx) => this.executeAgent(agentId, ctx)
+        );
+      } else {
+        // Sequential execution (existing logic)
+        for (const agent of agents) {
+          if (context.status === 'paused') {
+            await this.waitForResume(workflowId);
+          }
 
-        if (context.status === 'error') {
-          break;
-        }
+          if (context.status === 'error') {
+            break;
+          }
 
-        await this.executeAgent(agent.id, context);
+          await this.executeAgent(agent.id, context);
+        }
       }
 
       // Mark workflow as completed if no errors
@@ -109,7 +133,9 @@ export class Conductor {
           agentId: 'conductor',
           status: 'complete',
           progress: 1,
-          message: `Workflow completed in ${context.endTime.getTime() - (context.startTime?.getTime() || 0)}ms`
+          message: `Workflow completed in ${context.endTime.getTime() - (context.startTime?.getTime() || 0)}ms${
+            context.parallelMetrics ? ` (saved ${(context.parallelMetrics.timeSaved / 1000).toFixed(1)}s)` : ''
+          }`
         });
       }
 
@@ -146,6 +172,14 @@ export class Conductor {
     if (!agent) {
       throw new Error(`Agent ${agentId} not found in workflow context`);
     }
+
+    // Set up agent communicator for inter-agent messaging
+    const communicator = context.messageBus ? {
+      sendTo: (targetAgent: string, data: any) => context.messageBus!.sendMessage(agentId, targetAgent, data),
+      broadcast: (data: any) => context.messageBus!.broadcast(agentId, data),
+      getMessages: () => context.messageBus!.getMessages(agentId),
+      getLatestMessage: () => context.messageBus!.getLatestMessage(agentId)
+    } : null;
 
     // Determine API key to use (BYOAPI vs platform)
     let anthropicApiKey = process.env.ANTHROPIC_API_KEY;
@@ -208,19 +242,34 @@ export class Conductor {
       const anthropic = new Anthropic({ apiKey: anthropicApiKey });
 
       // Prepare system prompt with workflow context
-      const systemPrompt = `You are the Orchestra Conductor. Coordinate agents, monitor progress, handle errors. 
+      const systemPrompt = `You are ${agent.name}, an AI agent in the Orchestra platform. 
       
 Current workflow: ${context.workflowId}
 Agent role: ${agent.role}
 Previous context: ${JSON.stringify(context.currentData, null, 2)}
 Execution log: ${context.executionLog.slice(-3).map(log => `${log.timestamp}: ${log.action}`).join(', ')}
+${communicator ? `
+Available messages: ${JSON.stringify(communicator.getMessages(), null, 2)}
+
+You can communicate with other agents by including special commands in your response:
+- SEND_TO[agentId]: message content
+- BROADCAST: message content for all agents
+` : ''}
 
 ${agent.prompt}`;
 
       // Prepare user prompt with current context
-      const userPrompt = Object.keys(context.currentData).length > 0 
+      let userPrompt = Object.keys(context.currentData).length > 0 
         ? `Process the following data and provide your analysis: ${JSON.stringify(context.currentData, null, 2)}`
         : `Begin your task as ${agent.role}. Provide initial analysis or output.`;
+
+      // Add latest messages to prompt if available
+      if (communicator) {
+        const latestMessage = communicator.getLatestMessage();
+        if (latestMessage) {
+          userPrompt += `\n\nLatest message from ${latestMessage.fromAgent}: ${JSON.stringify(latestMessage.data)}`;
+        }
+      }
 
       // Execute agent with Anthropic
       const response = await anthropic.messages.create({
@@ -234,6 +283,11 @@ ${agent.prompt}`;
 
       const responseText = (response.content[0] as any)?.text || 'No response received';
       const actualTokensUsed = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+
+      // Process inter-agent communication commands in response
+      if (communicator && responseText) {
+        await this.processAgentCommunication(responseText, agentId, communicator);
+      }
 
       // Only record token usage if using platform API key (not user's BYOAPI key)
       if (!usingUserKey) {
@@ -304,6 +358,41 @@ ${agent.prompt}`;
       context.status = 'error';
       
       throw error;
+    }
+  }
+
+  /**
+   * Process agent communication commands from response
+   */
+  private async processAgentCommunication(
+    response: string, 
+    agentId: string, 
+    communicator: any
+  ): Promise<void> {
+    try {
+      // Parse SEND_TO commands
+      const sendToMatches = response.match(/SEND_TO\[([^\]]+)\]:\s*(.+?)(?=\n|$)/g);
+      if (sendToMatches) {
+        for (const match of sendToMatches) {
+          const [, targetAgent, message] = match.match(/SEND_TO\[([^\]]+)\]:\s*(.+)/) || [];
+          if (targetAgent && message) {
+            await communicator.sendTo(targetAgent.trim(), message.trim());
+          }
+        }
+      }
+
+      // Parse BROADCAST commands
+      const broadcastMatches = response.match(/BROADCAST:\s*(.+?)(?=\n|$)/g);
+      if (broadcastMatches) {
+        for (const match of broadcastMatches) {
+          const [, message] = match.match(/BROADCAST:\s*(.+)/) || [];
+          if (message) {
+            await communicator.broadcast(message.trim());
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error processing agent communication:', error);
     }
   }
 

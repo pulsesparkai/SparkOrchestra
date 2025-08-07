@@ -8,7 +8,7 @@ export function registerWorkflowRoutes(app: Express) {
   app.post("/api/workflows/:id/start", async (req, res) => {
     try {
       const { id: workflowId } = req.params;
-      const { agentIds } = req.body;
+      const { agentIds, executionMode = 'sequential', dependencies = [] } = req.body;
       const userId = 'demo-user'; // TODO: Get from auth context
 
       if (!agentIds || !Array.isArray(agentIds) || agentIds.length === 0) {
@@ -74,16 +74,18 @@ export function registerWorkflowRoutes(app: Express) {
       }
 
       // Start workflow execution
-      const context = await conductor.orchestrateWorkflow(workflowId, agentIds, userId);
+      const context = await conductor.orchestrateWorkflow(workflowId, agentIds, userId, executionMode, dependencies);
       
       res.json({
         success: true,
         workflowId,
         status: context.status,
-        message: `Workflow started with ${agentIds.length} agents`,
+        message: `Workflow started with ${agentIds.length} agents in ${executionMode} mode`,
         estimatedTokens: totalEstimatedTokens,
         agentsWithApiKeys: agentIds.length - agentsWithoutApiKeys.length,
-        agentsUsingCredits: agentsWithoutApiKeys.length
+        agentsUsingCredits: agentsWithoutApiKeys.length,
+        executionMode,
+        parallelMetrics: context.parallelMetrics
       });
 
     } catch (error: any) {

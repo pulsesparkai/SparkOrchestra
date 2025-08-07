@@ -319,13 +319,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // TODO: Implement workflow execution with Supabase Realtime
-      console.log(`Starting workflow ${workflowId} with ${agentIds.length} agents`);
+      const { executionMode = 'sequential', dependencies = [] } = req.body;
+      const userId = req.user?.id || 'demo-user';
+
+      // Start workflow with conductor
+      const context = await conductor.orchestrateWorkflow(workflowId, agentIds, userId, executionMode, dependencies);
 
       res.json({ 
-        message: "Workflow started successfully",
+        message: `Workflow started successfully in ${executionMode} mode`,
         workflowId,
-        agentCount: agentIds.length 
+        agentCount: agentIds.length,
+        executionMode,
+        status: context.status,
+        parallelMetrics: context.parallelMetrics
       });
     } catch (error: any) {
       res.status(500).json({ 
