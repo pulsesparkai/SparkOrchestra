@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Eye, MessageSquare, Zap, Bot, AlertCircle, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { HelpCircle, MessageSquare, Zap, Bot, AlertCircle, CheckCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Message {
   id: number;
@@ -115,12 +117,7 @@ export function LiveDemoPreview() {
   const agents = ['Research', 'Analysis', 'Writer'];
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8 }}
-      className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-6 shadow-2xl"
-    >
+    <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-6 shadow-2xl">
       {/* Conductor Section */}
       <motion.div 
         className="mb-6"
