@@ -444,12 +444,20 @@ export default function Workflow() {
                     ⚡ Estimated time savings: ~{Math.max(0, (selectedAgents.length - 1) * 15)} seconds
                   </div>
                 )}
-                </div>
-                 <div className="text-right">
-                   <div className="text-xs text-gray-500 mb-1">Execution Time</div>
-                   <div className="text-sm font-medium text-gray-900">
-                     ~{executionMode === 'parallel' ? 30 : selectedAgents.length * 30}s
-                   </div>
+                <div className="flex items-center justify-between mt-4">
+                  <div>
+                    {executionMode === 'parallel' && selectedAgents.length > 1 && (
+                      <div className="text-sm text-green-600 font-medium">
+                        ⚡ Time saved: ~{Math.max(0, (selectedAgents.length - 1) * 15)}s
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-gray-500 mb-1">Execution Time</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      ~{executionMode === 'parallel' ? 30 : selectedAgents.length * 30}s
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
