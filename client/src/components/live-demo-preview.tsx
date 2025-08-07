@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { HelpCircle, MessageSquare, Zap, Bot, AlertCircle, CheckCircle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Eye, MessageSquare, Zap, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface Message {
   id: number;
@@ -178,7 +176,7 @@ export function LiveDemoPreview() {
         <h3 className="text-white font-semibold mb-2">Live Parallel Execution</h3>
         <motion.div 
           className="text-sm text-orange-400 bg-orange-600/20 px-3 py-1 rounded-full inline-flex items-center"
-          animate={{ 
+          animate={{
             backgroundColor: isComplete ? 'rgba(34, 197, 94, 0.2)' : 'rgba(234, 88, 12, 0.2)'
           }}
         >
