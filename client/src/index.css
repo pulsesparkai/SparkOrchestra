@@ -13,28 +13,28 @@
   --card-foreground: hsl(0, 0%, 9%); /* Dark text on cards */
   --border: hsl(0, 0%, 89%); /* Light gray borders */
   --input: hsl(0, 0%, 100%); /* White inputs */
-  --primary: hsl(15, 50%, 48%); /* Brown/terracotta color #c85a3a */
+  --primary: hsl(20, 65%, 55%); /* Orange/brown color #d97444 */
   --primary-foreground: hsl(0, 0%, 98%);
   --secondary: hsl(0, 0%, 96%);
   --secondary-foreground: hsl(0, 0%, 9%);
-  --accent: hsl(15, 50%, 48%); /* Same as primary */
+  --accent: hsl(20, 65%, 55%); /* Same as primary */
   --accent-foreground: hsl(0, 0%, 98%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(15, 50%, 48%);
-  --chart-1: hsl(15, 50%, 48%);
-  --chart-2: hsl(15, 40%, 58%);
-  --chart-3: hsl(15, 30%, 68%);
+  --ring: hsl(20, 65%, 55%);
+  --chart-1: hsl(20, 65%, 55%);
+  --chart-2: hsl(25, 60%, 60%);
+  --chart-3: hsl(30, 55%, 65%);
   --chart-4: hsl(0, 0%, 65%);
   --chart-5: hsl(0, 0%, 75%);
   --sidebar-background: hsl(0, 0%, 96%);
   --sidebar-foreground: hsl(0, 0%, 9%);
-  --sidebar-primary: hsl(15, 50%, 48%);
+  --sidebar-primary: hsl(20, 65%, 55%);
   --sidebar-primary-foreground: hsl(0, 0%, 98%);
-  --sidebar-accent: hsl(15, 50%, 48%);
+  --sidebar-accent: hsl(20, 65%, 55%);
   --sidebar-accent-foreground: hsl(0, 0%, 98%);
   --sidebar-border: hsl(0, 0%, 89%);
-  --sidebar-ring: hsl(15, 50%, 48%);
+  --sidebar-ring: hsl(20, 65%, 55%);
   --radius: 0.5rem;
 }
 
@@ -49,15 +49,34 @@
   --card-foreground: hsl(0, 0%, 9%);
   --border: hsl(0, 0%, 89%);
   --input: hsl(0, 0%, 100%);
-  --primary: hsl(15, 50%, 48%);
+  --primary: hsl(20, 65%, 55%);
   --primary-foreground: hsl(0, 0%, 98%);
   --secondary: hsl(0, 0%, 96%);
   --secondary-foreground: hsl(0, 0%, 9%);
-  --accent: hsl(15, 50%, 48%);
+  --accent: hsl(20, 65%, 55%);
   --accent-foreground: hsl(0, 0%, 98%);
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(15, 50%, 48%);
+  --ring: hsl(20, 65%, 55%);
+}
+
+/* Custom animations for Orchestra */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(234, 88, 12, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(234, 88, 12, 0.5); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
 }
 
 @layer base {
