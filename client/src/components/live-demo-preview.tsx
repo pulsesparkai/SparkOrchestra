@@ -115,7 +115,7 @@ export function LiveDemoPreview() {
   const agents = ['Research', 'Analysis', 'Writer'];
 
   return (
-    <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-6 shadow-2xl">
+    <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-6 shadow-2xl h-full min-h-[600px]">
       {/* Conductor Section */}
       <motion.div 
         className="mb-6"
@@ -278,12 +278,12 @@ export function LiveDemoPreview() {
       </div>
 
       {/* Inter-Agent Messages */}
-      <div className="mb-4 h-16 overflow-hidden">
+      <div className="mb-4 h-20 overflow-hidden">
         <div className="text-xs text-gray-400 mb-2 flex items-center">
           <MessageSquare className="w-3 h-3 mr-1" />
           Inter-Agent Communication
         </div>
-        <div className="space-y-1">
+        <div className="space-y-1 overflow-y-auto max-h-16">
           {messages.map((msg) => (
             <motion.div
               key={msg.id}
