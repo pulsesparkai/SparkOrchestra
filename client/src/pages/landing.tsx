@@ -497,7 +497,53 @@ export default function Landing() {
             </p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {/* Free Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+            >
+              <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-white text-2xl mb-2">Free</CardTitle>
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold text-white">$0</span>
+                    <span className="text-gray-400 text-lg">/month</span>
+                  </div>
+                  <p className="text-gray-400">Try Orchestra risk-free</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">100 Orchestra credits</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">2 parallel agents</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">Basic workflow monitoring</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">BYOK supported</span>
+                    </div>
+                  </div>
+                  <Link href="/login">
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button className="w-full bg-gray-500 hover:bg-gray-400 text-white transition-all duration-200">
+                        Get Started Free
+                      </Button>
+                    </motion.div>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
+
             {/* Starter Plan */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -506,45 +552,41 @@ export default function Landing() {
               whileHover={{ scale: 1.02, y: -5 }}
             >
               <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-              <CardHeader className="text-center">
-                <CardTitle className="text-white text-2xl mb-2">Starter</CardTitle>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-white">$15</span>
-                  <span className="text-gray-400 text-lg">/month</span>
-                </div>
-                <p className="text-gray-400">Perfect for small teams</p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-8">
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span className="text-gray-300">2,500 Orchestra credits per month</span>
+                <CardHeader className="text-center">
+                  <CardTitle className="text-white text-2xl mb-2">Starter</CardTitle>
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold text-white">$15</span>
+                    <span className="text-gray-400 text-lg">/month</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span className="text-gray-300">Bring your own API key for unlimited usage</span>
+                  <p className="text-gray-400">Perfect for small teams</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">2,500 Orchestra credits</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">Up to 5 parallel agents</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">Real-time monitoring</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300">BYOK for unlimited usage</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span className="text-gray-300">Up to 5 parallel agents</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span className="text-gray-300">Basic analytics</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span className="text-gray-300">Community resources</span>
-                  </div>
-                </div>
-                <Link href="/login">
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200">
-                    Start Starter Plan
-                    </Button>
-                  </motion.div>
-                </Link>
-              </CardContent>
+                  <Link href="/login">
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200">
+                        Start Starter Plan
+                      </Button>
+                    </motion.div>
+                  </Link>
+                </CardContent>
               </Card>
             </motion.div>
 
@@ -552,76 +594,76 @@ export default function Landing() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               whileHover={{ scale: 1.05, y: -10 }}
             >
               <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full">
-              <div className="absolute top-4 right-4">
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
-                  <Crown className="w-3 h-3 mr-1" />
-                  RECOMMENDED
-                  </Badge>
-                </motion.div>
-              </div>
-              
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"
-                animate={{ 
-                  background: [
-                    'linear-gradient(135deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.1))',
-                    'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1))'
-                  ]
-                }}
-                transition={{ duration: 4, repeat: Infinity }}
-              />
-              
-              <CardHeader className="relative z-10 text-center">
-                <CardTitle className="text-white text-2xl mb-2">Pro</CardTitle>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-white">$49</span>
-                  <span className="text-gray-400 text-lg">/month</span>
-                </div>
-                <p className="text-gray-400">For growing businesses</p>
-              </CardHeader>
-              <CardContent className="relative z-10">
-                <div className="space-y-3 mb-8">
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orange-400" />
-                    <span className="text-gray-300">10,000 Orchestra credits per month</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orange-400" />
-                    <span className="text-gray-300">Bring your own API key for unlimited usage</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orange-400" />
-                    <span className="text-gray-300">Unlimited parallel agents</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orange-400" />
-                    <span className="text-gray-300">Advanced analytics</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orange-400" />
-                    <span className="text-gray-300">API access</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-orange-400" />
-                    <span className="text-gray-300">Priority support</span>
-                  </div>
-                </div>
-                <Link href="/login">
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white transition-all duration-200">
-                    Choose Pro
-                    </Button>
+                <div className="absolute top-4 right-4">
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
+                      <Crown className="w-3 h-3 mr-1" />
+                      RECOMMENDED
+                    </Badge>
                   </motion.div>
-                </Link>
-              </CardContent>
+                </div>
+              
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"
+                  animate={{ 
+                    background: [
+                      'linear-gradient(135deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.1))',
+                      'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1))'
+                    ]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                />
+              
+                <CardHeader className="relative z-10 text-center">
+                  <CardTitle className="text-white text-2xl mb-2">Pro</CardTitle>
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold text-white">$49</span>
+                    <span className="text-gray-400 text-lg">/month</span>
+                  </div>
+                  <p className="text-gray-400">For growing businesses</p>
+                </CardHeader>
+                <CardContent className="relative z-10">
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                      <span className="text-gray-300">10,000 Orchestra credits</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                      <span className="text-gray-300">Unlimited parallel agents</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                      <span className="text-gray-300">Advanced analytics dashboard</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                      <span className="text-gray-300">Custom integrations</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
+                      <span className="text-gray-300">BYOK for unlimited usage</span>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      toast({
+                        title: "Upgrade Coming Soon",
+                        description: "Stripe integration will be available shortly. Thanks for your interest!",
+                      });
+                    }}
+                    className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white transition-all duration-200"
+                  >
+                    Choose Pro
+                  </Button>
+                </CardContent>
               </Card>
             </motion.div>
 
@@ -629,53 +671,49 @@ export default function Landing() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               whileHover={{ scale: 1.02, y: -5 }}
             >
               <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-              <CardHeader className="text-center">
-                <CardTitle className="text-white text-2xl mb-2">Enterprise</CardTitle>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-white">Custom</span>
-                  <span className="text-gray-400 text-lg block">pricing</span>
-                </div>
-                <p className="text-gray-400">For large organizations</p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-8">
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">Unlimited Orchestra credits</span>
+                <CardHeader className="text-center">
+                  <CardTitle className="text-white text-2xl mb-2">Enterprise</CardTitle>
+                  <div className="mb-4">
+                    <span className="text-4xl font-bold text-white">Custom</span>
+                    <span className="text-gray-400 text-lg block">pricing</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">Dedicated infrastructure</span>
+                  <p className="text-gray-400">For large organizations</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <span className="text-gray-300">Unlimited Orchestra credits</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <span className="text-gray-300">Dedicated infrastructure</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <span className="text-gray-300">Custom AI models</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <span className="text-gray-300">SLA guarantees</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                      <span className="text-gray-300">White-glove onboarding</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">SLA guarantees</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">White-glove onboarding</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">Custom AI models</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">24/7 dedicated support</span>
-                  </div>
-                </div>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-200"
-                  onClick={() => window.open('mailto:sales@pulsespark.ai', '_blank')}
-                >
-                  Contact Sales
-                </Button>
-              </CardContent>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-200"
+                    onClick={() => window.open('mailto:sales@pulsespark.ai', '_blank')}
+                  >
+                    Contact Sales
+                  </Button>
+                </CardContent>
               </Card>
             </motion.div>
           </div>
