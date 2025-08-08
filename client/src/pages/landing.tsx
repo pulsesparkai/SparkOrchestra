@@ -219,7 +219,7 @@ export default function Landing() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8 }}
-                className="flex justify-center mb-12"
+                className="flex justify-center"
               >
                 <img 
                   src={mainLogo}
@@ -228,7 +228,7 @@ export default function Landing() {
                 />
               </motion.div>
               <motion.h1 
-                className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight text-center -mt-8"
+                className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight text-center -mt-16"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
