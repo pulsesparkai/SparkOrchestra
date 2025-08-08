@@ -10,7 +10,6 @@ export function ComparisonAnimation() {
   const [sequentialStep, setSequentialStep] = useState(0);
   const [parallelProgress, setParallelProgress] = useState([0, 0, 0]);
   const [showError, setShowError] = useState(false);
-  const [errorResolved, setErrorResolved] = useState(false);
   useEffect(() => {
     if (!isInView) {
       setSequentialStep(0);
