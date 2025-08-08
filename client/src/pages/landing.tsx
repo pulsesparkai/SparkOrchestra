@@ -142,7 +142,7 @@ export default function Landing() {
               <img 
                 src={orchestraLogo}
                 alt="Orchestra by PulseSpark.ai" 
-                className="h-8 w-auto"
+                className="h-12 w-auto"
               />
             </div>
             
