@@ -191,9 +191,13 @@ export function ComparisonAnimation() {
                     <div className="w-8 h-8 bg-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
                       <motion.div
                         animate={{ 
-                          rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? 360 : 0 
+                          rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? 360 : 0,
+                          scale: parallelProgress[i] >= 100 ? [1, 1.1, 1] : 1
                         }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        transition={{ 
+                          rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                          scale: { duration: 0.6, ease: "easeOut" }
+                        }}
                         className="w-4 h-4 bg-white rounded-full"
                       />
                     </div>
@@ -225,13 +229,14 @@ export function ComparisonAnimation() {
                     {parallelProgress[i] >= 100 && (
                       <motion.div
                         initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
+                        animate={{ scale: [0, 1.2, 1] }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
                         className="absolute -top-2 -right-2 bg-green-500 rounded-full p-1"
                       >
                         <CheckCircle className="w-3 h-3 text-white" />
                       </motion.div>
                     )}
-              transition={{ delay: 1.5, duration: 0.8, ease: "easeOut" }}
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -240,14 +245,9 @@ export function ComparisonAnimation() {
             {isInView && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                        rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? 360 : 0,
-                        scale: parallelProgress[i] >= 100 ? [1, 1.1, 1] : 1
+                animate={{ opacity: 1, height: 'auto' }}
                 transition={{ delay: 1, duration: 0.5 }}
-                      transition={{ 
-                        rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
-                        scale: { duration: 0.6, ease: "easeOut" }
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                      }}
+                className="mb-4 p-3 bg-gray-800/50 rounded-lg border border-gray-600"
               >
                 <div className="text-xs text-gray-400 mb-2 flex items-center">
                   <Bot className="w-3 h-3 mr-1" />
@@ -256,7 +256,8 @@ export function ComparisonAnimation() {
                 <motion.div
                   key={showError ? 'error' : 'normal'}
                   initial={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
                   className="text-xs space-y-1"
                 >
                   {showError ? (
@@ -267,9 +268,8 @@ export function ComparisonAnimation() {
                   ) : errorResolved ? (
                     <div className="text-green-400 flex items-center">
                       <CheckCircle className="w-3 h-3 mr-1" />
-                      animate={{ scale: 1, rotate: [0, 5, -5, 0] }}
-                      animate={{ scale: [0, 1.2, 1] }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      "Error resolved - all agents back to optimal performance"
+                    </div>
                   ) : (
                     <div className="text-blue-400">
                       "All agents executing optimally - monitoring performance metrics"
@@ -280,26 +280,26 @@ export function ComparisonAnimation() {
             )}
 
             <div className="text-center">
-              <div className="text-3xl font-bold text-orange-400">15 seconds</div>
-            <motion.div 
-              className="text-3xl font-bold text-orange-400"
-              animate={{
-                scale: parallelProgress.every(p => p >= 100) ? [1, 1.05, 1] : 1
-              }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              15 seconds
-            </motion.div>
-                <Zap className="w-4 h-4 inline mr-1" />
-                30 seconds saved (3x faster)
-              <motion.span
+              <motion.div 
+                className="text-3xl font-bold text-orange-400"
                 animate={{
-                  opacity: parallelProgress.every(p => p >= 100) ? [0.7, 1, 0.7] : 1
+                  scale: parallelProgress.every(p => p >= 100) ? [1, 1.05, 1] : 1
                 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                30 seconds saved (3x faster)
-              </motion.span>
+                15 seconds
+              </motion.div>
+              <div className="text-sm text-orange-400 flex items-center justify-center">
+                <Zap className="w-4 h-4 inline mr-1" />
+                <motion.span
+                  animate={{
+                    opacity: parallelProgress.every(p => p >= 100) ? [0.7, 1, 0.7] : 1
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  30 seconds saved (3x faster)
+                </motion.span>
+              </div>
             </div>
           </CardContent>
         </Card>
