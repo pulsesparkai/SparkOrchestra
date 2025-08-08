@@ -30,7 +30,7 @@ import { Link } from "wouter";
 import { LiveDemoPreview } from "@/components/live-demo-preview";
 import { MessageSquare } from "lucide-react";
 import { ComparisonAnimation } from "@/components/comparison-animation";
-import orchestraLogo from '@/assets/logos/Lo (1).png';
+import orchestraLogo from '@/assets/logos/orchestralogoO.png';
 
 // Animated section wrapper component
 function AnimatedSection({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -142,7 +142,7 @@ export default function Landing() {
               <img 
                 src={orchestraLogo}
                 alt="Orchestra by PulseSpark.ai" 
-                className="h-20 w-auto"
+                className="h-12 w-auto"
               />
             </div>
             
