@@ -224,7 +224,7 @@ export default function Landing() {
                 <img 
                   src={mainLogo}
                   alt="Orchestra" 
-                  className="h-48 w-auto"
+                  className="h-64 w-auto"
                 />
               </motion.div>
               <motion.h1 
@@ -234,7 +234,7 @@ export default function Landing() {
                 transition={{ duration: 0.8 }}
               >
                 <motion.span 
-                  className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent text-center"
+                  className="block text-white text-center"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
