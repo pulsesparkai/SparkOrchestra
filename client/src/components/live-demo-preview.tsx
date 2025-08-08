@@ -115,7 +115,7 @@ export function LiveDemoPreview() {
   const agents = ['Research', 'Analysis', 'Writer'];
 
   return (
-    <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-6 shadow-2xl h-full min-h-[600px]">
+    <div className="bg-gray-700/50 backdrop-blur-sm border border-gray-600 rounded-xl p-4 sm:p-6 shadow-2xl h-full min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] max-w-md mx-auto lg:max-w-none">
       {/* Conductor Section */}
       <motion.div 
         className="mb-6"
@@ -123,24 +123,24 @@ export function LiveDemoPreview() {
           borderColor: hasError ? 'rgba(239, 68, 68, 0.5)' : isComplete ? 'rgba(34, 197, 94, 0.5)' : 'rgba(234, 88, 12, 0.3)'
         }}
       >
-        <div className="bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-lg p-4 border border-orange-600/30">
+        <div className="bg-gradient-to-r from-orange-600/20 to-amber-600/20 rounded-lg p-3 sm:p-4 border border-orange-600/30">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-3">
               <motion.div 
-                className="w-10 h-10 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-orange-600 to-amber-600 rounded-lg flex items-center justify-center"
                 animate={{ 
                   boxShadow: hasError ? '0 0 20px rgba(239, 68, 68, 0.5)' : isComplete ? '0 0 20px rgba(34, 197, 94, 0.5)' : '0 0 20px rgba(234, 88, 12, 0.3)'
                 }}
               >
-                <Eye className="w-6 h-6 text-white" />
+                <Eye className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </motion.div>
               <div>
-                <h4 className="text-white font-semibold">AI Conductor</h4>
+                <h4 className="text-white font-semibold text-sm sm:text-base">AI Conductor</h4>
                 <motion.p 
                   key={conductorStatus}
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`text-xs ${
+                  className={`text-xs sm:text-sm ${
                     hasError ? 'text-red-300' : isComplete ? 'text-green-300' : 'text-orange-300'
                   }`}
                 >
@@ -173,31 +173,32 @@ export function LiveDemoPreview() {
 
       {/* Title */}
       <div className="text-center mb-4">
-        <h3 className="text-white font-semibold mb-2">Live Parallel Execution</h3>
+        <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">Live Parallel Execution</h3>
         <motion.div 
-          className="text-sm text-orange-400 bg-orange-600/20 px-3 py-1 rounded-full inline-flex items-center"
+          className="text-xs sm:text-sm text-orange-400 bg-orange-600/20 px-2 sm:px-3 py-1 rounded-full inline-flex items-center"
           animate={{
             backgroundColor: isComplete ? 'rgba(34, 197, 94, 0.2)' : 'rgba(234, 88, 12, 0.2)'
           }}
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          <div 
+            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500 mr-2"
+            style={{
+              animation: 'slow-blink 3s infinite ease-in-out'
+            }}
           >
-            <Zap className="w-4 h-4 mr-2" />
-          </motion.div>
+          </div>
           {isComplete ? 'Execution completed' : '3 agents executing simultaneously'}
         </motion.div>
       </div>
 
-      <div className="text-xs text-gray-400 text-center mb-3">Level 1 - Simultaneous Execution</div>
+      <div className="text-xs text-gray-400 text-center mb-3 hidden sm:block">Level 1 - Simultaneous Execution</div>
       
       {/* Agents Grid */}
-      <div className="grid grid-cols-3 gap-3 mb-4 relative">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 relative">
         {agents.map((name, i) => (
           <motion.div 
             key={i} 
-            className="bg-gray-600 border border-orange-600/30 rounded-lg p-3 relative"
+            className="bg-gray-600 border border-orange-600/30 rounded-lg p-2 sm:p-3 relative"
             animate={{
               borderColor: hasError && i === 1 ? 'rgba(239, 68, 68, 0.5)' : 'rgba(234, 88, 12, 0.3)',
               backgroundColor: hasError && i === 1 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(75, 85, 99, 1)'
@@ -205,13 +206,13 @@ export function LiveDemoPreview() {
           >
             <div className="flex items-center justify-center mb-2">
               <motion.div 
-                className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center"
+                className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-600 rounded-lg flex items-center justify-center"
                 animate={{
                   backgroundColor: hasError && i === 1 ? 'rgb(239, 68, 68)' : 'rgb(234, 88, 12)'
                 }}
               >
                 <motion.div 
-                  className="w-3 h-3 bg-white rounded-full"
+                  className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full"
                   animate={{ 
                     scale: progress[i] >= 100 ? [1, 1.2, 1] : [1, 1.1, 1]
                   }}
@@ -222,10 +223,10 @@ export function LiveDemoPreview() {
                 />
               </motion.div>
             </div>
-            <div className="text-xs text-white font-medium text-center mb-2">{name} Agent</div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
+            <div className="text-xs sm:text-sm text-white font-medium text-center mb-2">{name} Agent</div>
+            <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2">
               <motion.div 
-                className="bg-gradient-to-r from-orange-400 to-amber-400 h-2 rounded-full"
+                className="bg-gradient-to-r from-orange-400 to-amber-400 h-1.5 sm:h-2 rounded-full"
                 animate={{ width: `${progress[i]}%` }}
                 transition={{ duration: 0.5 }}
               />
@@ -242,14 +243,14 @@ export function LiveDemoPreview() {
                 transition={{ duration: 0.5 }}
                 className="absolute -top-1 -right-1 bg-red-500 rounded-full p-1"
               >
-                <AlertCircle className="w-3 h-3 text-white" />
+                <AlertCircle className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
               </motion.div>
             )}
           </motion.div>
         ))}
         
         {/* Animated connection lines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 10 }}>
+        <svg className="absolute inset-0 w-full h-full pointer-events-none hidden sm:block" style={{ zIndex: 10 }}>
           {/* Left to Center */}
           <motion.line 
             x1="33%" y1="50%" x2="50%" y2="50%" 
@@ -278,24 +279,24 @@ export function LiveDemoPreview() {
       </div>
 
       {/* Inter-Agent Messages */}
-      <div className="mb-4 h-20 overflow-hidden">
+      <div className="mb-4 h-16 sm:h-20 overflow-hidden">
         <div className="text-xs text-gray-400 mb-2 flex items-center">
           <MessageSquare className="w-3 h-3 mr-1" />
           Inter-Agent Communication
         </div>
-        <div className="space-y-1 overflow-y-auto max-h-16">
+        <div className="space-y-1 overflow-y-auto max-h-12 sm:max-h-16">
           {messages.map((msg) => (
             <motion.div
               key={msg.id}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="text-xs bg-gray-600/50 rounded px-2 py-1"
+              className="text-xs bg-gray-600/50 rounded px-2 py-1 truncate"
             >
               <span className="text-orange-400">{msg.from}</span>
               <span className="text-gray-400"> → </span>
               <span className="text-amber-400">{msg.to}</span>
-              <span className="text-gray-300">: {msg.text}</span>
+              <span className="text-gray-300 hidden sm:inline">: {msg.text}</span>
             </motion.div>
           ))}
         </div>
@@ -309,19 +310,17 @@ export function LiveDemoPreview() {
         }}
         transition={{ duration: 0.5 }}
       >
-        <div className="text-sm">
+        <div className="text-xs sm:text-sm">
           <span className="text-gray-400">Sequential: 45s</span>
-          <motion.span 
+          <span 
             className="text-orange-400 mx-2"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity }}
           >
             ⚡
-          </motion.span>
+          </span>
           <span className="text-orange-400 font-semibold">Parallel: 15s</span>
         </div>
         <motion.div 
-          className="text-xs text-green-400 font-medium mt-1"
+          className="text-xs sm:text-sm text-green-400 font-medium mt-1"
           animate={{ 
             color: isComplete ? '#22c55e' : '#10b981'
           }}

@@ -75,7 +75,7 @@ export function ComparisonAnimation() {
   const competitors = ['Current Tools', 'GitHub Actions', 'Jenkins', 'CircleCI'];
 
   return (
-    <div ref={ref} className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
       {/* Traditional Sequential */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
@@ -100,7 +100,7 @@ export function ComparisonAnimation() {
                     backgroundColor: sequentialStep === i + 1 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(75, 85, 99, 1)'
                   }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gray-600 rounded-lg p-4 flex items-center justify-between"
+                  className="bg-gray-600 rounded-lg p-3 sm:p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold ${
@@ -111,7 +111,7 @@ export function ComparisonAnimation() {
                       {i + 1}
                     </div>
                     <div>
-                      <div className="text-white font-medium">{agent}</div>
+                      <div className="text-white font-medium text-sm sm:text-base">{agent}</div>
                       <div className="text-xs text-gray-400">Waits for previous agent</div>
                     </div>
                   </div>
@@ -128,7 +128,7 @@ export function ComparisonAnimation() {
             </div>
 
             <div className="text-center mb-4">
-              <div className="text-3xl font-bold text-gray-300">45 seconds</div>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-300">45 seconds</div>
               <div className="text-sm text-gray-400">Total execution time</div>
               <div className="text-xs text-gray-500 mt-2 space-y-1">
                 <div>• No cross-validation</div>
@@ -171,8 +171,8 @@ export function ComparisonAnimation() {
           
           <CardContent className="relative z-10">
             <div className="text-center mb-4">
-              <div className="text-sm text-orange-400 mb-3">Level 1 - All Execute Together</div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="text-xs sm:text-sm text-orange-400 mb-3 hidden sm:block">Level 1 - All Execute Together</div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {['Research', 'Analysis', 'Writer'].map((agent, i) => (
                   <motion.div
                     key={i}
@@ -180,9 +180,9 @@ export function ComparisonAnimation() {
                       scale: parallelProgress[i] > 0 && parallelProgress[i] < 10 ? 1.02 : 1,
                     }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
-                    className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3 text-center relative"
+                    className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-2 sm:p-3 text-center relative"
                   >
-                    <div className="w-8 h-8 bg-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
                       <motion.div
                         animate={{ 
                           rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? [0, 360] : 0,
@@ -192,13 +192,13 @@ export function ComparisonAnimation() {
                           rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
                           scale: { duration: 0.6, ease: "easeOut", repeat: parallelProgress[i] >= 100 ? 3 : 0 }
                         }}
-                        className="w-4 h-4 bg-white rounded-full"
+                        className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full"
                       />
                     </div>
-                    <div className="text-xs text-white font-medium mb-1">{agent}</div>
-                    <div className="w-full bg-gray-700 rounded-full h-1.5">
+                    <div className="text-xs sm:text-sm text-white font-medium mb-1">{agent}</div>
+                    <div className="w-full bg-gray-700 rounded-full h-1 sm:h-1.5">
                       <motion.div
-                        className="bg-gradient-to-r from-orange-400 to-amber-400 h-1.5 rounded-full"
+                        className="bg-gradient-to-r from-orange-400 to-amber-400 h-1 sm:h-1.5 rounded-full"
                         animate={{ width: `${parallelProgress[i]}%` }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                       />
@@ -215,7 +215,7 @@ export function ComparisonAnimation() {
                         transition={{ duration: 0.5 }}
                         className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1"
                       >
-                        <AlertCircle className="w-3 h-3 text-white" />
+                        <AlertCircle className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
                       </motion.div>
                     )}
                     
@@ -227,7 +227,7 @@ export function ComparisonAnimation() {
                         transition={{ duration: 0.6, ease: "easeOut" }}
                         className="absolute -top-2 -right-2 bg-green-500 rounded-full p-1"
                       >
-                        <CheckCircle className="w-3 h-3 text-white" />
+                        <CheckCircle className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
                       </motion.div>
                     )}
                   </motion.div>
@@ -242,7 +242,7 @@ export function ComparisonAnimation() {
                   height: parallelProgress.some(p => p > 20) ? 'auto' : 0
                 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="mt-4 grid grid-cols-3 gap-2 text-center overflow-hidden"
+                className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 text-center overflow-hidden"
               >
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -251,9 +251,9 @@ export function ComparisonAnimation() {
                     y: parallelProgress[0] > 20 ? 0 : 10 
                   }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="bg-green-600/20 border border-green-500/30 rounded p-2"
+                  className="bg-green-600/20 border border-green-500/30 rounded p-1.5 sm:p-2"
                 >
-                  <CheckCircle className="w-4 h-4 text-green-400 mx-auto mb-1" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 mx-auto mb-1" />
                   <div className="text-xs text-green-400 font-medium">98% Accuracy</div>
                 </motion.div>
                 
@@ -264,9 +264,9 @@ export function ComparisonAnimation() {
                     y: parallelProgress[1] > 40 ? 0 : 10 
                   }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="bg-blue-600/20 border border-blue-500/30 rounded p-2"
+                  className="bg-blue-600/20 border border-blue-500/30 rounded p-1.5 sm:p-2"
                 >
-                  <Shield className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                  <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 mx-auto mb-1" />
                   <div className="text-xs text-blue-400 font-medium">Cross-Validated</div>
                 </motion.div>
                 
@@ -277,9 +277,9 @@ export function ComparisonAnimation() {
                     y: parallelProgress[2] > 60 ? 0 : 10 
                   }}
                   transition={{ duration: 0.5, delay: 0.6 }}
-                  className="bg-purple-600/20 border border-purple-500/30 rounded p-2"
+                  className="bg-purple-600/20 border border-purple-500/30 rounded p-1.5 sm:p-2"
                 >
-                  <Brain className="w-4 h-4 text-purple-400 mx-auto mb-1" />
+                  <Brain className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400 mx-auto mb-1" />
                   <div className="text-xs text-purple-400 font-medium">-73% Hallucinations</div>
                 </motion.div>
               </motion.div>
@@ -291,7 +291,7 @@ export function ComparisonAnimation() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 transition={{ delay: 1, duration: 0.5 }}
-                className="mb-4 p-3 bg-gray-800/50 rounded-lg border border-gray-600"
+                className="mb-4 p-2 sm:p-3 bg-gray-800/50 rounded-lg border border-gray-600"
               >
                 <div className="text-xs text-gray-400 mb-2 flex items-center">
                   <Bot className="w-3 h-3 mr-1" />
@@ -307,16 +307,19 @@ export function ComparisonAnimation() {
                   {showError ? (
                     <div className="text-red-400 flex items-center">
                       <AlertCircle className="w-3 h-3 mr-1" />
-                      "Analysis agent error detected - implementing recovery protocol"
+                      <span className="hidden sm:inline">"Analysis agent error detected - implementing recovery protocol"</span>
+                      <span className="sm:hidden">"Error detected - auto-correcting"</span>
                     </div>
                   ) : errorResolved ? (
                     <div className="text-green-400 flex items-center">
                       <CheckCircle className="w-3 h-3 mr-1" />
-                      "Cross-validation complete - accuracy improved by 15%"
+                      <span className="hidden sm:inline">"Cross-validation complete - accuracy improved by 15%"</span>
+                      <span className="sm:hidden">"Validation complete - accuracy improved"</span>
                     </div>
                   ) : (
                     <div className="text-blue-400">
-                      "Agents collaborating in real-time - validating outputs for accuracy"
+                      <span className="hidden sm:inline">"Agents collaborating in real-time - validating outputs for accuracy"</span>
+                      <span className="sm:hidden">"Agents collaborating in real-time"</span>
                     </div>
                   )}
                 </motion.div>
@@ -325,7 +328,7 @@ export function ComparisonAnimation() {
 
             <div className="text-center">
               <motion.div 
-                className="text-3xl font-bold text-orange-400"
+                className="text-2xl sm:text-3xl font-bold text-orange-400"
                 animate={{
                   scale: parallelProgress.every(p => p >= 100) ? [1, 1.05, 1] : 1
                 }}
@@ -345,7 +348,7 @@ export function ComparisonAnimation() {
                 </motion.span>
               </div>
               <motion.div 
-                className="text-sm text-green-400 flex items-center justify-center font-medium"
+                className="text-xs sm:text-sm text-green-400 flex items-center justify-center font-medium"
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ 
                   opacity: parallelProgress.every(p => p >= 100) ? 1 : 0,
@@ -354,7 +357,8 @@ export function ComparisonAnimation() {
                 transition={{ duration: 0.8, delay: 0.5 }}
               >
                 <TrendingUp className="w-4 h-4 inline mr-1" />
-                98% accuracy (vs 85% sequential)
+                <span className="hidden sm:inline">98% accuracy (vs 85% sequential)</span>
+                <span className="sm:hidden">98% accuracy</span>
               </motion.div>
             </div>
           </CardContent>

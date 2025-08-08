@@ -28,10 +28,12 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Link } from "wouter";
 import { LiveDemoPreview } from "@/components/live-demo-preview";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Menu, X } from "lucide-react";
 import { ComparisonAnimation } from "@/components/comparison-animation";
 import orchestraLogo from '@/assets/logos/orchestralogoO.png';
 import mainLogo from '@/assets/logos/Lo (1).png';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 // Animated section wrapper component
 function AnimatedSection({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -55,6 +57,7 @@ export default function Landing() {
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0.8]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const features = [
     {
@@ -148,8 +151,14 @@ export default function Landing() {
             </div>
             
             <nav className="hidden md:flex items-center space-x-8">
+              <a href="/" className="text-gray-300 hover:text-white transition-colors">
+                Home
+              </a>
               <a href="#features" className="text-gray-300 hover:text-white transition-colors">
                 Features
+              </a>
+              <a href="#use-cases" className="text-gray-300 hover:text-white transition-colors">
+                Use Cases
               </a>
               <a href="#infrastructure" className="text-gray-300 hover:text-white transition-colors">
                 Infrastructure
@@ -157,12 +166,15 @@ export default function Landing() {
               <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">
                 Pricing
               </a>
+              <a href="/blog" className="text-gray-300 hover:text-white transition-colors">
+                Blog
+              </a>
               <a href="#about" className="text-gray-300 hover:text-white transition-colors">
                 About
               </a>
             </nav>
             
-            <div className="flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-4">
               <Button variant="ghost" className="text-white bg-orange-600/20 hover:bg-orange-600/30 border border-orange-600/30">
                 Contact Sales
               </Button>
@@ -172,12 +184,71 @@ export default function Landing() {
                 </Button>
               </Link>
             </div>
+            
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Dialog open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white">
+                    <Menu className="w-5 h-5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-gray-800 border-gray-700 p-0 max-w-xs">
+                  <div className="p-6 space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-white font-semibold">Menu</h3>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-gray-400 hover:text-white"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <nav className="space-y-3">
+                      <a href="/" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        Home
+                      </a>
+                      <a href="#features" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        Features
+                      </a>
+                      <a href="#use-cases" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        Use Cases
+                      </a>
+                      <a href="#infrastructure" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        Infrastructure
+                      </a>
+                      <a href="#pricing" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        Pricing
+                      </a>
+                      <a href="/blog" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        Blog
+                      </a>
+                      <a href="#about" className="block text-gray-300 hover:text-white transition-colors py-2">
+                        About
+                      </a>
+                    </nav>
+                    <div className="pt-4 border-t border-gray-700 space-y-3">
+                      <Button variant="ghost" className="w-full text-white bg-orange-600/20 hover:bg-orange-600/30 border border-orange-600/30">
+                        Contact Sales
+                      </Button>
+                      <Link href="/login">
+                        <Button variant="ghost" className="w-full text-gray-300 hover:text-white">
+                          Login →
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gray-800">
+      <section className="relative overflow-hidden bg-gray-800" id="home">
         {/* Abstract Background Graphics */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
@@ -206,29 +277,29 @@ export default function Landing() {
           />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="text-center lg:text-left">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div className="text-center lg:text-left order-2 lg:order-1">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8 }}
-                className="flex justify-center"
+                className="flex justify-center lg:justify-start"
               >
                 <img 
                   src={mainLogo}
                   alt="Orchestra" 
-                  className="h-80 w-auto"
+                  className="h-48 sm:h-64 lg:h-80 w-auto"
                 />
               </motion.div>
               <motion.h1 
-                className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight text-center -mt-16"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 leading-tight text-center lg:text-left -mt-8 sm:-mt-12 lg:-mt-16"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
                 <motion.span 
-                  className="block text-white text-center"
+                  className="block text-white text-center lg:text-left"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
@@ -238,7 +309,7 @@ export default function Landing() {
               </motion.h1>
             
               <motion.p 
-                className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
+                className="text-lg sm:text-xl text-gray-300 max-w-4xl mx-auto lg:mx-0 mb-8 sm:mb-12 leading-relaxed text-center lg:text-left"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -248,7 +319,7 @@ export default function Landing() {
               </motion.p>
             
               <motion.div 
-                className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
@@ -260,25 +331,10 @@ export default function Landing() {
                   >
                     <Button 
                       size="lg"
-                      className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-10 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                      className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 w-full sm:w-auto"
                     >
                       <Zap className="w-5 h-5 mr-2" />
                       Get Started Free
-                    </Button>
-                  </motion.div>
-                </Link>
-                <Link href="/login">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button 
-                      variant="outline" 
-                      size="lg"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white px-10 py-4 text-lg rounded-lg"
-                    >
-                      Sign In
-                      <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                   </motion.div>
                 </Link>
@@ -287,7 +343,7 @@ export default function Landing() {
             
             {/* Live Demo Preview */}
             <motion.div 
-              className="hidden lg:block"
+              className="order-1 lg:order-2 w-full max-w-md mx-auto lg:max-w-none"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 1 }}
@@ -315,7 +371,7 @@ export default function Landing() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
@@ -365,7 +421,7 @@ export default function Landing() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {infrastructureCapabilities.map((capability, index) => {
               const Icon = capability.icon;
               return (
@@ -401,7 +457,7 @@ export default function Landing() {
       </AnimatedSection>
 
       {/* Use Cases Section */}
-      <AnimatedSection className="py-16 bg-gray-800">
+      <AnimatedSection id="use-cases" className="py-16 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             className="text-center mb-12"
@@ -417,7 +473,7 @@ export default function Landing() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {useCases.map((useCase, index) => (
               <motion.div
                 key={index}
@@ -497,7 +553,7 @@ export default function Landing() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
             {/* Free Plan */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -794,7 +850,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="bg-gray-900 border-t border-gray-700 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="md:col-span-1">
               <div className="flex items-center space-x-3 mb-4">
@@ -847,10 +903,10 @@ export default function Landing() {
               {/* Newsletter Signup */}
               <div className="mt-6">
                 <h4 className="text-white font-medium mb-2">Stay Updated</h4>
-                <div className="flex space-x-2">
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                   <Input 
                     placeholder="Enter email" 
-                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 text-sm focus:border-orange-600"
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 text-sm focus:border-orange-600 flex-1"
                   />
                   <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-white">
                     <Mail className="w-4 h-4" />
