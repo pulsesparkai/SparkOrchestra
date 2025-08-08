@@ -33,14 +33,15 @@ export function ComparisonAnimation() {
       });
     }, 2500);
 
-    // Parallel animation - all agents progress together
+    // Parallel animation - all agents progress together (much slower)
     const parallelInterval = setInterval(() => {
       setParallelProgress(prev => {
         const newProgress = prev.map((p, i) => {
-          // Stagger agent progress slightly for more natural feel
-          const baseIncrement = Math.random() * 5 + 3; // 3-8% range
-          const staggerMultiplier = i === 0 ? 1 : i === 1 ? 0.9 : 0.95; // Research normal, Analysis 10% slower, Writer 5% slower
-          const increment = baseIncrement * staggerMultiplier;
+          // Much smaller increments for smoother, slower progress
+          const baseIncrement = 4.5; // Base increment for ~22 updates to reach 100%
+          const variance = Math.random() * 2 - 1; // -1 to 1 variance
+          const staggerMultiplier = i === 0 ? 1.1 : i === 1 ? 1.0 : 0.9; // Research fastest, Analysis middle, Writer slowest
+          const increment = (baseIncrement + variance) * staggerMultiplier;
           return Math.min(p + increment, 100);
         });
         
@@ -63,7 +64,7 @@ export function ComparisonAnimation() {
         
         return newProgress;
       });
-    }, 1200); // Doubled the interval for smoother updates
+    }, 1500); // Slower updates for 13-14 second completion time
 
     return () => {
       clearInterval(sequentialInterval);
@@ -183,20 +184,20 @@ export function ComparisonAnimation() {
                   <motion.div
                     key={i}
                     animate={{
-                      scale: parallelProgress[i] > 0 ? [1, 1.05, 1] : 1,
+                      scale: parallelProgress[i] > 0 && parallelProgress[i] < 10 ? 1.05 : 1,
                     }}
-                    transition={{ duration: 0.5, repeat: parallelProgress[i] < 100 ? Infinity : 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3 text-center relative"
                   >
                     <div className="w-8 h-8 bg-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
                       <motion.div
                         animate={{ 
                           rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? 360 : 0,
-                          scale: parallelProgress[i] >= 100 ? [1, 1.1, 1] : 1
+                          scale: parallelProgress[i] >= 100 ? [1, 1.2, 1] : 1
                         }}
                         transition={{ 
-                          rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
-                          scale: { duration: 0.6, ease: "easeOut" }
+                          rotate: { duration: 4, repeat: Infinity, ease: "linear" },
+                          scale: { duration: 0.8, ease: "easeOut", repeat: parallelProgress[i] >= 100 ? 2 : 0 }
                         }}
                         className="w-4 h-4 bg-white rounded-full"
                       />
@@ -206,7 +207,7 @@ export function ComparisonAnimation() {
                       <motion.div
                         className="bg-gradient-to-r from-orange-400 to-amber-400 h-1.5 rounded-full"
                         animate={{ width: `${parallelProgress[i]}%` }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
                       />
                     </div>
                     <div className="text-xs text-gray-400 mt-1">
@@ -283,9 +284,9 @@ export function ComparisonAnimation() {
               <motion.div 
                 className="text-3xl font-bold text-orange-400"
                 animate={{
-                  scale: parallelProgress.every(p => p >= 100) ? [1, 1.05, 1] : 1
+                  scale: parallelProgress.every(p => p >= 100) ? [1, 1.1, 1] : 1
                 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                transition={{ duration: 0.8, ease: "easeOut", repeat: parallelProgress.every(p => p >= 100) ? 3 : 0 }}
               >
                 15 seconds
               </motion.div>
@@ -293,9 +294,9 @@ export function ComparisonAnimation() {
                 <Zap className="w-4 h-4 inline mr-1" />
                 <motion.span
                   animate={{
-                    opacity: parallelProgress.every(p => p >= 100) ? [0.7, 1, 0.7] : 1
+                    opacity: parallelProgress.every(p => p >= 100) ? [1, 0.7, 1] : 1
                   }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{ duration: 1.5, repeat: parallelProgress.every(p => p >= 100) ? 2 : 0, ease: "easeInOut" }}
                 >
                   30 seconds saved (3x faster)
                 </motion.span>
