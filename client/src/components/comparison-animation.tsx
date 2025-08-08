@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, Clock, Zap, Bot } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, Zap, Bot, Shield, Brain, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -37,9 +37,9 @@ export function ComparisonAnimation() {
     const parallelInterval = setInterval(() => {
       setParallelProgress(prev => {
         const newProgress = prev.map((p, i) => {
-          // Much smaller increments for smoother, slower progress
-          const baseIncrement = 4.5; // Base increment for ~22 updates to reach 100%
-          const variance = Math.random() * 2 - 1; // -1 to 1 variance
+          // Smaller, more consistent increments for smoother progress
+          const baseIncrement = 4.2; // Base increment for ~24 updates to reach 100%
+          const variance = Math.random() * 2; // 0 to 2 variance
           const staggerMultiplier = i === 0 ? 1.1 : i === 1 ? 1.0 : 0.9; // Research fastest, Analysis middle, Writer slowest
           const increment = (baseIncrement + variance) * staggerMultiplier;
           return Math.min(p + increment, 100);
@@ -64,7 +64,7 @@ export function ComparisonAnimation() {
         
         return newProgress;
       });
-    }, 1500); // Slower updates for 13-14 second completion time
+    }, 1200); // Slower updates for 13-14 second completion time
 
     return () => {
       clearInterval(sequentialInterval);
@@ -130,6 +130,11 @@ export function ComparisonAnimation() {
             <div className="text-center mb-4">
               <div className="text-3xl font-bold text-gray-300">45 seconds</div>
               <div className="text-sm text-gray-400">Total execution time</div>
+              <div className="text-xs text-gray-500 mt-2 space-y-1">
+                <div>• No cross-validation</div>
+                <div>• Higher error rates</div>
+                <div>• Potential hallucinations</div>
+              </div>
             </div>
 
             {/* Competitor logos */}
@@ -184,20 +189,20 @@ export function ComparisonAnimation() {
                   <motion.div
                     key={i}
                     animate={{
-                      scale: parallelProgress[i] > 0 && parallelProgress[i] < 10 ? 1.05 : 1,
+                      scale: parallelProgress[i] > 0 && parallelProgress[i] < 10 ? 1.02 : 1,
                     }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
                     className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-3 text-center relative"
                   >
                     <div className="w-8 h-8 bg-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
                       <motion.div
                         animate={{ 
-                          rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? 360 : 0,
+                          rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? [0, 360] : 0,
                           scale: parallelProgress[i] >= 100 ? [1, 1.2, 1] : 1
                         }}
                         transition={{ 
-                          rotate: { duration: 4, repeat: Infinity, ease: "linear" },
-                          scale: { duration: 0.8, ease: "easeOut", repeat: parallelProgress[i] >= 100 ? 2 : 0 }
+                          rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                          scale: { duration: 0.6, ease: "easeOut", repeat: parallelProgress[i] >= 100 ? 3 : 0 }
                         }}
                         className="w-4 h-4 bg-white rounded-full"
                       />
@@ -207,7 +212,7 @@ export function ComparisonAnimation() {
                       <motion.div
                         className="bg-gradient-to-r from-orange-400 to-amber-400 h-1.5 rounded-full"
                         animate={{ width: `${parallelProgress[i]}%` }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
                       />
                     </div>
                     <div className="text-xs text-gray-400 mt-1">
@@ -240,6 +245,56 @@ export function ComparisonAnimation() {
                   </motion.div>
                 ))}
               </div>
+              
+              {/* Quality Metrics */}
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ 
+                  opacity: parallelProgress.some(p => p > 20) ? 1 : 0,
+                  height: parallelProgress.some(p => p > 20) ? 'auto' : 0
+                }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="mt-4 grid grid-cols-3 gap-2 text-center overflow-hidden"
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ 
+                    opacity: parallelProgress[0] > 20 ? 1 : 0, 
+                    y: parallelProgress[0] > 20 ? 0 : 10 
+                  }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-green-600/20 border border-green-500/30 rounded p-2"
+                >
+                  <CheckCircle className="w-4 h-4 text-green-400 mx-auto mb-1" />
+                  <div className="text-xs text-green-400 font-medium">98% Accuracy</div>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ 
+                    opacity: parallelProgress[1] > 40 ? 1 : 0, 
+                    y: parallelProgress[1] > 40 ? 0 : 10 
+                  }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="bg-blue-600/20 border border-blue-500/30 rounded p-2"
+                >
+                  <Shield className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                  <div className="text-xs text-blue-400 font-medium">Cross-Validated</div>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ 
+                    opacity: parallelProgress[2] > 60 ? 1 : 0, 
+                    y: parallelProgress[2] > 60 ? 0 : 10 
+                  }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  className="bg-purple-600/20 border border-purple-500/30 rounded p-2"
+                >
+                  <Brain className="w-4 h-4 text-purple-400 mx-auto mb-1" />
+                  <div className="text-xs text-purple-400 font-medium">-73% Hallucinations</div>
+                </motion.div>
+              </motion.div>
             </div>
 
             {/* Inter-agent communication */}
@@ -269,11 +324,11 @@ export function ComparisonAnimation() {
                   ) : errorResolved ? (
                     <div className="text-green-400 flex items-center">
                       <CheckCircle className="w-3 h-3 mr-1" />
-                      "Error resolved - all agents back to optimal performance"
+                      "Cross-validation complete - accuracy improved by 15%"
                     </div>
                   ) : (
                     <div className="text-blue-400">
-                      "All agents executing optimally - monitoring performance metrics"
+                      "Agents collaborating in real-time - validating outputs for accuracy"
                     </div>
                   )}
                 </motion.div>
@@ -284,23 +339,35 @@ export function ComparisonAnimation() {
               <motion.div 
                 className="text-3xl font-bold text-orange-400"
                 animate={{
-                  scale: parallelProgress.every(p => p >= 100) ? [1, 1.1, 1] : 1
+                  scale: parallelProgress.every(p => p >= 100) ? [1, 1.05, 1] : 1
                 }}
-                transition={{ duration: 0.8, ease: "easeOut", repeat: parallelProgress.every(p => p >= 100) ? 3 : 0 }}
+                transition={{ duration: 0.6, ease: "easeOut", repeat: parallelProgress.every(p => p >= 100) ? 2 : 0 }}
               >
                 15 seconds
               </motion.div>
-              <div className="text-sm text-orange-400 flex items-center justify-center">
+              <div className="text-sm text-orange-400 flex items-center justify-center mb-1">
                 <Zap className="w-4 h-4 inline mr-1" />
                 <motion.span
                   animate={{
-                    opacity: parallelProgress.every(p => p >= 100) ? [1, 0.7, 1] : 1
+                    opacity: parallelProgress.every(p => p >= 100) ? [1, 0.8, 1] : 1
                   }}
-                  transition={{ duration: 1.5, repeat: parallelProgress.every(p => p >= 100) ? 2 : 0, ease: "easeInOut" }}
+                  transition={{ duration: 1.2, repeat: parallelProgress.every(p => p >= 100) ? 2 : 0, ease: "easeInOut" }}
                 >
                   30 seconds saved (3x faster)
                 </motion.span>
               </div>
+              <motion.div 
+                className="text-sm text-green-400 flex items-center justify-center font-medium"
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ 
+                  opacity: parallelProgress.every(p => p >= 100) ? 1 : 0,
+                  y: parallelProgress.every(p => p >= 100) ? 0 : 5
+                }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
+                <TrendingUp className="w-4 h-4 inline mr-1" />
+                98% accuracy (vs 85% sequential)
+              </motion.div>
             </div>
           </CardContent>
         </Card>
