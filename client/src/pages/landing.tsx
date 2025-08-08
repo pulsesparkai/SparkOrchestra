@@ -401,53 +401,53 @@ export default function Landing() {
       </AnimatedSection>
 
       {/* Use Cases Section */}
-      <AnimatedSection className="py-24 bg-gray-800">
+      <AnimatedSection className="py-16 bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl font-bold text-white mb-3">
               Real-World Performance Gains
             </h2>
-            <p className="text-xl text-gray-400">
+            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
               See how parallel execution transforms workflow performance across industries
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {useCases.map((useCase, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2, duration: 0.6 }}
-                whileHover={{ scale: 1.05, y: -10 }}
+                whileHover={{ scale: 1.02, y: -5 }}
               >
-                <Card className={`bg-gradient-to-br ${useCase.gradient} border-gray-700 hover:border-orange-600/50 transition-all duration-300 group overflow-hidden relative h-full`}>
+                <Card className={`bg-gradient-to-br ${useCase.gradient} border-gray-700 hover:border-orange-600/50 transition-all duration-300 group overflow-hidden relative h-full min-h-[280px]`}>
                   <motion.div 
                     className="absolute inset-0 bg-gray-700/90"
                     whileHover={{ backgroundColor: 'rgba(55, 65, 81, 0.85)' }}
                   />
-                  <CardContent className="relative z-10 p-8">
-                    <div className="text-center">
+                  <CardContent className="relative z-10 p-6 flex flex-col justify-between h-full">
+                    <div className="text-center flex-1 flex flex-col justify-center">
                       <motion.h3 
-                        className="text-2xl font-bold text-white mb-4"
+                        className="text-xl font-bold text-white mb-3"
                         whileHover={{ scale: 1.05 }}
                       >
                         {useCase.title}
                       </motion.h3>
-                      <p className="text-gray-300 mb-6">{useCase.description}</p>
+                      <p className="text-gray-300 mb-4 text-sm">{useCase.description}</p>
                       <motion.div 
-                        className="text-3xl font-bold text-orange-400 mb-2"
+                        className="text-2xl font-bold text-orange-400 mb-3"
                         animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
                         {useCase.stats}
                       </motion.div>
-                      <Badge className="bg-orange-600/20 text-orange-300 border-orange-600/30">
+                      <Badge className="bg-orange-600/20 text-orange-300 border-orange-600/30 text-xs">
                         Proven Results
                       </Badge>
                     </div>
