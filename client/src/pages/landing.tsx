@@ -214,30 +214,18 @@ export default function Landing() {
         >
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-center lg:text-left">
-              <motion.h1 
-                className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight"
+              <motion.div
+                className="mb-8"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                The AI orchestrator that runs
-                <motion.span 
-                  className="block bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                  agents in parallel
-                </motion.span>
-                <motion.span 
-                  className="block text-4xl md:text-5xl text-gray-300 mt-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                  engineered for 10x faster automation
-                </motion.span>
-              </motion.h1>
+                <img 
+                  src="/heroimage.png"
+                  alt="Orchestra - AI Agent Orchestration Platform"
+                  className="w-full max-w-2xl mx-auto lg:mx-0"
+                />
+              </motion.div>
             
               <motion.p 
                 className="text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
