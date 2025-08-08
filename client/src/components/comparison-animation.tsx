@@ -11,6 +11,7 @@ export function ComparisonAnimation() {
   const [parallelProgress, setParallelProgress] = useState([0, 0, 0]);
   const [showError, setShowError] = useState(false);
   const [errorResolved, setErrorResolved] = useState(false);
+  const [errorResolved, setErrorResolved] = useState(false);
 
   useEffect(() => {
     if (!isInView) {
