@@ -36,7 +36,13 @@ export function ComparisonAnimation() {
     // Parallel animation - all agents progress together
     const parallelInterval = setInterval(() => {
       setParallelProgress(prev => {
-        const newProgress = prev.map(p => Math.min(p + Math.random() * 12 + 8, 100));
+        const newProgress = prev.map((p, i) => {
+          // Stagger agent progress slightly for more natural feel
+          const baseIncrement = Math.random() * 5 + 3; // 3-8% range
+          const staggerMultiplier = i === 0 ? 1 : i === 1 ? 0.9 : 0.95; // Research normal, Analysis 10% slower, Writer 5% slower
+          const increment = baseIncrement * staggerMultiplier;
+          return Math.min(p + increment, 100);
+        });
         
         // Simulate error detection at 60% on Analysis agent
         if (newProgress[1] >= 60 && !showError && !errorResolved) {
@@ -57,7 +63,7 @@ export function ComparisonAnimation() {
         
         return newProgress;
       });
-    }, 600);
+    }, 1200); // Doubled the interval for smoother updates
 
     return () => {
       clearInterval(sequentialInterval);
@@ -225,7 +231,7 @@ export function ComparisonAnimation() {
                         <CheckCircle className="w-3 h-3 text-white" />
                       </motion.div>
                     )}
-                  </motion.div>
+              transition={{ delay: 1.5, duration: 0.8, ease: "easeOut" }}
                 ))}
               </div>
             </div>
@@ -234,9 +240,14 @@ export function ComparisonAnimation() {
             {isInView && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
+                        rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? 360 : 0,
+                        scale: parallelProgress[i] >= 100 ? [1, 1.1, 1] : 1
                 transition={{ delay: 1, duration: 0.5 }}
-                className="bg-gray-600/50 rounded-lg p-3 mb-4"
+                      transition={{ 
+                        rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
+                        scale: { duration: 0.6, ease: "easeOut" }
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                      }}
               >
                 <div className="text-xs text-gray-400 mb-2 flex items-center">
                   <Bot className="w-3 h-3 mr-1" />
@@ -245,7 +256,7 @@ export function ComparisonAnimation() {
                 <motion.div
                   key={showError ? 'error' : 'normal'}
                   initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
                   className="text-xs space-y-1"
                 >
                   {showError ? (
@@ -256,8 +267,9 @@ export function ComparisonAnimation() {
                   ) : errorResolved ? (
                     <div className="text-green-400 flex items-center">
                       <CheckCircle className="w-3 h-3 mr-1" />
-                      "Error resolved - all agents synchronized and continuing"
-                    </div>
+                      animate={{ scale: 1, rotate: [0, 5, -5, 0] }}
+                      animate={{ scale: [0, 1.2, 1] }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
                   ) : (
                     <div className="text-blue-400">
                       "All agents executing optimally - monitoring performance metrics"
@@ -269,10 +281,25 @@ export function ComparisonAnimation() {
 
             <div className="text-center">
               <div className="text-3xl font-bold text-orange-400">15 seconds</div>
-              <div className="text-sm text-green-400 font-medium">
+            <motion.div 
+              className="text-3xl font-bold text-orange-400"
+              animate={{
+                scale: parallelProgress.every(p => p >= 100) ? [1, 1.05, 1] : 1
+              }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              15 seconds
+            </motion.div>
                 <Zap className="w-4 h-4 inline mr-1" />
                 30 seconds saved (3x faster)
-              </div>
+              <motion.span
+                animate={{
+                  opacity: parallelProgress.every(p => p >= 100) ? [0.7, 1, 0.7] : 1
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                30 seconds saved (3x faster)
+              </motion.span>
             </div>
           </CardContent>
         </Card>
