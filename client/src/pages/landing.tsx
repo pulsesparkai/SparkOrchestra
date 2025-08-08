@@ -31,6 +31,7 @@ import { LiveDemoPreview } from "@/components/live-demo-preview";
 import { MessageSquare } from "lucide-react";
 import { ComparisonAnimation } from "@/components/comparison-animation";
 import orchestraLogo from '@/assets/logos/orchestralogoO.png';
+import mainLogo from '@/assets/logos/Lo (1).png';
 
 // Animated section wrapper component
 function AnimatedSection({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -214,6 +215,18 @@ export default function Landing() {
         >
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8 }}
+                className="flex justify-center lg:justify-start mb-8"
+              >
+                <img 
+                  src={mainLogo}
+                  alt="Orchestra" 
+                  className="h-24 w-auto"
+                />
+              </motion.div>
               <motion.h1 
                 className="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight"
                 initial={{ opacity: 0, y: 30 }}
