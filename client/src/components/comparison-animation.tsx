@@ -10,8 +10,6 @@ export function ComparisonAnimation() {
   const [sequentialStep, setSequentialStep] = useState(0);
   const [parallelProgress, setParallelProgress] = useState([0, 0, 0]);
   const [showError, setShowError] = useState(false);
-  const [errorResolved, setErrorResolved] = useState(false);
-
   useEffect(() => {
     if (!isInView) {
       setSequentialStep(0);
@@ -134,18 +132,6 @@ export function ComparisonAnimation() {
                 <div>• No cross-validation</div>
                 <div>• Higher error rates</div>
                 <div>• Potential hallucinations</div>
-              </div>
-            </div>
-
-            {/* Competitor logos */}
-            <div className="pt-4 border-t border-gray-600">
-              <div className="text-xs text-gray-400 mb-2">Used by:</div>
-              <div className="flex flex-wrap gap-2">
-                {competitors.map((comp, i) => (
-                  <div key={i} className="text-xs bg-gray-600 px-2 py-1 rounded text-gray-300">
-                    {comp}
-                  </div>
-                ))}
               </div>
             </div>
           </CardContent>
