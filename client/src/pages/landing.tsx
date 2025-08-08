@@ -177,10 +177,7 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <motion.section 
-        className="relative overflow-hidden bg-gray-800"
-        style={{ y: heroY }}
-      >
+      <section className="relative overflow-hidden bg-gray-800">
         {/* Abstract Background Graphics */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
@@ -209,10 +206,7 @@ export default function Landing() {
           />
         </div>
         
-        <motion.div 
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32"
-          style={{ opacity: heroOpacity }}
-        >
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-center lg:text-left">
               <motion.div
@@ -301,8 +295,8 @@ export default function Landing() {
               <LiveDemoPreview />
             </motion.div>
           </div>
-        </motion.div>
-      </motion.section>
+        </div>
+      </section>
 
       {/* Features Section */}
       <AnimatedSection id="features" className="py-24 bg-gray-800">
