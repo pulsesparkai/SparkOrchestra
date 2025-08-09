@@ -2,6 +2,7 @@ import { db } from '../db';
 import { tokenUsage, users } from '../../shared/schema';
 import { eq, and } from 'drizzle-orm';
 import { getWebSocketManager } from '../websocket-mock';
+import { notificationService } from './notificationService';
 import type { User } from '../../shared/schema';
 
 export interface TokenUsageStats {
@@ -214,6 +215,13 @@ export class TokenTracker {
 
       // Emit warning at 80% usage
       if (stats.percentageUsed >= 80 && stats.percentageUsed < 100) {
+        // Send notification for token limit warning
+        try {
+          await notificationService.notifyTokenLimitWarning(userId, stats.tokensUsed, stats.tokenLimit);
+        } catch (error) {
+          console.error('Failed to send token warning notification:', error);
+        }
+        
         this.wsManager?.emitLog({
           id: `token-warning-${Date.now()}`,
           timestamp: new Date(),

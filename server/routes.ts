@@ -5,6 +5,7 @@ import { insertAgentSchema } from "@shared/schema";
 import { testAnthropicConnection } from "./services/anthropic";
 import agentRoutes from "./routes/agents";
 import userRoutes from "./routes/users";
+import notificationRoutes from "./routes/notifications";
 import { conductor } from "./conductor";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -51,6 +52,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // User profile routes
   app.use('/api/users', userRoutes);
+
+  // Notification routes
+  app.use('/api/notifications', notificationRoutes);
 
   // Import enhanced workflow routes with token enforcement
   const { registerWorkflowRoutes } = await import('./routes/workflows');

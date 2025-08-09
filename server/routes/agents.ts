@@ -5,6 +5,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { storage } from '../storage';
 import { insertAgentSchema, type Agent } from '../../shared/schema';
 import { tokenTracker } from '../services/tokenTracker';
+import { notificationService } from '../services/notificationService';
 
 // Extend Request interface for Supabase auth
 interface AuthenticatedRequest extends Request {
@@ -62,6 +63,14 @@ router.post('/', async (req: AuthenticatedRequest, res: Response) => {
     
     // Get updated agent to return
     const updatedAgent = await storage.getAgent(agent.id);
+    
+    // Send success notification
+    try {
+      await notificationService.notifyAgentCreated(userId, validatedData.name);
+    } catch (notificationError) {
+      console.error('Failed to send agent creation notification:', notificationError);
+      // Don't fail the request if notification fails
+    }
     
     res.status(201).json({
       ...updatedAgent,

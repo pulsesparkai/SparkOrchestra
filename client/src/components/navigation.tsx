@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User, HelpCircle, LogOut, Settings, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TokenUsageIndicator } from "@/components/ui/token-usage-indicator";
+import { NotificationBell } from "@/components/ui/notification-bell";
 import { useTour } from "@/components/onboarding/tour-context";
 import { useAuth } from "@/components/auth/auth-provider";
 import { UserMenu } from "@/components/user-menu";
@@ -71,9 +72,7 @@ export default function Navigation() {
             >
               <HelpCircle className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orchestra-brown">
-              <Bell className="w-4 h-4" />
-            </Button>
+            <NotificationBell />
             
             <UserMenu />
           </div>
