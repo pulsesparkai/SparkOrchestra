@@ -1,16 +1,68 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, Component, ReactNode } from 'react';
 import { AlertCircle, CheckCircle, Clock, Zap, Bot, Shield, Brain, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export function ComparisonAnimation() {
+// Error Boundary Component
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error('ComparisonAnimation Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || (
+        <Card className="bg-gray-700 border-gray-600 shadow-xl">
+          <CardContent className="p-6 text-center">
+            <AlertCircle className="w-8 h-8 text-red-400 mx-auto mb-4" />
+            <h3 className="text-white font-semibold mb-2">Animation Error</h3>
+            <p className="text-gray-400 text-sm">
+              Unable to load comparison animation. Please refresh the page.
+            </p>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+// Main ComparisonAnimation Component
+function ComparisonAnimationContent() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
   const [sequentialStep, setSequentialStep] = useState(0);
   const [parallelProgress, setParallelProgress] = useState([0, 0, 0]);
   const [showError, setShowError] = useState(false);
   const [errorResolved, setErrorResolved] = useState(false);
+
+  // Pre-calculated random values for performance optimization
+  const [randomMultipliers] = useState(() => [
+    Math.random() * 2, // Agent 0 variance
+    Math.random() * 2, // Agent 1 variance  
+    Math.random() * 2  // Agent 2 variance
+  ]);
 
   useEffect(() => {
     if (!isInView) {
@@ -33,14 +85,14 @@ export function ComparisonAnimation() {
       });
     }, 2500);
 
-    // Parallel animation - all agents progress together (much slower)
+    // Parallel animation - all agents progress together (optimized with pre-calculated values)
     const parallelInterval = setInterval(() => {
       setParallelProgress(prev => {
         const newProgress = prev.map((p, i) => {
-          // Smaller, more consistent increments for smoother progress
-          const baseIncrement = 4.2; // Base increment for ~24 updates to reach 100%
-          const variance = Math.random() * 2; // 0 to 2 variance
-          const staggerMultiplier = i === 0 ? 1.1 : i === 1 ? 1.0 : 0.9; // Research fastest, Analysis middle, Writer slowest
+          // Use pre-calculated random values for consistent performance
+          const baseIncrement = 4.2;
+          const variance = randomMultipliers[i]; // Use pre-calculated value
+          const staggerMultiplier = i === 0 ? 1.1 : i === 1 ? 1.0 : 0.9;
           const increment = (baseIncrement + variance) * staggerMultiplier;
           return Math.min(p + increment, 100);
         });
@@ -64,33 +116,32 @@ export function ComparisonAnimation() {
         
         return newProgress;
       });
-    }, 1200); // Slower updates for 13-14 second completion time
+    }, 1200);
 
+    // Cleanup function to clear intervals on unmount
     return () => {
       clearInterval(sequentialInterval);
       clearInterval(parallelInterval);
     };
-  }, [isInView]); // Removed showError and errorResolved from dependencies to prevent infinite loops
-
-  const competitors = ['Current Tools', 'GitHub Actions', 'Jenkins', 'CircleCI'];
+  }, [isInView]); // Removed showError and errorResolved to prevent infinite loops
 
   return (
-    <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
+    <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
       {/* Traditional Sequential */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -50 }}
         transition={{ duration: 0.6 }}
       >
-        <Card className="bg-gray-700 border-gray-600 shadow-xl h-full">
+        <Card className="bg-gray-700 border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
           <CardHeader className="text-center">
             <CardTitle className="text-white flex items-center justify-center gap-2">
               Traditional Sequential
               <Badge variant="secondary" className="bg-gray-600 text-gray-300">Old Way</Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4 mb-6">
+          <CardContent className="flex flex-col justify-between h-full">
+            <div className="space-y-4 mb-6 flex-grow">
               {['Research Agent', 'Analysis Agent', 'Writer Agent'].map((agent, i) => (
                 <motion.div
                   key={i}
@@ -100,7 +151,7 @@ export function ComparisonAnimation() {
                     backgroundColor: sequentialStep === i + 1 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(75, 85, 99, 1)'
                   }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gray-600 rounded-lg p-3 sm:p-4 flex items-center justify-between"
+                  className="bg-gray-600 border border-gray-500 rounded-lg p-3 sm:p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold ${
@@ -127,7 +178,7 @@ export function ComparisonAnimation() {
               ))}
             </div>
 
-            <div className="text-center mb-4">
+            <div className="text-center">
               <div className="text-2xl sm:text-3xl font-bold text-gray-300">45 seconds</div>
               <div className="text-sm text-gray-400">Total execution time</div>
               <div className="text-xs text-gray-500 mt-2 space-y-1">
@@ -146,17 +197,17 @@ export function ComparisonAnimation() {
         animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 50 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <Card className="bg-gray-700 border-2 border-orange-600 shadow-xl h-full relative overflow-hidden">
+        <Card className="bg-gray-700 border-2 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full">
           {/* Animated gradient background */}
-          <motion.div
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"
             animate={{ 
               background: [
-                'linear-gradient(45deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.1))',
-                'linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1))'
+                'linear-gradient(135deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.1))',
+                'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1))'
               ]
             }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="absolute inset-0"
+            transition={{ duration: 4, repeat: Infinity }}
           />
           
           <CardHeader className="relative z-10 text-center">
@@ -169,9 +220,9 @@ export function ComparisonAnimation() {
             </CardTitle>
           </CardHeader>
           
-          <CardContent className="relative z-10">
-            <div className="text-center mb-4">
-              <div className="text-xs sm:text-sm text-orange-400 mb-3 hidden sm:block">Level 1 - All Execute Together</div>
+          <CardContent className="relative z-10 flex flex-col justify-between h-full">
+            <div className="text-center mb-4 flex-grow">
+              <div className="text-xs sm:text-sm text-orange-400 mb-3">Level 1 - All Execute Together</div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {['Research', 'Analysis', 'Writer'].map((agent, i) => (
                   <motion.div
@@ -298,7 +349,7 @@ export function ComparisonAnimation() {
                   AI Conductor Oversight:
                 </div>
                 <motion.div
-                  key={showError ? 'error' : errorResolved ? 'resolved' : 'normal'}
+                  key={`${showError}-${errorResolved}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
@@ -306,13 +357,13 @@ export function ComparisonAnimation() {
                 >
                   {showError ? (
                     <div className="text-red-400 flex items-center">
-                      <AlertCircle className="w-3 h-3 mr-1" />
+                      <AlertCircle className="w-3 h-3 mr-1 flex-shrink-0" />
                       <span className="hidden sm:inline">"Analysis agent error detected - implementing recovery protocol"</span>
                       <span className="sm:hidden">"Error detected - auto-correcting"</span>
                     </div>
                   ) : errorResolved ? (
                     <div className="text-green-400 flex items-center">
-                      <CheckCircle className="w-3 h-3 mr-1" />
+                      <CheckCircle className="w-3 h-3 mr-1 flex-shrink-0" />
                       <span className="hidden sm:inline">"Cross-validation complete - accuracy improved by 15%"</span>
                       <span className="sm:hidden">"Validation complete - accuracy improved"</span>
                     </div>
@@ -365,5 +416,14 @@ export function ComparisonAnimation() {
         </Card>
       </motion.div>
     </div>
+  );
+}
+
+// Exported component with error boundary wrapper
+export function ComparisonAnimation() {
+  return (
+    <ErrorBoundary>
+      <ComparisonAnimationContent />
+    </ErrorBoundary>
   );
 }
