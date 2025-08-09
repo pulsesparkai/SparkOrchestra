@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pahxigjphtkkzznwbjkv.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhaHhpZ2pwaHRra3p6bndiamt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzMzYyODYsImV4cCI6MjA2OTkxMjI4Nn0.c7UnbhORa7Rykjurzqhz8Sv1VQGSoPa-iZZScO2lq2Y'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pahaqjxjghtkzzmbwikv.supabase.co'
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhaGFxanhqZ2h0a3p6bWJ3aWt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQzNjA4MDAsImV4cCI6MjA2OTkzNjgwMH0.example-anon-key-here'
 
 console.log('🔧 Frontend Supabase URL:', supabaseUrl)
 console.log('🔧 Frontend Anon Key:', supabaseAnonKey ? 'Set' : 'Missing')

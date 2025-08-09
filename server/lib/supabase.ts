@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Load environment variables with fallbacks
-const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://pahxigjphtkkzznwbjkv.supabase.co'
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://pahaqjxjghtkzzmbwikv.supabase.co'
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'YOUR_SERVICE_ROLE_KEY_HERE'
 
 console.log('🔧 Supabase URL:', supabaseUrl);

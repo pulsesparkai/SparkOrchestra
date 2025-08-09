@@ -8,10 +8,19 @@ export function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Handle magic link callback from URL hash
+        // Handle auth callback from URL hash or query params
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = hashParams.get('access_token');
-        const refreshToken = hashParams.get('refresh_token');
+        const queryParams = new URLSearchParams(window.location.search);
+        const accessToken = hashParams.get('access_token') || queryParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token') || queryParams.get('refresh_token');
+        const error = hashParams.get('error') || queryParams.get('error');
+        
+        // Handle auth errors
+        if (error) {
+          console.error('Auth callback error:', error);
+          setLocation('/?error=' + encodeURIComponent(error));
+          return;
+        }
         
         if (accessToken && refreshToken) {
           // Set the session from the magic link tokens
