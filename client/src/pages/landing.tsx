@@ -784,7 +784,7 @@ export default function Landing() {
       </AnimatedSection>
 
       {/* Call to Action */}
-      <AnimatedSection className="py-24 bg-gray-800 relative overflow-hidden">
+      <AnimatedSection className="py-24 bg-gray-900 relative overflow-hidden">
         <motion.div 
           className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-amber-600/10"
           animate={{ 
