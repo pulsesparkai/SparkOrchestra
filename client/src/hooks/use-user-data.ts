@@ -1,6 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/components/auth/auth-provider";
 
+export interface UserUsageData {
+  tokensUsed: number;
+  tokenLimit: number;
+  plan: string;
+  agentCount: number;
+}
+
 export interface UserData {
   id: string;
   email: string;
@@ -12,6 +19,17 @@ export interface UserData {
   agentLimit: number;
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
+}
+
+export function useUserUsage() {
+  const { user } = useAuth();
+  
+  return useQuery<UserUsageData>({
+    queryKey: ['/api/users/me/usage'],
+    enabled: !!user,
+    refetchInterval: 30000, // Refetch every 30 seconds for live updates
+    staleTime: 10000, // Consider data stale after 10 seconds
+  });
 }
 
 export function useUserData() {

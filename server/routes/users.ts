@@ -61,4 +61,51 @@ router.get('/me', async (req: AuthenticatedRequest, res: Response) => {
   }
 });
 
+// GET /api/users/me/usage - Get current user's token usage
+router.get('/me/usage', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user.id;
+    
+    // Get user from database for plan info
+    const { data: user, error: userError } = await adminDb.getUserById(userId);
+
+    if (userError || !user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get current month token usage
+    const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
+    const { data: usage, error: usageError } = await adminDb.getOrCreateTokenUsage(userId, currentMonth);
+
+    // Get agent count
+    const { data: userAgents, error: agentsError } = await adminDb.getUserAgents(userId);
+    const agentCount = userAgents?.length || 0;
+
+    // Determine token limits based on plan
+    const planLimits = {
+      free: 100,
+      early_adopter: 1000,
+      starter: 2500,
+      pro: 10000,
+      enterprise: -1 // unlimited
+    };
+
+    const userPlan = user.user_plan || 'free';
+    const tokenLimit = planLimits[userPlan as keyof typeof planLimits] || 100;
+
+    res.json({
+      tokensUsed: usage?.tokens_used || 0,
+      tokenLimit,
+      plan: userPlan,
+      agentCount
+    });
+  } catch (error: any) {
+    console.error('Error fetching user usage:', error);
+    res.status(500).json({ 
+      message: 'Failed to fetch user usage',
+      error: error.message 
+    });
+  }
+});
+
 export default router;
