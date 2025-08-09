@@ -17,6 +17,7 @@ export interface UserData {
   tokenLimit: number;
   agentCount: number;
   agentLimit: number;
+  hasApiKey: boolean;
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
 }

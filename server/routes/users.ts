@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
 import { supabaseAdmin, adminDb } from '../lib/supabase';
+import { EncryptionService } from '../services/encryption';
+import Anthropic from '@anthropic-ai/sdk';
 
 // Extend Request interface for Supabase auth
 interface AuthenticatedRequest extends Request {
@@ -108,4 +110,91 @@ router.get('/me/usage', async (req: AuthenticatedRequest, res: Response) => {
   }
 });
 
+// POST /api/users/me/api-key - Add/update user's API key
+router.post('/me/api-key', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user.id;
+    const { apiKey } = req.body;
+
+    if (!apiKey) {
+      return res.status(400).json({ message: 'API key is required' });
+    }
+
+    // Validate API key format
+    if (!apiKey.startsWith('sk-ant-') || apiKey.length < 20) {
+      return res.status(400).json({ message: 'Invalid API key format' });
+    }
+
+    // Test the API key with Anthropic
+    try {
+      const anthropic = new Anthropic({ apiKey });
+      await anthropic.messages.create({
+        model: 'claude-3-haiku-20240307', // Use cheapest model for testing
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'Test' }],
+      });
+    } catch (anthropicError: any) {
+      if (anthropicError.status === 401) {
+        return res.status(400).json({ message: 'Invalid API key - authentication failed' });
+      }
+      return res.status(400).json({ message: 'API key validation failed' });
+    }
+
+    // Encrypt the API key
+    const encryptedApiKey = EncryptionService.encrypt(apiKey);
+
+    // Update user record with encrypted API key
+    const { error: updateError } = await adminDb.updateUser(userId, {
+      encrypted_api_key: encryptedApiKey,
+      updated_at: new Date().toISOString()
+    });
+
+    if (updateError) {
+      console.error('Error updating user API key:', updateError);
+      return res.status(500).json({ message: 'Failed to save API key' });
+    }
+
+    res.json({ 
+      success: true, 
+      message: 'API key saved successfully',
+      hasApiKey: true
+    });
+  } catch (error: any) {
+    console.error('Error saving API key:', error);
+    res.status(500).json({ 
+      message: 'Failed to save API key',
+      error: error.message 
+    });
+  }
+});
+
+// DELETE /api/users/me/api-key - Remove user's API key
+router.delete('/me/api-key', async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user.id;
+
+    // Remove API key from user record
+    const { error: updateError } = await adminDb.updateUser(userId, {
+      encrypted_api_key: null,
+      updated_at: new Date().toISOString()
+    });
+
+    if (updateError) {
+      console.error('Error removing user API key:', updateError);
+      return res.status(500).json({ message: 'Failed to remove API key' });
+    }
+
+    res.json({ 
+      success: true, 
+      message: 'API key removed successfully',
+      hasApiKey: false
+    });
+  } catch (error: any) {
+    console.error('Error removing API key:', error);
+    res.status(500).json({ 
+      message: 'Failed to remove API key',
+      error: error.message 
+    });
+  }
+});
 export default router;

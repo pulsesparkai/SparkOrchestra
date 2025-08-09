@@ -1,6 +1,7 @@
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { ApiKeyModal } from "@/components/ui/api-key-modal";
 import { useUserData } from "@/hooks/use-user-data";
 import { Zap, AlertTriangle, Key } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,12 +17,14 @@ export function TokenCounter({
   showUpgradePrompt = false,
   onUpgrade
 }: TokenCounterProps) {
+  const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   const { userData, isLoading } = useUserData();
   
   // Use real data or defaults while loading
   const tokensUsed = userData?.tokensUsed || 0;
   const tokensLimit = userData?.tokenLimit || 100;
   const userPlan = userData?.userPlan || "free";
+  const hasApiKey = userData?.hasApiKey || false;
   
   if (isLoading) {
     return (
@@ -135,12 +138,22 @@ export function TokenCounter({
                   Upgrade to Early Adopter
                 </button>
               )}
-              <button className="flex-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded transition-colors">
-                Add API Key
+              <button 
+                onClick={() => setApiKeyModalOpen(true)}
+                className="flex-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded transition-colors"
+              >
+                {hasApiKey ? 'Manage API Key' : 'Add API Key'}
               </button>
             </div>
           </div>
         )}
+
+        {/* API Key Modal */}
+        <ApiKeyModal
+          open={apiKeyModalOpen}
+          onOpenChange={setApiKeyModalOpen}
+          hasExistingKey={hasApiKey}
+        />
       </CardContent>
     </Card>
   );
