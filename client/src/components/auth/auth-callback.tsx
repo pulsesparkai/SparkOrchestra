@@ -8,55 +8,52 @@ export function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Handle auth callback from URL hash or query params
+        // Parse both hash (magic links) and query params (OAuth/code flow)
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const queryParams = new URLSearchParams(window.location.search);
         const accessToken = hashParams.get('access_token') || queryParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token') || queryParams.get('refresh_token');
-        const error = hashParams.get('error') || queryParams.get('error');
-        
-        // Handle auth errors
-        if (error) {
-          console.error('Auth callback error:', error);
-          setLocation('/?error=' + encodeURIComponent(error));
+        const authError = hashParams.get('error') || queryParams.get('error'); // Renamed to avoid conflict
+
+        if (authError) {
+          console.error('Auth callback error:', authError);
+          setLocation('/');
           return;
         }
-        
+
         if (accessToken && refreshToken) {
-          // Set the session from the magic link tokens
-          const { data, error } = await supabase.auth.setSession({
+          // Set session from tokens
+          const { data, error: setError } = await supabase.auth.setSession({
             access_token: accessToken,
-            refresh_token: refreshToken
+            refresh_token: refreshToken,
           });
-          
-          if (error) {
-            console.error('Auth callback error:', error);
+
+          if (setError) {
+            console.error('Session set error:', setError);
             setLocation('/');
             return;
           }
-          
+
           if (data.session) {
-            // Clear the hash from URL
+            // Clear hash/query from URL
             window.history.replaceState({}, document.title, window.location.pathname);
-            // Successfully authenticated, redirect to dashboard
             setLocation('/dashboard');
             return;
           }
         }
-        
-        // Fallback: check for existing session
-        const { data, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error('Auth callback error:', error);
+
+        // Fallback: check existing session
+        const { data, error: sessionError } = await supabase.auth.getSession(); // Renamed 'error'
+
+        if (sessionError) {
+          console.error('Session check error:', sessionError);
           setLocation('/');
           return;
         }
 
         if (data.session) {
-          // Successfully authenticated, redirect to dashboard
           setLocation('/dashboard');
         } else {
-          // No session, redirect to home
           setLocation('/');
         }
       } catch (error) {
