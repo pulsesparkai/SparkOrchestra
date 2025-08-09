@@ -1,23 +1,15 @@
 import { Link, useLocation } from "wouter";
 import { Music, ChartLine, Bot, Table, Eye, DollarSign, Bell, User, HelpCircle, LogOut, Settings, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { TokenUsageIndicator } from "@/components/ui/token-usage-indicator";
 import { useTour } from "@/components/onboarding/tour-context";
 import { useAuth } from "@/components/auth/auth-provider";
+import { UserMenu } from "@/components/user-menu";
 import orchestraLogo from '@assets/Lo_1754349496969.png';
 
 export default function Navigation() {
   const [location] = useLocation();
   const { startTour } = useTour();
-  const { user, signOut } = useAuth();
 
   const navItems = [
     { path: "/dashboard", label: "Dashboard", icon: ChartLine, tourId: "dashboard-tab" },
@@ -83,53 +75,7 @@ export default function Navigation() {
               <Bell className="w-4 h-4" />
             </Button>
             
-            {/* User Profile Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="w-8 h-8 p-0 bg-orchestra-brown rounded-full hover:bg-orchestra-brown/90"
-                >
-                  <User className="text-white w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-white">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">Account</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user?.email || 'info@pulsespark.ai'}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="cursor-pointer">
-                    <ChartLine className="mr-2 h-4 w-4" />
-                    Dashboard
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/pricing" className="cursor-pointer">
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    Billing & Plan
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem 
-                  onClick={signOut}
-                  className="cursor-pointer text-red-600 focus:text-red-600"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <UserMenu />
           </div>
         </div>
       </div>

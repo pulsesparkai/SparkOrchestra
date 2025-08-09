@@ -18,6 +18,9 @@ import Agents from "@/pages/agents";
 import Workflow from "@/pages/workflow";
 import Conductor from "@/pages/conductor";
 import Pricing from "@/pages/pricing";
+import Profile from "@/pages/profile";
+import Settings from "@/pages/settings";
+import Billing from "@/pages/billing";
 import NotFound from "@/pages/not-found";
 
 function AppContent() {
@@ -54,6 +57,9 @@ function AppContent() {
             <Route path="/workflow" component={Workflow} />
             <Route path="/conductor" component={Conductor} />
             <Route path="/pricing" component={Pricing} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/billing" component={Billing} />
             <Route component={NotFound} />
           </Switch>
           <TourModal />
