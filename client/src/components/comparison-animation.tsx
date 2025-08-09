@@ -4,7 +4,11 @@ import { AlertCircle, CheckCircle, Clock, Zap, Bot, Shield, Brain, TrendingUp } 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Error Boundary Component
+/**
+ * Error Boundary Component
+ * Catches JavaScript errors in the ComparisonAnimation component tree
+ * Prevents entire page crashes and provides fallback UI
+ */
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
@@ -22,15 +26,18 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Update state so the next render will show the fallback UI
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: any) {
+    // Log error details for debugging
     console.error('ComparisonAnimation Error:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
+      // Render fallback UI if provided, otherwise default error message
       return this.props.fallback || (
         <Card className="bg-gray-700 border-gray-600 shadow-xl">
           <CardContent className="p-6 text-center">
@@ -48,23 +55,42 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-// Main ComparisonAnimation Component
+/**
+ * Main ComparisonAnimation Component
+ * Shows side-by-side comparison of sequential vs parallel AI agent execution
+ * Features: Real-time progress simulation, error detection, performance metrics
+ */
 function ComparisonAnimationContent() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
-  const [sequentialStep, setSequentialStep] = useState(0);
-  const [parallelProgress, setParallelProgress] = useState([0, 0, 0]);
-  const [showError, setShowError] = useState(false);
-  const [errorResolved, setErrorResolved] = useState(false);
+  
+  // State for sequential execution simulation
+  const [sequentialStep, setSequentialStep] = useState<number>(0);
+  
+  // State for parallel execution simulation (progress for 3 agents)
+  const [parallelProgress, setParallelProgress] = useState<number[]>([0, 0, 0]);
+  
+  // State for error simulation and resolution
+  const [showError, setShowError] = useState<boolean>(false);
+  const [errorResolved, setErrorResolved] = useState<boolean>(false);
 
-  // Pre-calculated random values for performance optimization
-  const [randomMultipliers] = useState(() => [
-    Math.random() * 2, // Agent 0 variance
-    Math.random() * 2, // Agent 1 variance  
-    Math.random() * 2  // Agent 2 variance
+  /**
+   * Performance Optimization: Pre-calculate random values
+   * Avoids calling Math.random() on every interval tick for better performance
+   */
+  const [randomMultipliers] = useState<number[]>(() => [
+    Math.random() * 2, // Agent 0 variance multiplier
+    Math.random() * 2, // Agent 1 variance multiplier
+    Math.random() * 2  // Agent 2 variance multiplier
   ]);
 
+  /**
+   * Main animation effect
+   * Handles both sequential and parallel execution simulations
+   * Only runs when component is in view for performance
+   */
   useEffect(() => {
+    // Reset all states when component goes out of view
     if (!isInView) {
       setSequentialStep(0);
       setParallelProgress([0, 0, 0]);
@@ -73,31 +99,40 @@ function ComparisonAnimationContent() {
       return;
     }
 
-    // Sequential animation - slower, one at a time
+    /**
+     * Sequential Animation: Agents execute one after another
+     * Each step represents one agent completing before the next starts
+     */
     const sequentialInterval = setInterval(() => {
       setSequentialStep(prev => {
         if (prev >= 3) {
-          // Reset after completion
+          // Reset after all agents complete
           setTimeout(() => setSequentialStep(0), 2000);
           return prev;
         }
         return prev + 1;
       });
-    }, 2500);
+    }, 2500); // 2.5 seconds per agent
 
-    // Parallel animation - all agents progress together (optimized with pre-calculated values)
+    /**
+     * Parallel Animation: All agents execute simultaneously
+     * Uses pre-calculated random values for consistent performance
+     */
     const parallelInterval = setInterval(() => {
       setParallelProgress(prev => {
-        const newProgress = prev.map((p, i) => {
-          // Use pre-calculated random values for consistent performance
+        const newProgress = prev.map((currentProgress, agentIndex) => {
+          // Use pre-calculated random values instead of Math.random() for performance
           const baseIncrement = 4.2;
-          const variance = randomMultipliers[i]; // Use pre-calculated value
-          const staggerMultiplier = i === 0 ? 1.1 : i === 1 ? 1.0 : 0.9;
+          const variance = randomMultipliers[agentIndex]; // Pre-calculated value
+          const staggerMultiplier = agentIndex === 0 ? 1.1 : agentIndex === 1 ? 1.0 : 0.9;
           const increment = (baseIncrement + variance) * staggerMultiplier;
-          return Math.min(p + increment, 100);
+          return Math.min(currentProgress + increment, 100);
         });
         
-        // Simulate error detection at 60% on Analysis agent
+        /**
+         * Error Simulation: Trigger error at 60% progress on Analysis agent (index 1)
+         * Simulates real-world error detection and auto-recovery
+         */
         if (newProgress[1] >= 60 && !showError && !errorResolved) {
           setShowError(true);
           setTimeout(() => {
@@ -106,8 +141,10 @@ function ComparisonAnimationContent() {
           }, 2000);
         }
         
-        // Reset when all complete
-        if (newProgress.every(p => p >= 100)) {
+        /**
+         * Reset Animation: When all agents complete, reset after 3 seconds
+         */
+        if (newProgress.every(progress => progress >= 100)) {
           setTimeout(() => {
             setParallelProgress([0, 0, 0]);
             setErrorResolved(false);
@@ -116,61 +153,70 @@ function ComparisonAnimationContent() {
         
         return newProgress;
       });
-    }, 1200);
+    }, 1200); // Update every 1.2 seconds
 
-    // Cleanup function to clear intervals on unmount
+    /**
+     * Cleanup Function: Clear intervals on component unmount or view change
+     * Prevents memory leaks and ensures proper cleanup
+     */
     return () => {
       clearInterval(sequentialInterval);
       clearInterval(parallelInterval);
     };
-  }, [isInView]); // Removed showError and errorResolved to prevent infinite loops
+  }, [isInView, randomMultipliers]); // Only depend on isInView and pre-calculated values
+
+  // Agent names for consistent labeling
+  const agentNames: string[] = ['Research', 'Analysis', 'Writer'];
 
   return (
     <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
-      {/* Traditional Sequential */}
+      {/* Traditional Sequential Execution Card */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : -50 }}
         transition={{ duration: 0.6 }}
       >
-        <Card className="bg-gray-700 border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
+        <Card className="bg-gray-700 border-gray-600 shadow-xl hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
           <CardHeader className="text-center">
             <CardTitle className="text-white flex items-center justify-center gap-2">
               Traditional Sequential
-              <Badge variant="secondary" className="bg-gray-600 text-gray-300">Old Way</Badge>
+              <Badge variant="secondary" className="bg-gray-600 text-gray-300 text-xs">
+                Old Way
+              </Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col justify-between h-full">
+          <CardContent className="flex-1 flex flex-col justify-between p-4 sm:p-6">
+            {/* Sequential Agent Steps */}
             <div className="space-y-4 mb-6 flex-grow">
-              {['Research Agent', 'Analysis Agent', 'Writer Agent'].map((agent, i) => (
+              {agentNames.map((agentName, index) => (
                 <motion.div
-                  key={i}
+                  key={index}
                   animate={{
-                    opacity: sequentialStep > i ? 1 : 0.4,
-                    scale: sequentialStep === i + 1 ? 1.02 : 1,
-                    backgroundColor: sequentialStep === i + 1 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(75, 85, 99, 1)'
+                    opacity: sequentialStep > index ? 1 : 0.4,
+                    scale: sequentialStep === index + 1 ? 1.02 : 1,
+                    backgroundColor: sequentialStep === index + 1 ? 'rgba(59, 130, 246, 0.1)' : 'rgba(75, 85, 99, 1)'
                   }}
                   transition={{ duration: 0.3 }}
                   className="bg-gray-600 border border-gray-500 rounded-lg p-3 sm:p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold ${
-                      sequentialStep > i ? 'bg-green-500' : 
-                      sequentialStep === i + 1 ? 'bg-blue-500' : 
+                      sequentialStep > index ? 'bg-green-500' : 
+                      sequentialStep === index + 1 ? 'bg-blue-500' : 
                       'bg-gray-500'
                     }`}>
-                      {i + 1}
+                      {index + 1}
                     </div>
                     <div>
-                      <div className="text-white font-medium text-sm sm:text-base">{agent}</div>
+                      <div className="text-white font-medium text-sm sm:text-base">{agentName} Agent</div>
                       <div className="text-xs text-gray-400">Waits for previous agent</div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {sequentialStep === i + 1 && (
+                    {sequentialStep === index + 1 && (
                       <Clock className="w-4 h-4 text-blue-400 animate-spin" />
                     )}
-                    {sequentialStep > i && (
+                    {sequentialStep > index && (
                       <CheckCircle className="w-4 h-4 text-green-400" />
                     )}
                   </div>
@@ -178,6 +224,7 @@ function ComparisonAnimationContent() {
               ))}
             </div>
 
+            {/* Sequential Performance Metrics */}
             <div className="text-center">
               <div className="text-2xl sm:text-3xl font-bold text-gray-300">45 seconds</div>
               <div className="text-sm text-gray-400">Total execution time</div>
@@ -191,14 +238,14 @@ function ComparisonAnimationContent() {
         </Card>
       </motion.div>
 
-      {/* Orchestra Parallel */}
+      {/* Orchestra Parallel Execution Card */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 50 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <Card className="bg-gray-700 border-2 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full">
-          {/* Animated gradient background */}
+        <Card className="bg-gray-700 border-2 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full flex flex-col">
+          {/* Animated gradient background for visual appeal */}
           <motion.div 
             className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"
             animate={{ 
@@ -212,23 +259,26 @@ function ComparisonAnimationContent() {
           
           <CardHeader className="relative z-10 text-center">
             <CardTitle className="text-white flex items-center justify-center gap-2">
+              <Zap className="w-5 h-5 text-orange-400" />
               Orchestra Parallel
-              <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white animate-pulse">
-                <Zap className="w-3 h-3 mr-1" />
+              <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white animate-pulse text-xs">
                 70% Faster
               </Badge>
             </CardTitle>
           </CardHeader>
           
-          <CardContent className="relative z-10 flex flex-col justify-between h-full">
+          <CardContent className="relative z-10 flex-1 flex flex-col justify-between p-4 sm:p-6">
+            {/* Parallel Agent Execution */}
             <div className="text-center mb-4 flex-grow">
               <div className="text-xs sm:text-sm text-orange-400 mb-3">Level 1 - All Execute Together</div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {['Research', 'Analysis', 'Writer'].map((agent, i) => (
+                {agentNames.map((agentName, index) => (
                   <motion.div
-                    key={i}
+                    key={index}
                     animate={{
-                      scale: parallelProgress[i] > 0 && parallelProgress[i] < 10 ? 1.02 : 1,
+                      scale: parallelProgress[index] > 0 && parallelProgress[index] < 10 ? 1.02 : 1,
+                      borderColor: showError && index === 1 ? 'rgba(239, 68, 68, 0.5)' : 'rgba(234, 88, 12, 0.5)',
+                      backgroundColor: showError && index === 1 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(234, 88, 12, 0.1)'
                     }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
                     className="bg-orange-600/20 border border-orange-600/50 rounded-lg p-2 sm:p-3 text-center relative"
@@ -236,30 +286,30 @@ function ComparisonAnimationContent() {
                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-orange-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
                       <motion.div
                         animate={{ 
-                          rotate: parallelProgress[i] > 0 && parallelProgress[i] < 100 ? [0, 360] : 0,
-                          scale: parallelProgress[i] >= 100 ? [1, 1.2, 1] : 1
+                          rotate: parallelProgress[index] > 0 && parallelProgress[index] < 100 ? [0, 360] : 0,
+                          scale: parallelProgress[index] >= 100 ? [1, 1.2, 1] : 1
                         }}
                         transition={{ 
                           rotate: { duration: 3.5, repeat: Infinity, ease: "easeInOut" },
-                          scale: { duration: 0.6, ease: "easeOut", repeat: parallelProgress[i] >= 100 ? 3 : 0 }
+                          scale: { duration: 0.6, ease: "easeOut", repeat: parallelProgress[index] >= 100 ? 3 : 0 }
                         }}
                         className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full"
                       />
                     </div>
-                    <div className="text-xs sm:text-sm text-white font-medium mb-1">{agent}</div>
+                    <div className="text-xs sm:text-sm text-white font-medium mb-1">{agentName}</div>
                     <div className="w-full bg-gray-700 rounded-full h-1 sm:h-1.5">
                       <motion.div
                         className="bg-gradient-to-r from-orange-400 to-amber-400 h-1 sm:h-1.5 rounded-full"
-                        animate={{ width: `${parallelProgress[i]}%` }}
+                        animate={{ width: `${parallelProgress[index]}%` }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                       />
                     </div>
                     <div className="text-xs text-gray-400 mt-1">
-                      {parallelProgress[i] >= 100 ? 'Complete' : `${Math.round(parallelProgress[i])}%`}
+                      {parallelProgress[index] >= 100 ? 'Complete' : `${Math.round(parallelProgress[index])}%`}
                     </div>
                     
-                    {/* Error indicator */}
-                    {showError && i === 1 && (
+                    {/* Error indicator for Analysis agent */}
+                    {showError && index === 1 && (
                       <motion.div
                         initial={{ scale: 0, rotate: 0 }}
                         animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
@@ -270,8 +320,8 @@ function ComparisonAnimationContent() {
                       </motion.div>
                     )}
                     
-                    {/* Success indicator */}
-                    {parallelProgress[i] >= 100 && (
+                    {/* Success indicator when agent completes */}
+                    {parallelProgress[index] >= 100 && (
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: [0, 1.2, 1] }}
@@ -285,7 +335,7 @@ function ComparisonAnimationContent() {
                 ))}
               </div>
               
-              {/* Quality Metrics */}
+              {/* Quality Metrics - Show as agents progress */}
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ 
@@ -336,7 +386,7 @@ function ComparisonAnimationContent() {
               </motion.div>
             </div>
 
-            {/* Inter-agent communication */}
+            {/* AI Conductor Oversight Messages */}
             {isInView && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -345,11 +395,11 @@ function ComparisonAnimationContent() {
                 className="mb-4 p-2 sm:p-3 bg-gray-800/50 rounded-lg border border-gray-600"
               >
                 <div className="text-xs text-gray-400 mb-2 flex items-center">
-                  <Bot className="w-3 h-3 mr-1" />
+                  <Bot className="w-3 h-3 mr-1 flex-shrink-0" />
                   AI Conductor Oversight:
                 </div>
                 <motion.div
-                  key={`${showError}-${errorResolved}`}
+                  key={`${showError}-${errorResolved}`} // Re-render when error state changes
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
@@ -377,6 +427,7 @@ function ComparisonAnimationContent() {
               </motion.div>
             )}
 
+            {/* Parallel Performance Metrics */}
             <div className="text-center">
               <motion.div 
                 className="text-2xl sm:text-3xl font-bold text-orange-400"
@@ -388,7 +439,7 @@ function ComparisonAnimationContent() {
                 15 seconds
               </motion.div>
               <div className="text-sm text-orange-400 flex items-center justify-center mb-1">
-                <Zap className="w-4 h-4 inline mr-1" />
+                <Zap className="w-4 h-4 inline mr-1 flex-shrink-0" />
                 <motion.span
                   animate={{
                     opacity: parallelProgress.every(p => p >= 100) ? [1, 0.8, 1] : 1
@@ -407,7 +458,7 @@ function ComparisonAnimationContent() {
                 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
               >
-                <TrendingUp className="w-4 h-4 inline mr-1" />
+                <TrendingUp className="w-4 h-4 inline mr-1 flex-shrink-0" />
                 <span className="hidden sm:inline">98% accuracy (vs 85% sequential)</span>
                 <span className="sm:hidden">98% accuracy</span>
               </motion.div>
@@ -419,7 +470,10 @@ function ComparisonAnimationContent() {
   );
 }
 
-// Exported component with error boundary wrapper
+/**
+ * Main exported component with error boundary wrapper
+ * Provides safe rendering with fallback UI in case of errors
+ */
 export function ComparisonAnimation() {
   return (
     <ErrorBoundary>
@@ -427,3 +481,22 @@ export function ComparisonAnimation() {
     </ErrorBoundary>
   );
 }
+
+/**
+ * Test Component for Development/Testing
+ * Uncomment and use this to test the component in isolation
+ */
+/*
+export function ComparisonAnimationTest() {
+  return (
+    <div className="min-h-screen bg-gray-800 p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-white text-center mb-8">
+          ComparisonAnimation Test
+        </h1>
+        <ComparisonAnimation />
+      </div>
+    </div>
+  );
+}
+*/
