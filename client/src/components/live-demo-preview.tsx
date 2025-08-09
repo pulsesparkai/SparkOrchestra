@@ -180,13 +180,7 @@ export function LiveDemoPreview() {
             backgroundColor: isComplete ? 'rgba(34, 197, 94, 0.2)' : 'rgba(234, 88, 12, 0.2)'
           }}
         >
-          <div 
-            className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500 mr-2"
-            style={{
-              animation: 'slow-blink 3s infinite ease-in-out'
-            }}
-          >
-          </div>
+          <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500 mr-2 animate-slow-blink" />
           {isComplete ? 'Execution completed' : '3 agents executing simultaneously'}
         </motion.div>
       </div>

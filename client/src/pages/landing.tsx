@@ -553,7 +553,7 @@ export default function Landing() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto mb-16 auto-rows-fr">
             {/* Free Plan */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -561,37 +561,37 @@ export default function Landing() {
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.02, y: -5 }}
             >
-              <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-                <CardHeader className="text-center">
+              <Card className="bg-gray-600 border-gray-500 hover:border-orange-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 h-full flex flex-col min-h-[400px]">
+                <CardHeader className="text-center pb-4">
                   <CardTitle className="text-white text-2xl mb-2">Free</CardTitle>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-white">$0</span>
+                    <span className="text-3xl sm:text-4xl font-bold text-white">$0</span>
                     <span className="text-gray-400 text-lg">/month</span>
                   </div>
                   <p className="text-gray-400">Try Orchestra risk-free</p>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 mb-8">
+                <CardContent className="flex-1 flex flex-col justify-between p-4 sm:p-6">
+                  <div className="space-y-3 flex-grow">
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">100 Orchestra credits</span>
+                      <span className="text-gray-300 text-sm">100 Orchestra credits</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">2 parallel agents</span>
+                      <span className="text-gray-300 text-sm">2 parallel agents</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">Basic workflow monitoring</span>
+                      <span className="text-gray-300 text-sm">Basic workflow monitoring</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">BYOK supported</span>
+                      <span className="text-gray-300 text-sm">BYOK supported</span>
                     </div>
                   </div>
                   <Link href="/login">
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button className="w-full bg-gray-500 hover:bg-gray-400 text-white transition-all duration-200">
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6">
+                      <Button size="lg" className="w-full bg-gray-500 hover:bg-gray-400 text-white transition-all duration-200">
                         Get Started Free
                       </Button>
                     </motion.div>
@@ -607,37 +607,37 @@ export default function Landing() {
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.02, y: -5 }}
             >
-              <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-                <CardHeader className="text-center">
+              <Card className="bg-gray-600 border-gray-500 hover:border-orange-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 h-full flex flex-col min-h-[400px]">
+                <CardHeader className="text-center pb-4">
                   <CardTitle className="text-white text-2xl mb-2">Starter</CardTitle>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-white">$15</span>
+                    <span className="text-3xl sm:text-4xl font-bold text-white">$15</span>
                     <span className="text-gray-400 text-lg">/month</span>
                   </div>
                   <p className="text-gray-400">Perfect for small teams</p>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 mb-8">
+                <CardContent className="flex-1 flex flex-col justify-between p-4 sm:p-6">
+                  <div className="space-y-3 flex-grow">
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">2,500 Orchestra credits</span>
+                      <span className="text-gray-300 text-sm">2,500 Orchestra credits</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">Up to 5 parallel agents</span>
+                      <span className="text-gray-300 text-sm">Up to 5 parallel agents</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">Real-time monitoring</span>
+                      <span className="text-gray-300 text-sm">Real-time monitoring</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span className="text-gray-300">BYOK for unlimited usage</span>
+                      <span className="text-gray-300 text-sm">BYOK for unlimited usage</span>
                     </div>
                   </div>
                   <Link href="/login">
-                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200">
+                    <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6">
+                      <Button size="lg" className="w-full bg-orange-600 hover:bg-orange-700 text-white transition-all duration-200">
                         Start Starter Plan
                       </Button>
                     </motion.div>
@@ -653,7 +653,7 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.2 }}
               whileHover={{ scale: 1.05, y: -10 }}
             >
-              <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full">
+              <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full flex flex-col min-h-[400px]">
                 <div className="absolute top-4 right-4">
                   <motion.div
                     animate={{ scale: [1, 1.1, 1] }}
@@ -677,48 +677,51 @@ export default function Landing() {
                   transition={{ duration: 4, repeat: Infinity }}
                 />
               
-                <CardHeader className="relative z-10 text-center">
+                <CardHeader className="relative z-10 text-center pb-4">
                   <CardTitle className="text-white text-2xl mb-2">Pro</CardTitle>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-white">$49</span>
+                    <span className="text-3xl sm:text-4xl font-bold text-white">$49</span>
                     <span className="text-gray-400 text-lg">/month</span>
                   </div>
                   <p className="text-gray-400">For growing businesses</p>
                 </CardHeader>
-                <CardContent className="relative z-10">
-                  <div className="space-y-3 mb-8">
+                <CardContent className="relative z-10 flex-1 flex flex-col justify-between p-4 sm:p-6">
+                  <div className="space-y-3 flex-grow">
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                      <span className="text-gray-300">10,000 Orchestra credits</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">10,000 Orchestra credits</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                      <span className="text-gray-300">Unlimited parallel agents</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">Unlimited parallel agents</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                      <span className="text-gray-300">Advanced analytics dashboard</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">Advanced analytics dashboard</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                      <span className="text-gray-300">Custom integrations</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">Custom integrations</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-orange-400 flex-shrink-0" />
-                      <span className="text-gray-300">BYOK for unlimited usage</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">BYOK for unlimited usage</span>
                     </div>
                   </div>
-                  <Button
-                    onClick={() => {
-                      toast({
-                        title: "Upgrade Coming Soon",
-                        description: "Stripe integration will be available shortly. Thanks for your interest!",
-                      });
-                    }}
-                    className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white transition-all duration-200"
-                  >
-                    Choose Pro
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6">
+                    <Button
+                      size="lg"
+                      onClick={() => {
+                        toast({
+                          title: "Upgrade Coming Soon",
+                          description: "Stripe integration will be available shortly. Thanks for your interest!",
+                        });
+                      }}
+                      className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white transition-all duration-200"
+                    >
+                      Choose Pro
+                    </Button>
+                  </motion.div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -730,45 +733,48 @@ export default function Landing() {
               transition={{ duration: 0.6, delay: 0.3 }}
               whileHover={{ scale: 1.02, y: -5 }}
             >
-              <Card className="bg-gray-600 border-gray-500 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-                <CardHeader className="text-center">
+              <Card className="bg-gray-600 border-gray-500 hover:border-orange-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 h-full flex flex-col min-h-[400px]">
+                <CardHeader className="text-center pb-4">
                   <CardTitle className="text-white text-2xl mb-2">Enterprise</CardTitle>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-white">Custom</span>
+                    <span className="text-3xl sm:text-4xl font-bold text-white">Custom</span>
                     <span className="text-gray-400 text-lg block">pricing</span>
                   </div>
                   <p className="text-gray-400">For large organizations</p>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 mb-8">
+                <CardContent className="flex-1 flex flex-col justify-between p-4 sm:p-6">
+                  <div className="space-y-3 flex-grow">
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-300">Unlimited Orchestra credits</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">Unlimited Orchestra credits</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-300">Dedicated infrastructure</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">Dedicated infrastructure</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-300">Custom AI models</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">Custom AI models</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-300">SLA guarantees</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">SLA guarantees</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-300">White-glove onboarding</span>
+                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
+                      <span className="text-gray-300 text-sm">White-glove onboarding</span>
                     </div>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    className="w-full border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-200"
-                    onClick={() => window.open('mailto:sales@pulsespark.ai', '_blank')}
-                  >
-                    Contact Sales
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6">
+                    <Button 
+                      size="lg"
+                      variant="outline" 
+                      className="w-full border-blue-500 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 transition-all duration-200"
+                      onClick={() => window.open('mailto:sales@pulsespark.ai', '_blank')}
+                    >
+                      Contact Sales
+                    </Button>
+                  </motion.div>
                 </CardContent>
               </Card>
             </motion.div>

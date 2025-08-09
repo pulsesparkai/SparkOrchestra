@@ -103,6 +103,15 @@
   animation: slide-up 0.3s ease-out;
 }
 
+@keyframes slow-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-slow-blink {
+  animation: slow-blink 3s infinite ease-in-out;
+}
+
 @layer base {
   * {
     @apply border-border;
