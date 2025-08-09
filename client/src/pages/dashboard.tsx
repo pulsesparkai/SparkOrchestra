@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { UpgradeBanner } from "@/components/ui/upgrade-banner";
 import { TokenLimitModal } from "@/components/ui/token-limit-modal";
 import { TokenCounter } from "@/components/ui/token-counter";
+import { AgentCreateModal } from "@/components/agent-create-modal";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { useUserData } from "@/hooks/use-user-data";
 import { Bot, Zap, Clock, TrendingUp, Plus } from "lucide-react";
@@ -11,6 +12,7 @@ import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const [tokenLimitModalOpen, setTokenLimitModalOpen] = useState(false);
+  const [agentCreateModalOpen, setAgentCreateModalOpen] = useState(false);
   const { trackEvent, trackTokenUsage, trackAgentUsage } = useAnalytics();
   const { userData, isLoading: userDataLoading } = useUserData();
 
@@ -72,6 +74,18 @@ export default function Dashboard() {
           onTrackEvent={trackEvent}
         />
 
+        {/* Agent Create Modal */}
+        <AgentCreateModal
+          open={agentCreateModalOpen}
+          onOpenChange={setAgentCreateModalOpen}
+          onSuccess={() => {
+            setAgentCreateModalOpen(false);
+            trackEvent("agent_created", {
+              source: "dashboard_quick_action",
+              user_plan: userPlan
+            });
+          }}
+        />
         {/* Token Counter */}
         <div className="mb-6">
           <TokenCounter
@@ -185,15 +199,16 @@ export default function Dashboard() {
               <CardTitle className="text-gray-900">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Link href="/agents">
-                <Button 
-                  className="w-full bg-orchestra-brown hover:bg-orchestra-brown-hover text-white"
-                  onClick={() => trackEvent("quick_action_clicked", { action: "create_agent" })}
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Agent
-                </Button>
-              </Link>
+              <Button 
+                className="w-full bg-orchestra-brown hover:bg-orchestra-brown-hover text-white"
+                onClick={() => {
+                  trackEvent("quick_action_clicked", { action: "create_agent" });
+                  setAgentCreateModalOpen(true);
+                }}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Agent
+              </Button>
               <Link href="/workflow">
                 <Button 
                   variant="outline" 
