@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 
 export default function Dashboard() {
   const [tokenLimitModalOpen, setTokenLimitModalOpen] = useState(false);
-  const [agentCreateModalOpen, setAgentCreateModalOpen] = useState(false);
+  const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
   const { trackEvent, trackTokenUsage, trackAgentUsage } = useAnalytics();
   const { userData, isLoading: userDataLoading } = useUserData();
 
@@ -74,18 +74,6 @@ export default function Dashboard() {
           onTrackEvent={trackEvent}
         />
 
-        {/* Agent Create Modal */}
-        <AgentCreateModal
-          open={agentCreateModalOpen}
-          onOpenChange={setAgentCreateModalOpen}
-          onSuccess={() => {
-            setAgentCreateModalOpen(false);
-            trackEvent("agent_created", {
-              source: "dashboard_quick_action",
-              user_plan: userPlan
-            });
-          }}
-        />
         {/* Token Counter */}
         <div className="mb-6">
           <TokenCounter
@@ -201,10 +189,7 @@ export default function Dashboard() {
             <CardContent className="space-y-4">
               <Button 
                 className="w-full bg-orchestra-brown hover:bg-orchestra-brown-hover text-white"
-                onClick={() => {
-                  trackEvent("quick_action_clicked", { action: "create_agent" });
-                  setAgentCreateModalOpen(true);
-                }}
+                onClick={() => setIsAgentModalOpen(true)}
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Create Agent
@@ -259,6 +244,12 @@ export default function Dashboard() {
           tokensLimit={tokensLimit}
           userPlan={userPlan}
           onUpgrade={handleUpgrade}
+        />
+
+        {/* Agent Create Modal */}
+        <AgentCreateModal
+          isOpen={isAgentModalOpen}
+          onClose={() => setIsAgentModalOpen(false)}
         />
       </div>
     </div>

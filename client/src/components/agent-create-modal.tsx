@@ -1,303 +1,209 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/components/auth/auth-provider";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Eye, EyeOff, Save, Bot, Key } from "lucide-react";
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
+import { useQueryClient } from '@tanstack/react-query';
 
-const agentFormSchema = z.object({
-  name: z.string().min(1, "Agent name is required"),
-  role: z.string().min(1, "Role selection is required"),
-  prompt: z.string().min(10, "System prompt must be at least 10 characters"),
-  model: z.string().min(1, "Model selection is required"),
+const agentSchema = z.object({
+  name: z.string().min(1, 'Agent name is required'),
+  role: z.string().min(1, 'Role is required'),
+  prompt: z.string().min(10, 'Prompt must be at least 10 characters'),
+  model: z.string().min(1, 'Model is required'),
   apiKey: z.string().optional(),
-  usePlatformKey: z.boolean().default(true),
+  usePlatformKey: z.boolean().default(true)
 });
 
-type AgentFormData = z.infer<typeof agentFormSchema>;
+type AgentFormData = z.infer<typeof agentSchema>;
 
 interface AgentCreateModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export function AgentCreateModal({ open, onOpenChange, onSuccess }: AgentCreateModalProps) {
-  const [showApiKey, setShowApiKey] = useState(false);
+export function AgentCreateModal({ isOpen, onClose }: AgentCreateModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
   const queryClient = useQueryClient();
-
+  
   const form = useForm<AgentFormData>({
-    resolver: zodResolver(agentFormSchema),
+    resolver: zodResolver(agentSchema),
     defaultValues: {
-      name: "",
-      role: "",
-      prompt: "",
-      model: "",
-      apiKey: "",
-      usePlatformKey: true,
-    },
+      name: '',
+      role: 'Custom',
+      prompt: '',
+      model: 'claude-sonnet-4-20250514',
+      apiKey: '',
+      usePlatformKey: true
+    }
   });
 
-  const createAgentMutation = useMutation({
-    mutationFn: async (data: AgentFormData) => {
-      if (!user?.id) {
-        throw new Error("User not authenticated");
-      }
-      
-      const agentData = {
+  const handleSubmit = async (data: AgentFormData) => {
+    setIsLoading(true);
+    try {
+      const payload = {
         name: data.name,
         role: data.role,
         prompt: data.prompt,
         model: data.model,
-        apiKey: data.usePlatformKey ? undefined : data.apiKey,
-        conductorMonitoring: false,
-        userId: user.id
+        apiKey: !data.usePlatformKey ? data.apiKey : undefined
       };
+
+      await apiRequest('POST', '/api/agents', payload);
       
-      const response = await apiRequest("POST", "/api/agents", agentData);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/agents"] });
       toast({
-        title: "Agent Created",
-        description: "Your agent has been successfully created!",
+        title: 'Agent Created',
+        description: `${data.name} has been created successfully.`,
       });
+      
+      queryClient.invalidateQueries({ queryKey: ['/api/agents'] });
       form.reset();
-      onSuccess?.();
-    },
-    onError: (error: any) => {
-      console.error("Agent creation error:", error);
+      onClose();
+    } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message || "Failed to create agent",
-        variant: "destructive",
+        title: 'Error',
+        description: error.message || 'Failed to create agent',
+        variant: 'destructive',
       });
-    },
-  });
-
-  const onSubmit = (data: AgentFormData) => {
-    createAgentMutation.mutate(data);
-  };
-
-  const handleModalClose = (open: boolean) => {
-    if (!open) {
-      form.reset();
+    } finally {
+      setIsLoading(false);
     }
-    onOpenChange(open);
   };
+
+  if (!isOpen) return null;
 
   return (
-    <Dialog open={open} onOpenChange={handleModalClose}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-gray-800 border border-gray-600">
-        <DialogHeader>
-          <DialogTitle className="text-white flex items-center space-x-2">
-            <Bot className="w-5 h-5 text-orange-400" />
-            <span>Create New Agent</span>
-          </DialogTitle>
-        </DialogHeader>
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Agent Name */}
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">
-                    Agent Name <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g., Content Analyzer, Data Processor"
-                      className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-orange-500 focus:border-orange-500"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-white">Create New Agent</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-            {/* Role Selection */}
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">
-                    Role <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:ring-orange-500 focus:border-orange-500">
-                        <SelectValue placeholder="Select a role..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-gray-700 border-gray-600">
-                      <SelectItem value="Analyzer" className="text-white hover:bg-gray-600">Analyzer</SelectItem>
-                      <SelectItem value="Writer" className="text-white hover:bg-gray-600">Writer</SelectItem>
-                      <SelectItem value="Reviewer" className="text-white hover:bg-gray-600">Reviewer</SelectItem>
-                      <SelectItem value="Custom" className="text-white hover:bg-gray-600">Custom</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <div>
+            <Label htmlFor="name" className="text-white">Agent Name</Label>
+            <Input
+              id="name"
+              {...form.register('name')}
+              className="bg-gray-700 border-gray-600 text-white"
+              placeholder="e.g., Customer Support Agent"
             />
+            {form.formState.errors.name && (
+              <p className="text-red-400 text-sm mt-1">{form.formState.errors.name.message}</p>
+            )}
+          </div>
 
-            {/* System Prompt */}
-            <FormField
-              control={form.control}
-              name="prompt"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">
-                    System Prompt <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Describe the agent's role, capabilities, and instructions..."
-                      className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-orange-500 focus:border-orange-500 resize-none"
-                      rows={4}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          <div>
+            <Label htmlFor="role" className="text-white">Role</Label>
+            <Select
+              value={form.watch('role')}
+              onValueChange={(value) => form.setValue('role', value)}
+            >
+              <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Analyzer">Analyzer</SelectItem>
+                <SelectItem value="Writer">Writer</SelectItem>
+                <SelectItem value="Reviewer">Reviewer</SelectItem>
+                <SelectItem value="Custom">Custom</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="prompt" className="text-white">System Prompt</Label>
+            <Textarea
+              id="prompt"
+              {...form.register('prompt')}
+              className="bg-gray-700 border-gray-600 text-white min-h-[100px]"
+              placeholder="You are a helpful AI assistant that..."
             />
+            {form.formState.errors.prompt && (
+              <p className="text-red-400 text-sm mt-1">{form.formState.errors.prompt.message}</p>
+            )}
+          </div>
 
-            {/* Model Selection */}
-            <FormField
-              control={form.control}
-              name="model"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">
-                    Language Model <span className="text-red-400">*</span>
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-gray-700 border-gray-600 text-white focus:ring-orange-500 focus:border-orange-500">
-                        <SelectValue placeholder="Select a model..." />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-gray-700 border-gray-600">
-                      <SelectItem value="claude-sonnet-4-20250514" className="text-white hover:bg-gray-600">
-                        Claude Sonnet 4 (Latest)
-                      </SelectItem>
-                      <SelectItem value="gpt-4-turbo" className="text-white hover:bg-gray-600">
-                        GPT-4 Turbo
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div>
+            <Label htmlFor="model" className="text-white">Model</Label>
+            <Select
+              value={form.watch('model')}
+              onValueChange={(value) => form.setValue('model', value)}
+            >
+              <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="claude-sonnet-4-20250514">Claude Sonnet 4</SelectItem>
+                <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
+                <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            {/* API Key Section */}
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="usePlatformKey"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="border-gray-600 data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600"
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="text-gray-300">
-                        Use Platform API Key
-                      </FormLabel>
-                      <p className="text-xs text-gray-400">
-                        Use Orchestra credits instead of your own API key
-                      </p>
-                    </div>
-                  </FormItem>
-                )}
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="usePlatformKey"
+                checked={form.watch('usePlatformKey')}
+                onCheckedChange={(checked) => form.setValue('usePlatformKey', checked as boolean)}
               />
-
-              {!form.watch("usePlatformKey") && (
-                <FormField
-                  control={form.control}
-                  name="apiKey"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-300">
-                        Your API Key <span className="text-red-400">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type={showApiKey ? "text" : "password"}
-                            placeholder="sk-ant-..."
-                            className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-orange-500 focus:border-orange-500 pr-10"
-                            {...field}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setShowApiKey(!showApiKey)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 h-8 w-8 text-gray-400 hover:text-white"
-                          >
-                            {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <div className="text-xs text-gray-400 space-y-1">
-                        <p>• Unlimited usage with your own Anthropic API key</p>
-                        <p>• Encrypted and stored securely</p>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              <Label htmlFor="usePlatformKey" className="text-white">
+                Use Platform API Key
+              </Label>
+            </div>
+            
+            {!form.watch('usePlatformKey') && (
+              <div>
+                <Label htmlFor="apiKey" className="text-white">API Key</Label>
+                <Input
+                  id="apiKey"
+                  type="password"
+                  {...form.register('apiKey')}
+                  className="bg-gray-700 border-gray-600 text-white"
+                  placeholder="sk-ant-..."
                 />
-              )}
-            </div>
+                <p className="text-gray-400 text-xs mt-1">
+                  Using your own key provides unlimited usage
+                </p>
+              </div>
+            )}
+          </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-end space-x-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleModalClose(false)}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="bg-orange-600 hover:bg-orange-700 text-white"
-                disabled={createAgentMutation.isPending}
-              >
-                <Save className="w-4 h-4 mr-2" />
-                {createAgentMutation.isPending ? "Creating..." : "Create Agent"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-primary hover:bg-primary/90"
+            >
+              {isLoading ? 'Creating...' : 'Create Agent'}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
