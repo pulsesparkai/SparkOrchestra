@@ -10,6 +10,7 @@ export function ComparisonAnimation() {
   const [sequentialStep, setSequentialStep] = useState(0);
   const [parallelProgress, setParallelProgress] = useState([0, 0, 0]);
   const [showError, setShowError] = useState(false);
+  const [errorResolved, setErrorResolved] = useState(false);
 
   useEffect(() => {
     if (!isInView) {
@@ -69,7 +70,7 @@ export function ComparisonAnimation() {
       clearInterval(sequentialInterval);
       clearInterval(parallelInterval);
     };
-  }, [isInView, showError, errorResolved]);
+  }, [isInView]); // Removed showError and errorResolved from dependencies to prevent infinite loops
 
   const competitors = ['Current Tools', 'GitHub Actions', 'Jenkins', 'CircleCI'];
 
@@ -297,7 +298,7 @@ export function ComparisonAnimation() {
                   AI Conductor Oversight:
                 </div>
                 <motion.div
-                  key={showError ? 'error' : 'normal'}
+                  key={showError ? 'error' : errorResolved ? 'resolved' : 'normal'}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
