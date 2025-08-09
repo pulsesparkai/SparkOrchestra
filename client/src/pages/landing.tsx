@@ -654,17 +654,6 @@ export default function Landing() {
               whileHover={{ scale: 1.05, y: -10 }}
             >
               <Card className="bg-gray-600 border-orange-600 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden h-full flex flex-col min-h-[400px]">
-                <div className="absolute top-4 right-4">
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white">
-                      <Crown className="w-3 h-3 mr-1" />
-                      RECOMMENDED
-                    </Badge>
-                  </motion.div>
-                </div>
               
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-br from-orange-600/10 to-amber-600/10"
@@ -678,6 +667,18 @@ export default function Landing() {
                 />
               
                 <CardHeader className="relative z-10 text-center pb-4">
+                  {/* RECOMMENDED Badge - Positioned at top center to prevent layout shifts */}
+                  <div className="flex justify-center mb-3">
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <Badge className="bg-gradient-to-r from-orange-600 to-amber-600 text-white border-0 px-3 py-1 text-xs font-semibold">
+                        <Crown className="w-3 h-3 mr-1" />
+                        RECOMMENDED
+                      </Badge>
+                    </motion.div>
+                  </div>
                   <CardTitle className="text-white text-2xl mb-2">Pro</CardTitle>
                   <div className="mb-4">
                     <span className="text-3xl sm:text-4xl font-bold text-white">$49</span>
