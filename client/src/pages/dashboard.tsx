@@ -7,7 +7,7 @@ import { AgentCreateModal } from "@/components/agent-create-modal";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { useUserData } from "@/hooks/use-user-data";
 import { Bot, Zap, Clock, TrendingUp, Plus } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState, useEffect } from "react";
 
 export default function Dashboard() {
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
   const { trackEvent, trackTokenUsage, trackAgentUsage } = useAnalytics();
   const { userData, isLoading: userDataLoading } = useUserData();
+  const [, setLocation] = useLocation();
 
   // Use real data or defaults while loading
   const userPlan = userData?.userPlan || "free";
@@ -53,6 +54,11 @@ export default function Dashboard() {
     
     // Redirect to pricing page
     window.location.href = "/pricing";
+  };
+
+  const handleDesignWorkflow = () => {
+    trackEvent("quick_action_clicked", { action: "design_workflow" });
+    setLocation("/workflow");
   };
 
   return (
@@ -194,15 +200,13 @@ export default function Dashboard() {
                 <Plus className="w-4 h-4 mr-2" />
                 Create Agent
               </Button>
-              <Link href="/workflow">
-                <Button 
-                  variant="outline" 
-                  className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                  onClick={() => trackEvent("quick_action_clicked", { action: "design_workflow" })}
-                >
-                  Design Workflow
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                onClick={handleDesignWorkflow}
+              >
+                Design Workflow
+              </Button>
             </CardContent>
           </Card>
 
